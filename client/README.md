@@ -14,4 +14,22 @@ If you are developing a production application, we recommend using TypeScript wi
 //For runnig website you need :-
  1. Install Node From Browser
 
-//
+//  To run you need to do following steps in terminal:-
+
+1. cd client
+2. npm  run dev
+
+// How Did We make The Folder Of React+Vite Are:-
+
+1. npm create vite@latest
+2. cd client or folder name which created
+3. npm install
+4. npm run dev
+
+// package i install in file are :-
+
+1. npm i react-router-dom  // For navigating between different pages/views without refreshing the browser.
+2. npm install tailwindcss @tailwindcss/vite  // for adding style and make is user-friendly
+3. npm install @reduxjs/toolkit   // Redux-Toolkit use for  helps you store, update, and access global state from anywhere in your app, in a clean and structured way. 
+4. npm install react-redux
+
