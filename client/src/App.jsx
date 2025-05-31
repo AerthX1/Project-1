@@ -1,13 +1,12 @@
-import { useState } from 'react'
-import './index.css'
+import React from 'react';
+import {RouterProvider} from 'react-router-dom';
+import router from './routes/AppRoutes';
 
-function App() {
-  
-
+const App = () => {
   return (
-    <>
-     <h1 className='bg-blue-400'>Hey</h1>
-    </>
+    <div>
+     <RouterProvider router={router} />
+    </div>
   )
 }
 
