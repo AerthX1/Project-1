@@ -1,9 +1,8 @@
 const Footer = () => {
   return (
-    <footer className="bg-[#0B1120] text-white px-8 py-10 mt-10">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-10">
-
-        <div>
+    <footer className="bg-[#0B1120] text-white px-6 py-10 mt-10">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between gap-10">
+        <div className="flex-1 min-w-[250px]">
           <h2 className="text-green-500 text-2xl font-bold mb-2">Aearthex</h2>
           <p className="text-gray-300 mb-4">
             Your trusted partner in carbon offset, ESG reporting, and sustainable innovation.
@@ -17,14 +16,14 @@ const Footer = () => {
             </p>
           </div>
           <div className="flex gap-4 mt-4 text-xl text-gray-400">
-            <a href="#"><i className="fab fa-linkedin"></i></a>
-            <a href="#"><i className="fab fa-instagram"></i></a>
-            <a href="#"><i className="fab fa-facebook"></i></a>
-            <a href="#"><i className="fab fa-twitter"></i></a>
+            <a href="#"><i className="fab fa-linkedin hover:text-white" /></a>
+            <a href="#"><i className="fab fa-instagram hover:text-white" /></a>
+            <a href="#"><i className="fab fa-facebook hover:text-white" /></a>
+            <a href="#"><i className="fab fa-twitter hover:text-white" /></a>
           </div>
         </div>
 
-        <div>
+        <div className="flex-1 min-w-[250px]">
           <h3 className="text-white text-lg font-semibold mb-3">Services</h3>
           <ul className="text-gray-300 space-y-2 text-sm">
             <li>Carbon Footprint & Analysis</li>
@@ -38,20 +37,20 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div>
+        <div className="flex-1 min-w-[250px]">
           <h3 className="text-white text-lg font-semibold mb-3">Stay Updated</h3>
           <p className="text-gray-300 text-sm mb-4">
-            Get exclusive carbon market insights and updates directly in your inbox.
+          Receive expert analysis and the latest trends in the carbon market directly via email.
           </p>
-          <form className="flex">
+          <form className="flex flex-col sm:flex-row gap-2">
             <input
               type="email"
               placeholder="e.g., name@example.com"
-              className="px-4 py-2 rounded-l-md text-white w-full"
+              className="px-4 py-2 text-white rounded-md w-full sm:w-auto sm:flex-1"
             />
             <button
               type="submit"
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-r-md"
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md"
             >
               Subscribe
             </button>
