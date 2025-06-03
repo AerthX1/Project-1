@@ -33,4 +33,7 @@ If you are developing a production application, we recommend using TypeScript wi
 3. npm install @reduxjs/toolkit   // Redux-Toolkit use for  helps you store, update, and access global state from anywhere in your app, in a clean and structured way. 
 4. npm install react-redux
 
+<<<<<<< HEAD
+=======
 let started
+>>>>>>> d7943c9d1763e46f62352e48b27c26171279fa7b
