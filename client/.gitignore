@@ -43,3 +43,8 @@ coverage/
 # Optional testing files
 *.test.js
 *.spec.js
+
+# Ignore large video files
+client/src/assets/introvideo.mp4
+client/src/assets/introsecondvideo.mp4
+client/src/assets/introthirdvideo.mp4
