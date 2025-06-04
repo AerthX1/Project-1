@@ -32,5 +32,6 @@ If you are developing a production application, we recommend using TypeScript wi
 2. npm install tailwindcss @tailwindcss/vite  // for adding style and make is user-friendly
 3. npm install @reduxjs/toolkit   // Redux-Toolkit use for  helps you store, update, and access global state from anywhere in your app, in a clean and structured way. 
 4. npm install react-redux
+5. npm install react-icons
 
 let started

@@ -2,6 +2,7 @@ import { createBrowserRouter, createRoutesFromElements, Route } from 'react-rout
 import Root from '../layout/Root';
 import Home from '../pages/Home';
 import MarketPlace from '../pages/MarketPlace'
+import Pricing from '../pages/Pricing';
 
 
 const router = createBrowserRouter(
@@ -10,6 +11,7 @@ const router = createBrowserRouter(
    <Route index element={<Home />} />
    <Route path='home' element={<Home/>}/>  
   <Route path="marketplace" element={<MarketPlace />} />
+  <Route path="pricing" element={<Pricing/>}/>
     </Route>
   )
 );
