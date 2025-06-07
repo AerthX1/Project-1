@@ -327,7 +327,8 @@ const Pricing = () => {
                 }`}
               aria-pressed={billing === "yearly"}
             >
-              Yearly <span className="text-sm font-normal ml-2">(Save 20%)</span>
+              Yearly{" "}
+              <span className="text-sm font-normal ml-2">(Save 20%)</span>
             </button>
           </div>
         </div>
@@ -350,7 +351,9 @@ const Pricing = () => {
 
                 <h3
                   className={`text-3xl font-bold mb-5 tracking-wide ${
-                    plan.highlight ? "text-yellow-100 drop-shadow-lg" : "text-green-700"
+                    plan.highlight
+                      ? "text-yellow-100 drop-shadow-lg"
+                      : "text-green-700"
                   }`}
                 >
                   {planName}
@@ -358,7 +361,9 @@ const Pricing = () => {
 
                 <p
                   className={`text-6xl font-extrabold mb-6 tracking-tight ${
-                    plan.highlight ? "text-yellow-200 drop-shadow" : "text-green-800"
+                    plan.highlight
+                      ? "text-yellow-200 drop-shadow"
+                      : "text-green-800"
                   }`}
                 >
                   {plan[billing] === "Custom" ? (
@@ -447,7 +452,9 @@ const Pricing = () => {
                             {display && (
                               <span
                                 className={`ml-auto font-semibold ${
-                                  plan.highlight ? "text-yellow-200" : "text-gray-700"
+                                  plan.highlight
+                                    ? "text-yellow-200"
+                                    : "text-gray-700"
                                 }`}
                               >
                                 {display}
@@ -488,12 +495,18 @@ const Pricing = () => {
         </h2>
         <div className="bg-gray-50 rounded-xl p-10 shadow-xl text-gray-700 space-y-6 border border-green-200 hover:shadow-2xl transition-shadow duration-300">
           <p className="text-lg leading-relaxed">
-            <strong className="text-green-900">Branded Carbon Offset Certificate NFT:</strong>{" "}
-            ₹199 per certificate — A unique, verifiable digital certificate minted on the blockchain.
+            <strong className="text-green-900">
+              Branded Carbon Offset Certificate NFT:
+            </strong>{" "}
+            ₹199 per certificate — A unique, verifiable digital certificate
+            minted on the blockchain.
           </p>
           <p className="text-lg leading-relaxed">
-            <strong className="text-green-900">Public Offset Profile for Businesses:</strong>{" "}
-            ₹499/month — A public profile showcasing your sustainability milestones.
+            <strong className="text-green-900">
+              Public Offset Profile for Businesses:
+            </strong>{" "}
+            ₹499/month — A public profile showcasing your sustainability
+            milestones.
           </p>
         </div>
       </section>
@@ -504,16 +517,22 @@ const Pricing = () => {
         </h2>
         <div className="bg-gradient-to-r from-green-50 to-white rounded-2xl p-10 shadow-2xl text-gray-700 space-y-6 border border-green-200 hover:shadow-3xl transition-shadow duration-300">
           <p className="text-lg leading-relaxed">
-            <strong className="text-green-800">Project Onboarding Fee:</strong> ₹5 per carbon credit
+            <strong className="text-green-800">Project Onboarding Fee:</strong>{" "}
+            ₹5 per carbon credit
           </p>
           <p className="text-lg leading-relaxed">
-            <strong className="text-green-800">Blockchain Gas Fees:</strong> Dynamically calculated based on network activity
+            <strong className="text-green-800">Blockchain Gas Fees:</strong>{" "}
+            Dynamically calculated based on network activity
           </p>
           <p className="text-lg leading-relaxed">
-            <strong className="text-green-800">Smart Contract Deployment:</strong> One-time fee based on project complexity
+            <strong className="text-green-800">
+              Smart Contract Deployment:
+            </strong>{" "}
+            One-time fee based on project complexity
           </p>
           <p className="text-lg leading-relaxed">
-            <strong className="text-green-800">Additional Services:</strong> Third-party verifications, reports, consultancy
+            <strong className="text-green-800">Additional Services:</strong>{" "}
+            Third-party verifications, reports, consultancy
           </p>
         </div>
       </section>
@@ -524,13 +543,17 @@ const Pricing = () => {
         </h2>
         <div className="bg-green-50 rounded-xl p-10 shadow-xl text-green-900 space-y-6 border border-green-300 hover:shadow-2xl transition-shadow duration-300">
           <p className="text-lg leading-relaxed">
-            Need tailored API endpoints for seamless integration with your systems? Our enterprise plans include:
+            Need tailored API endpoints for seamless integration with your
+            systems? Our enterprise plans include:
           </p>
           <ul className="list-disc list-inside space-y-3 font-semibold">
             <li>Custom API key generation & management</li>
             <li>Rate limiting & usage analytics</li>
             <li>Dedicated technical support & onboarding</li>
-            <li>Enterprise dashboard with live carbon credit pricing and ESG insights</li>
+            <li>
+              Enterprise dashboard with live carbon credit pricing and ESG
+              insights
+            </li>
           </ul>
         </div>
       </section>

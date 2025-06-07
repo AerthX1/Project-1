@@ -86,3 +86,15 @@ For development, run the backend using:
 npm run dev if you're using nodemon (add a script in package.json)
 
 node server.js for production
+
+
+project-name@1.0.0 /your/project/path
+├── express@4.18.2
+├── mongoose@7.2.2
+├── cors@2.8.5
+├── dotenv@16.3.1
+├── bcryptjs@2.4.3
+├── jsonwebtoken@9.0.0
+
+
+npm install bcryptjs
