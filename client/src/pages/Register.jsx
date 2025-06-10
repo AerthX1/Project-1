@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerOrganization } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const Register = () => {
     email: "",
     password: "",
     designation: "",
+    employeeCount: "",
     termsAgreed: false,
   });
 
@@ -40,9 +42,7 @@ const Register = () => {
     }
   };
 
-  const handleSignInClick = () => {
-    navigate("/signin");
-  };
+  
 
   return (
     <div className="max-w-4xl mx-auto mt-12 p-6 bg-white rounded shadow-md">
@@ -193,13 +193,15 @@ const Register = () => {
           {loading ? "Registering..." : "Register Organization"}
         </button>
 
-        <button
-          type="button"
-          onClick={handleSignInClick}
-          className="col-span-2 w-full mt-4 py-2 border border-green-600 text-green-600 font-semibold rounded hover:bg-green-600 hover:text-white transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1"
-        >
-          Already have an account? Sign In
-        </button>
+      <Link
+  to="/signin"
+  className="col-span-2 block w-full mt-6 py-3 text-center border-2 border-green-700 text-green-700 font-semibold rounded-lg
+             hover:bg-green-700 hover:text-white transition-colors duration-300
+             focus:outline-none focus:ring-4 focus:ring-green-400 focus:ring-offset-2"
+  aria-label="Sign in to your Aearthex account"
+>
+  Already have an account? Sign In
+</Link>
       </form>
     </div>
   );

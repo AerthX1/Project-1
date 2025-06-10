@@ -328,7 +328,7 @@ const Pricing = () => {
               aria-pressed={billing === "yearly"}
             >
               Yearly{" "}
-              <span className="text-sm font-normal ml-2">(Save 20%)</span>
+            
             </button>
           </div>
         </div>

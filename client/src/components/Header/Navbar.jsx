@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/authSlice";
+import ProfileDropdown from "./ProfileDropdown";
+import DefaultAvatar from "./DefaultAvatar"; 
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -118,20 +120,37 @@ const Navbar = () => {
           </li>
 
           {isAuthenticated ? (
-            <Link
-              to="/profile"
-              className="ml-2 xl:ml-4 px-3 xl:px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-all"
-            >
-              Profile
-            </Link>
+            <li className="relative">
+    <button
+      onClick={(e) => {
+        const dropdown = e.currentTarget.nextSibling;
+        dropdown.classList.toggle("hidden");
+      }}
+      className="flex items-center cursor-pointer select-none"
+      aria-label="Toggle profile dropdown"
+    >
+      <DefaultAvatar
+        name={user.fullName || user.orgName || "User"}
+        size={36}
+      />
+    </button>
+    <div className="absolute right-0 top-7 z-10 hidden">
+      <ProfileDropdown onClose={() => {}} onLogout={handleLogout} />
+    </div>
+  </li>
+
           ) : (
-            <Link
-              to="/register"
-              className="ml-2 xl:ml-4 px-3 xl:px-4 py-2 bg-green-400 text-white rounded-lg font-semibold hover:bg-green-500 transition-all"
-            >
-              Register Here
-            </Link>
+            <li>
+              <Link
+                to="/register"
+                className="ml-2 xl:ml-4 px-3 xl:px-4 py-2 bg-green-400 text-white rounded-lg font-semibold hover:bg-green-500 transition-all"
+              >
+                Register Here
+              </Link>
+            </li>
           )}
+
+        
         </ul>
       </div>
 
@@ -218,13 +237,24 @@ const Navbar = () => {
           </Link>
 
           {isAuthenticated ? (
-            <Link
-              to="/profile"
-              className="bg-blue-500 text-white px-6 py-2 rounded-md font-medium hover:bg-blue-600"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Profile
-            </Link>
+            <>
+              <Link
+                to="/profile"
+                className="bg-blue-500 text-white px-6 py-2 rounded-md font-medium hover:bg-blue-600"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Profile
+              </Link>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsMenuOpen(false);
+                }}
+                className="bg-red-500 text-white px-6 py-2 rounded-md font-medium hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </>
           ) : (
             <Link
               to="/register"

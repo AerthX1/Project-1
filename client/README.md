@@ -34,5 +34,7 @@ If you are developing a production application, we recommend using TypeScript wi
 4. npm install react-redux
 5. npm install react-icons
 6. npm i axios
+7. npm install recharts
+
 
 let started
