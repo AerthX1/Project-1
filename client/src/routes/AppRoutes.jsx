@@ -6,6 +6,11 @@ import Pricing from '../pages/Pricing';
 import Register from '../pages/Register';
 import Resource from '../pages/Resource';
 import Login from '../pages/Login';
+import Solutions from '../pages/Solutions';
+import BusinessSolutions from '../pages/BusinessSolutions';
+import IndividualSolutions from '../pages/IndividualSolutions';
+import APIIntegration from '../pages/APIIntegration';
+import Profile from '../pages/Profile';
 
 
 const router = createBrowserRouter(
@@ -19,7 +24,13 @@ const router = createBrowserRouter(
   <Route path="/register" element={<Register/>}/>
    <Route path="/signin" element={<Login />} />
  <Route path="resources" element={<Resource />} />
+ <Route path="solutions" element={<Solutions/>}/>
+ <Route path="/solutions/business" element={<BusinessSolutions/>}/>
+  <Route path="/solutions/individuals" element={<IndividualSolutions/>}/>
+    <Route path="/solutions/api" element={<APIIntegration/>}/>
+
     </Route>
+    <Route path='/profile' element={<Profile/>}/>
      </>
   )
 );
