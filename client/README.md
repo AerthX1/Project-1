@@ -35,7 +35,7 @@ If you are developing a production application, we recommend using TypeScript wi
 5. npm install react-icons
 6. npm i axios
 7. npm install recharts
-
+<!-- 8. npm install react-helmet -->  // forget this wrong download
 
 <<<<<<< HEAD
 =======

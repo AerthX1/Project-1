@@ -12,6 +12,7 @@ export const fetchProfile = createAsyncThunk(
       });
       return res.data;
     } catch (err) {
+      console.error("Profile fetch error:", err.response?.data || err.message);
       return rejectWithValue(err.response?.data?.message || "Failed to fetch profile");
     }
   }
@@ -23,6 +24,7 @@ export const updateProfile = createAsyncThunk(
     try {
       const res = await axios.put(`${API_URL}/organization/profile`, formData, {
         headers: { Authorization: `Bearer ${token}` },
+        "Content-Type": "application/json",
       });
       return res.data;
     } catch (err) {

@@ -11,7 +11,7 @@ export const registerOrganization = createAsyncThunk(
       const { token, org } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(org));
-      return org;
+      return { token, user: org };
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || error.message || "Registration failed"
@@ -28,7 +28,7 @@ export const loginOrganization = createAsyncThunk(
       const { token, org } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(org));
-      return org;
+      return { token, user: org };
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || error.message || "Login failed"
@@ -41,12 +41,14 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: JSON.parse(localStorage.getItem("user")) || null,
+    token: localStorage.getItem("token") || null,
     loading: false,
     error: null,
   },
   reducers: {
     logout(state) {
       state.user = null;
+      state.token = null;
       localStorage.removeItem("token");
       localStorage.removeItem("user");
     },
@@ -59,7 +61,8 @@ const authSlice = createSlice({
       })
       .addCase(registerOrganization.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
       })
       .addCase(registerOrganization.rejected, (state, action) => {
         state.loading = false;
@@ -71,7 +74,8 @@ const authSlice = createSlice({
       })
       .addCase(loginOrganization.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
       })
       .addCase(loginOrganization.rejected, (state, action) => {
         state.loading = false;

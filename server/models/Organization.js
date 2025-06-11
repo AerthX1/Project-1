@@ -14,6 +14,13 @@ const organizationSchema = new mongoose.Schema({
   password: { type: String, required: true },
   designation: { type: String, required: true },
   termsAgreed: { type: Boolean, required: true, default: false },
+  avatarUrl: { type: String, default: '' },
+  bio: { type: String, default: '' },
+  linkedin: { type: String, default: '' },
+  github: { type: String, default: '' },
+  twitter: { type: String, default: '' },
+  isOpenToPartnerships: { type: Boolean, default: false },
+  showOnMarketplace: { type: Boolean, default: false },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Organization", organizationSchema);

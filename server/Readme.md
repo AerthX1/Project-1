@@ -97,4 +97,7 @@ project-name@1.0.0 /your/project/path
 ├── jsonwebtoken@9.0.0
 
 
-npm install bcryptjs
+npm init -y
+
+to Run :-  npm run start // start because i the hardik make write in package.json start: "nodemon server.js"  ok
+

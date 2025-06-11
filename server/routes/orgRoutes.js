@@ -3,16 +3,11 @@ const router = express.Router();
 const verifyToken = require('../middleware/authMiddleware');
 const { registerOrganization } = require('../controllers/orgAuthController');
 const { loginOrganization } = require("../controllers/authController");
+const { getProfile, updateProfile } = require('../controllers/profileController');
 
 router.post('/register', registerOrganization);
 router.post("/login", loginOrganization);
-
-router.get('/profile', verifyToken, (req, res) => {
-  res.json({
-    fullName: req.org.fullName,
-    email: req.org.email,
-    orgName: req.org.orgName,
-  });
-});
+router.get('/profile', verifyToken, getProfile);
+router.put('/profile', verifyToken, updateProfile);
 
 module.exports = router;
