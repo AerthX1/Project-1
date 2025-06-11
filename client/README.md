@@ -37,4 +37,7 @@ If you are developing a production application, we recommend using TypeScript wi
 7. npm install recharts
 
 
+<<<<<<< HEAD
+=======
 let started
+>>>>>>> d7943c9d1763e46f62352e48b27c26171279fa7b

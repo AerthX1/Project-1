@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+import React from 'react'
+
+const Home = () => {
+  return (
+    <div>Home</div>
+  )
+}
+
+export default Home
+=======
 import React from "react";
 import starterImage from "../assets/starterImage.jpeg";
 import starterVideo from "../assets/introfirstvideo.mp4";
@@ -131,3 +142,4 @@ export default function Home() {
     </div>
   );
 }
+>>>>>>> d7943c9d1763e46f62352e48b27c26171279fa7b
