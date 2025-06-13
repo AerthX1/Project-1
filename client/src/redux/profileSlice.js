@@ -7,7 +7,8 @@ export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (token, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${API_URL}/organization/profile`, {
+    const res = await axios.get(`${API_URL}/profile/profile`, {
+
         headers: { Authorization: `Bearer ${token}` },
       });
       return res.data;
@@ -22,9 +23,12 @@ export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async ({ token, formData }, { rejectWithValue }) => {
     try {
-      const res = await axios.put(`${API_URL}/organization/profile`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-        "Content-Type": "application/json",
+      const res = await axios.put(`${API_URL}/profile/profile`, formData, {
+
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
       return res.data;
     } catch (err) {

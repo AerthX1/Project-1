@@ -15,7 +15,7 @@ const organizationSchema = new mongoose.Schema({
   designation: { type: String, required: true },
   termsAgreed: { type: Boolean, required: true, default: false },
   avatarUrl: { type: String, default: '' },
-  bio: { type: String, default: '' },
+  description: { type: String, default: '' },
   linkedin: { type: String, default: '' },
   github: { type: String, default: '' },
   twitter: { type: String, default: '' },

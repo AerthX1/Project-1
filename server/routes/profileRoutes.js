@@ -1,12 +1,46 @@
 const express = require("express");
 const router = express.Router();
-const {
-  getProfile,
-  updateProfile,
-} = require("../controllers/profileController");
-const authMiddleware = require("../middleware/authMiddleware");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+const Organization = require("../models/Organization");
+const { getProfile, updateProfile } = require("../controllers/profileController");
+const verifyToken = require("../middleware/authMiddleware");
 
-router.get("/", authMiddleware, getProfile);
-router.put("/", authMiddleware, updateProfile);
+const uploadDir = "uploads/";
+fs.mkdirSync(uploadDir, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadDir),
+  filename: (req, file, cb) => {
+  try {
+    const orgName = req.user?.orgName?.replace(/\s+/g, "_") || req.user?.id || "unknown";
+
+    const now = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000; 
+    const istTime = new Date(now.getTime() + istOffset);
+
+    const year = istTime.getFullYear();
+    const month = String(istTime.getMonth() + 1).padStart(2, "0");
+    const day = String(istTime.getDate()).padStart(2, "0");
+    const hours = String(istTime.getHours()).padStart(2, "0");
+    const minutes = String(istTime.getMinutes()).padStart(2, "0");
+    const seconds = String(istTime.getSeconds()).padStart(2, "0");
+
+    const timeStampIST = `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
+
+    const ext = path.extname(file.originalname);
+    const filename = `${orgName}_${timeStampIST}${ext}`;
+    cb(null, filename);
+  } catch (err) {
+    cb(null, `${Date.now()}${path.extname(file.originalname)}`);
+  }
+}
+});
+
+const upload = multer({ storage });
+
+router.get("/profile", verifyToken, getProfile);
+router.put("/profile", verifyToken, upload.single("avatar"), updateProfile);
 
 module.exports = router;

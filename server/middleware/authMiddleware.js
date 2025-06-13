@@ -14,11 +14,17 @@ const verifyToken = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const org = await Organization.findById(decoded.id).select("-password");
 
+
     if (!org) {
       return res.status(404).json({ message: "Organization not found" });
     }
 
-    req.org = org;
+    req.user = {
+      id: org._id,
+      orgName: org.orgName,
+      email: org.email,
+    };
+
     next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid token" });

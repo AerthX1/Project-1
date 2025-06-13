@@ -33,6 +33,7 @@ const loginOrganization = async (req, res) => {
         id: org._id,
         orgName: org.orgName,
         email: org.email,
+          avatarUrl: org.avatarUrl,
       },
     });
   } catch (error) {
