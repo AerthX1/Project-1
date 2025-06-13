@@ -96,6 +96,9 @@ project-name@1.0.0 /your/project/path
 ├── bcryptjs@2.4.3
 ├── jsonwebtoken@9.0.0
 
+npm install multer
+
+
 
 npm init -y
 

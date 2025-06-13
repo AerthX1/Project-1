@@ -8,6 +8,7 @@ export const registerOrganization = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${API_URL}/organization/register`, formData);
+
       const { token, org } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(org));
