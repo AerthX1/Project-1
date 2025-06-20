@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const profileRoutes = require("./routes/profileRoutes");
 
 const orgRoutes = require("./routes/orgRoutes");
+const individualRoutes = require("./routes/individualRoutes");
+const individualProfileRoutes = require("./routes/individualProfileRoutes");
 
 const app = express();
 dotenv.config();
@@ -22,6 +24,8 @@ app.use("/uploads", express.static("uploads"));
 
 app.use("/api/organization", orgRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/individual", individualRoutes);
+app.use("/api/individual", individualProfileRoutes);
 
 const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGO_URI)

@@ -26,20 +26,23 @@ const loginOrganization = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    res.status(200).json({
-      message: "Login successful",
-      token,
-      org: {
-        id: org._id,
-        orgName: org.orgName,
-        email: org.email,
-          avatarUrl: org.avatarUrl,
-      },
-    });
+ res.status(200).json({
+  message: "Login successful",
+  token,
+  org: {
+    id: org._id,
+    orgName: org.orgName,
+    email: org.email,
+    role: org.role, 
+    avatarUrl: org.avatarUrl,
+  },
+});
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Server error" });
   }
+
+  
 };
 
 module.exports = { loginOrganization };

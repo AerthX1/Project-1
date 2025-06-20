@@ -11,6 +11,11 @@ import BusinessSolutions from '../pages/BusinessSolutions';
 import IndividualSolutions from '../pages/IndividualSolutions';
 import APIIntegration from '../pages/APIIntegration';
 import Profile from '../pages/Profile';
+import AdminDashboard from '../pages/AdminDashboard';
+import AdminRoute from "../components/Admin/AdminRoute";
+import RegisterChoice from '../pages/RegisterChoice';
+import RegisterIndividual from '../pages/RegisterIndividual';
+
 
 
 const router = createBrowserRouter(
@@ -21,8 +26,6 @@ const router = createBrowserRouter(
    <Route path='home' element={<Home/>}/>  
   <Route path="marketplace" element={<MarketPlace />} />
   <Route path="pricing" element={<Pricing/>}/>
-  <Route path="/register" element={<Register/>}/>
-   <Route path="/signin" element={<Login />} />
  <Route path="resources" element={<Resource />} />
  <Route path="solutions" element={<Solutions/>}/>
  <Route path="/solutions/business" element={<BusinessSolutions/>}/>
@@ -30,7 +33,13 @@ const router = createBrowserRouter(
     <Route path="/solutions/api" element={<APIIntegration/>}/>
 
     </Route>
+  <Route path="/register-choice" element={<RegisterChoice  />} />
+  <Route path="/register" element={<Register/>}/>
+  <Route path="/register-individual" element={<RegisterIndividual />} />
+   <Route path="/signin" element={<Login />} />
     <Route path='/profile' element={<Profile/>}/>
+    <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+
      </>
   )
 );

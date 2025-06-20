@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginOrganization } from "../redux/authSlice"; 
+import { loginOrganization, loginIndividual } from "../redux/authSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [role, setRole] = useState("organization"); // "organization" or "individual"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -22,18 +23,25 @@ const Login = () => {
     }
 
     setLoading(true);
-    try {
-      const resultAction = await dispatch(loginOrganization({ email, password }));
 
-      if (loginOrganization.fulfilled.match(resultAction)) {
-   
-        navigate("/");
+    try {
+      let result;
+
+      if (role === "organization") {
+        result = await dispatch(loginOrganization({ email, password })).unwrap(); // ✅ Unwrap
       } else {
-       
-        setError(resultAction.payload || "Login failed");
+        result = await dispatch(loginIndividual({ email, password })).unwrap(); // ✅ Unwrap
       }
-    } catch {
-      setError("Network error. Please try again.");
+
+      const { user } = result;
+
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      setError(err || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -42,7 +50,7 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login to AerthX</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Login to Aearthex</h2>
 
         {error && (
           <div className="mb-4 text-red-600 text-sm font-semibold text-center">
@@ -51,6 +59,30 @@ const Login = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Role Selection */}
+          <div className="flex gap-4 justify-center">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="role"
+                value="organization"
+                checked={role === "organization"}
+                onChange={() => setRole("organization")}
+              />
+              <span className="text-sm text-gray-700">Organization</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="role"
+                value="individual"
+                checked={role === "individual"}
+                onChange={() => setRole("individual")}
+              />
+              <span className="text-sm text-gray-700">Individual</span>
+            </label>
+          </div>
+
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email Address
