@@ -43,4 +43,5 @@ const upload = multer({ storage });
 router.get("/profile", verifyToken, getProfile);
 router.put("/profile", verifyToken, upload.single("avatar"), updateProfile);
 
+
 module.exports = router;

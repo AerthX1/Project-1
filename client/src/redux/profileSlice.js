@@ -5,10 +5,12 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
-  async (token, { rejectWithValue }) => {
+  async ({ token, userType }, { rejectWithValue }) => {
     try {
-    const res = await axios.get(`${API_URL}/profile/profile`, {
+      const route =
+       userType === "individual" ? "individual/profile" : "profile/profile";
 
+      const res = await axios.get(`${API_URL}/${route}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return res.data;
@@ -21,10 +23,12 @@ export const fetchProfile = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
-  async ({ token, formData }, { rejectWithValue }) => {
+  async ({ token, userType, formData }, { rejectWithValue }) => {
     try {
-      const res = await axios.put(`${API_URL}/profile/profile`, formData, {
+      const route =
+      userType === "individual" ? "individual/profile" : "profile/profile";
 
+      const res = await axios.put(`${API_URL}/${route}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

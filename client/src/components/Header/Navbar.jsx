@@ -27,7 +27,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout()); 
     navigate("/");
   };
 
@@ -200,12 +200,13 @@ const Navbar = () => {
             </li>
           ) : (
             <li>
-              <Link
-                to="/register"
-                className="ml-2 xl:ml-4 px-3 xl:px-4 py-2 bg-green-400 text-white rounded-lg font-semibold hover:bg-green-500 transition-all"
-              >
-                Register Here
-              </Link>
+             <Link
+  to="/register-choice"
+  className="ml-2 xl:ml-4 px-3 xl:px-4 py-2 bg-green-400 text-white rounded-lg font-semibold hover:bg-green-500 transition-all"
+>
+  Register Here
+</Link>
+
             </li>
           )}
 

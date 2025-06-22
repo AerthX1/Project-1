@@ -12,6 +12,7 @@ const organizationSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  role: { type: String, enum: ["user", "admin"], default: "user" },
   designation: { type: String, required: true },
   termsAgreed: { type: Boolean, required: true, default: false },
   avatarUrl: { type: String, default: '' },
