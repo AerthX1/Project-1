@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerIndividual } from "../redux/authSlice";
 import { useNavigate, Link } from "react-router-dom";
+import { validateEmailFrontend } from "../utils/validateEmail";
+
 
 const RegisterIndividual = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
+const [emailError, setEmailError] = useState("");
+const [emailChecking, setEmailChecking] = useState(false);
+const emailTimerRef = useRef(null);
+
 
   const [form, setForm] = useState({
     fullName: "",
@@ -20,21 +26,59 @@ const RegisterIndividual = () => {
     termsAgreed: false,
   });
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm({ ...form, [name]: type === "checkbox" ? checked : value });
-  };
+ const handleChange = (e) => {
+  const { name, value, type, checked } = e.target;
+  setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+
+  if (name === "email") {
+    setEmailChecking(true);
+    setEmailError("");
+
+    if (emailTimerRef.current) clearTimeout(emailTimerRef.current);
+
+    emailTimerRef.current = setTimeout(async () => {
+      if (!value.includes("@") || value.length < 6) {
+        setEmailError("Invalid email format");
+        setEmailChecking(false);
+        return;
+      }
+
+    try {
+  const res = await validateEmailFrontend(value);
+  setEmailChecking(false);
+
+  if (
+    res?.format_valid === false ||
+    res?.mx_found === false ||
+    res?.smtp_check === false ||  
+    res?.disposable === true
+  ) {
+    setEmailError("Invalid or disposable email address.");
+  } else {
+    setEmailError(""); 
+  }
+} catch (error) {
+  setEmailChecking(false);
+  setEmailError("Email validation failed.");
+}
+
+    }, 500); 
+  }
+};
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
-    try {
-      const result = await dispatch(registerIndividual(form));
-      if (!result.error) navigate("/");
-    } catch (err) {
-      console.error("Frontend error:", err.message);
-    }
-  };
+  e.preventDefault();
+  if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
+  if (emailError || emailChecking) return;
+
+  try {
+    const result = await dispatch(registerIndividual(form));
+    if (!result.error) navigate("/");
+  } catch (err) {
+    console.error("Frontend error:", err.message);
+  }
+};
+
 
   const statesOfIndia = [
     "Maharashtra", "Gujarat", "Karnataka", "Tamil Nadu", "Delhi", "Rajasthan",
@@ -57,15 +101,26 @@ const RegisterIndividual = () => {
           className="p-2 border rounded"
           required
         />
-        <input
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          placeholder="Email"
-          className="p-2 border rounded"
-          required
-        />
+     <input
+  type="email"
+  name="email"
+  value={form.email}
+  onChange={handleChange}
+  placeholder="Email"
+  className="p-2 border rounded"
+  required
+/>
+
+{emailChecking && (
+  <p className="col-span-2 text-blue-500 text-sm">Checking email...</p>
+)}
+
+{emailError && (
+  <p className="col-span-2 text-red-500 text-sm">{emailError}</p>
+)}
+
+
+
         <input
           type="password"
           name="password"
@@ -122,27 +177,31 @@ const RegisterIndividual = () => {
           className="p-2 border rounded"
         />
         <div className="col-span-2 flex items-center gap-2">
-          <input
-            type="checkbox"
-            name="termsAgreed"
-            checked={form.termsAgreed}
-            onChange={handleChange}
-          />
-          <label className="text-sm">
-            I agree to the{" "}
-            <a href="#" className="text-green-600 underline">
-              Terms & Conditions
-            </a>{" "}
-            *
-          </label>
+         <div className="col-span-2 flex items-center gap-2">
+  <input
+    type="checkbox"
+    name="termsAgreed"
+    checked={form.termsAgreed}
+    onChange={handleChange}
+  />
+  <label className={`text-sm ${!form.termsAgreed ? "text-red-600" : ""}`}>
+    I agree to the{" "}
+    <a href="#" className="text-green-600 underline">
+      Terms & Conditions
+    </a>{" "}
+    *
+  </label>
+</div>
+
         </div>
         <button
-          type="submit"
-          disabled={loading}
-          className="col-span-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded mt-2"
-        >
-          {loading ? "Registering..." : "Register Individual"}
-        </button>
+  type="submit"
+  disabled={loading || !form.termsAgreed}
+  className={`col-span-2 py-2 rounded mt-2 text-white 
+    ${!form.termsAgreed ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}`}
+>
+  {loading ? "Registering..." : "Register Individual"}
+</button>
 
         <Link
           to="/signin"

@@ -7,7 +7,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [role, setRole] = useState("organization"); // "organization" or "individual"
+  const [role, setRole] = useState("organization"); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,9 +28,9 @@ const Login = () => {
       let result;
 
       if (role === "organization") {
-        result = await dispatch(loginOrganization({ email, password })).unwrap(); // ✅ Unwrap
+        result = await dispatch(loginOrganization({ email, password })).unwrap();
       } else {
-        result = await dispatch(loginIndividual({ email, password })).unwrap(); // ✅ Unwrap
+        result = await dispatch(loginIndividual({ email, password })).unwrap(); 
       }
 
       const { user } = result;
@@ -59,7 +59,7 @@ const Login = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Role Selection */}
+
           <div className="flex gap-4 justify-center">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -112,7 +112,15 @@ const Login = () => {
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-400"
             />
           </div>
-
+<div className="text-right">
+  <button
+    type="button"
+    onClick={() => navigate("/forgot-password")}
+    className="text-sm text-emerald-600 hover:underline focus:outline-none"
+  >
+    Forgot Password?
+  </button>
+</div>
           <button
             type="submit"
             disabled={loading}

@@ -1,6 +1,9 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Individual = require("../models/Individual");
+const validateEmail = require("../utils/validateEmail");
+const sendEmail = require("../utils/sendEmail");
+const Notification = require("../models/Notification"); 
 
 const registerIndividual = async (req, res) => {
   try {
@@ -9,6 +12,19 @@ const registerIndividual = async (req, res) => {
 if (!fullName || !email || !password || !country || !city) {
   return res.status(400).json({ message: "All required fields must be filled." });
 }
+
+const emailCheck = await validateEmail(email);
+if (
+  !emailCheck ||
+  !emailCheck.is_valid_format?.value ||
+  !emailCheck.is_mx_found?.value ||
+  !emailCheck.is_smtp_valid?.value ||
+  emailCheck.is_disposable_email?.value
+) {
+  return res.status(400).json({ message: "Invalid or disposable email address." });
+}
+
+
 
 const existingUser = await Individual.findOne({ email });
 if (existingUser) {
@@ -30,14 +46,29 @@ const newUser = new Individual({
   avatarUrl: "", 
 });
 
-await newUser.save();
+await newUser.save()
+ 
+await sendEmail({
+  to: email,
+  subject: "Welcome to Aearthex 🌍",
+  text: `Hello ${fullName}, welcome to Aearthex! Your registration is successful.`,
+  html: `<h2>Welcome to Aearthex, ${fullName}!</h2>
+         <p>Your account has been successfully created.</p>
+         <p>Thank you for joining our mission toward a greener future. 🌿</p>`,
+});
 
+await Notification.create({
+  userId: newUser._id,
+  userType: "Individual",
+  title: "Welcome to Aearthex!",
+  message: "Your individual account was successfully created.",
+});
 
-    const token = jwt.sign(
-      { id: newUser._id, email: newUser.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
+const token = jwt.sign(
+  { id: newUser._id, email: newUser.email, userType: "Individual" }, 
+  process.env.JWT_SECRET,
+  { expiresIn: "1d" }
+);
 
     res.status(201).json({
       message: "Individual registered successfully.",
@@ -73,7 +104,7 @@ const loginIndividual = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id, email: user.email, userType: "Individual" },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );

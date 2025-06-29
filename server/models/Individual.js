@@ -11,6 +11,6 @@ const individualSchema = new mongoose.Schema({
   designation: { type: String },
   description: { type: String },
   avatarUrl: { type: String },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("Individual", individualSchema);

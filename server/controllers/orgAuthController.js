@@ -1,6 +1,9 @@
 const Organization = require("../models/Organization");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const validateEmail = require("../utils/validateEmail");
+const sendEmail = require("../utils/sendEmail");
+const Notification = require("../models/Notification");
 
 const registerOrganization = async (req, res) => {
   try {
@@ -32,6 +35,19 @@ const registerOrganization = async (req, res) => {
       return res.status(400).json({ message: "You must agree to the terms." });
     }
 
+const emailCheck = await validateEmail(email);
+if (
+  !emailCheck ||
+  !emailCheck.is_valid_format?.value ||
+  !emailCheck.is_mx_found?.value ||
+  !emailCheck.is_smtp_valid?.value ||
+  emailCheck.is_disposable_email?.value
+) {
+  return res.status(400).json({ message: "Invalid or disposable email address." });
+}
+
+
+
     const existingOrg = await Organization.findOne({ email });
     if (existingOrg) {
       return res.status(400).json({ message: "Email already registered." });
@@ -56,17 +72,34 @@ const registerOrganization = async (req, res) => {
       termsAgreed,
     });
 
-    await newOrg.save();
+await newOrg.save();
 
-    const token = jwt.sign(
-      { id: newOrg._id, email: newOrg.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
+await sendEmail({
+  to: email,
+  subject: "Welcome to Aearthex 🌍",
+  text: `Hello ${fullName}, welcome to Aearthex! Your registration is successful.`,
+  html: `<h2>Welcome to Aearthex, ${fullName}!</h2>
+         <p>Your account has been successfully created.</p>
+         <p>Thank you for joining our mission toward a greener future. 🌿</p>`,
+});
+
+await Notification.create({
+  userId: newOrg._id,
+  userType: "Organization",
+  title: "Welcome to Aearthex!",
+  message: "Your organization account was successfully created.",
+});
+
+const token = jwt.sign(
+  { id: newOrg._id, email: newOrg.email, userType: "Organization" },
+  process.env.JWT_SECRET,
+  { expiresIn: "1d" }
+);
+
 
     res.status(201).json({
       message: "Organization registered successfully.",
-      token,
+      token, 
       org: {
         id: newOrg._id,
         orgName: newOrg.orgName,

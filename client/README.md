@@ -36,6 +36,9 @@ If you are developing a production application, we recommend using TypeScript wi
 6. npm i axios
 7. npm install recharts
 <!-- 8. npm install react-helmet -->  // forget this wrong download
+9. npm install framer-motion
+10. npm install @headlessui/react
+11. npm install zxcvbn react-hot-toast @headlessui/react
 
 <<<<<<< HEAD
 =======

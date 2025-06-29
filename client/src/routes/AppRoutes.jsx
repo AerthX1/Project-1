@@ -15,6 +15,11 @@ import AdminDashboard from '../pages/AdminDashboard';
 import AdminRoute from "../components/Admin/AdminRoute";
 import RegisterChoice from '../pages/RegisterChoice';
 import RegisterIndividual from '../pages/RegisterIndividual';
+import ForgotPassword from '../pages/ForgotPassword';
+import HelpSupport from '../pages/HelpSupport';
+import NotificationPage from '../pages/NotificationPage';
+import About from '../pages/About';
+import Settings from '../pages/Settings';
 
 
 
@@ -38,6 +43,11 @@ const router = createBrowserRouter(
   <Route path="/register-individual" element={<RegisterIndividual />} />
    <Route path="/signin" element={<Login />} />
     <Route path='/profile' element={<Profile/>}/>
+    <Route path="/help" element={<HelpSupport />} />
+    <Route path="/notification" element={<NotificationPage />} />
+    <Route path="/about" element={<About />} />
+    <Route path="/settings" element={<Settings />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
     <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
 
      </>

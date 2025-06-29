@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import StatsOverview from "../components/admin/StatsOverview";
-import IncomeChart from "../components/admin/IncomeChart";
-import LiveUserControl from "../components/admin/LiveUserControl";
-import CarbonInventory from "../components/admin/CarbonInventory";
-import AdminControls from "../components/admin/AdminControls";
+import StatsOverview from "../components/Admin/StatsOverview";
+import IncomeChart from "../components/Admin/IncomeChart";
+import LiveUserControl from "../components/Admin/LiveUserControl";
+import CarbonInventory from "../components/Admin/CarbonInventory";
+import AdminControls from "../components/Admin/AdminControls";
 import {
   FaTachometerAlt,
   FaChartBar,
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-white text-gray-900">
-      {/* Sidebar */}
+
       <aside className="w-64 bg-black text-white min-h-screen p-6 hidden md:block">
         <div className="text-2xl font-bold mb-10 text-green-400">Aearthex Admin</div>
         <nav className="space-y-4">
@@ -61,7 +61,6 @@ const AdminDashboard = () => {
         </nav>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 p-6 md:p-10">
         <header className="mb-6 border-b pb-4 flex flex-col md:flex-row justify-between items-start md:items-center">
           <h1 className="text-3xl font-bold">
