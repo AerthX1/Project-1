@@ -97,7 +97,8 @@ project-name@1.0.0 /your/project/path
 ├── jsonwebtoken@9.0.0
 
 npm install multer
-
+npm install nodemailer
+npm i axios
 
 
 npm init -y

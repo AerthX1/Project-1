@@ -5,9 +5,11 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const profileRoutes = require("./routes/profileRoutes");
 
+const authRoutes = require("./routes/authRoutes");
 const orgRoutes = require("./routes/orgRoutes");
 const individualRoutes = require("./routes/individualRoutes");
 const individualProfileRoutes = require("./routes/individualProfileRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
 dotenv.config();
@@ -26,6 +28,8 @@ app.use("/api/organization", orgRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/individual", individualRoutes);
 app.use("/api/individual", individualProfileRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/user/notifications", notificationRoutes);
 
 const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGO_URI)

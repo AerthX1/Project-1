@@ -48,11 +48,11 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
         </li>
         <li>
           <Link
-            to="/referrals"
+            to="/notification"
             onClick={onClose}
             className="block px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
           >
-            Refer & Earn
+            Notification
           </Link>
         </li>
         <li>
@@ -65,6 +65,15 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
             Help & Support
           </Link>
         </li>
+        <li>
+  <Link
+    to="/about"
+    onClick={onClose}
+    className="block px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
+  >
+    About
+  </Link>
+</li>
         <li>
           <Link
             to="/settings"

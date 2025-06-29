@@ -3,7 +3,6 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// ORGANIZATION REGISTER
 export const registerOrganization = createAsyncThunk(
   "auth/registerOrganization",
   async (formData, { rejectWithValue }) => {
@@ -22,7 +21,6 @@ export const registerOrganization = createAsyncThunk(
   }
 );
 
-// ORGANIZATION LOGIN
 export const loginOrganization = createAsyncThunk(
   "auth/loginOrganization",
   async ({ email, password }, { rejectWithValue }) => {
@@ -41,7 +39,6 @@ export const loginOrganization = createAsyncThunk(
   }
 );
 
-// INDIVIDUAL REGISTER
 export const registerIndividual = createAsyncThunk(
   "auth/registerIndividual",
   async (formData, { rejectWithValue }) => {
@@ -60,7 +57,6 @@ export const registerIndividual = createAsyncThunk(
   }
 );
 
-// INDIVIDUAL LOGIN
 export const loginIndividual = createAsyncThunk(
   "auth/loginIndividual",
   async ({ email, password }, { rejectWithValue }) => {
@@ -79,7 +75,6 @@ export const loginIndividual = createAsyncThunk(
   }
 );
 
-// AUTH SLICE
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -101,7 +96,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // REGISTER ORGANIZATION
+
       .addCase(registerOrganization.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -117,7 +112,6 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // LOGIN ORGANIZATION
       .addCase(loginOrganization.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -133,7 +127,6 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // REGISTER INDIVIDUAL
       .addCase(registerIndividual.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -149,7 +142,6 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-      // LOGIN INDIVIDUAL
       .addCase(loginIndividual.pending, (state) => {
         state.loading = true;
         state.error = null;
