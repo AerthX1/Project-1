@@ -11,10 +11,11 @@ const NotificationPage = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const endpoint =
-          userType === "Organization"
-            ? "organization"
-            : "individual";
+       const endpoint =
+  userType?.toLowerCase() === "organization"
+    ? "organization"
+    : "individual";
+
 
         const res = await axios.get(
           `${import.meta.env.VITE_API_URL}/user/notifications/${endpoint}`,
@@ -23,7 +24,6 @@ const NotificationPage = () => {
           }
         );
 
-        console.log("Notification API Response:", res.data);
         setNotifications(res.data.notifications || []);
       } catch (error) {
         console.error("Failed to fetch notifications:", error);

@@ -8,6 +8,7 @@ const Notification = require("../models/Notification");
 
 const loginOrganization = async (req, res) => {
   try {
+    
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -126,6 +127,7 @@ const resetPassword = async (req, res) => {
     res.status(500).json({ error: "Failed to reset password" });
   }
 };
+
 
 
 module.exports = {

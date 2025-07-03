@@ -2,7 +2,7 @@ const Individual = require("../models/Individual");
 
 const getIndividualProfile = async (req, res) => {
   try {
-   const user = await Individual.findById(req.individual._id).select("-password");
+   const user = await Individual.findById(req.user.id).select("-password");
     if (!user) return res.status(404).json({ message: "Individual not found" });
     res.json(user);
   } catch (err) {
@@ -13,7 +13,7 @@ const getIndividualProfile = async (req, res) => {
 
 const updateIndividualProfile = async (req, res) => {
   try {
-  const userId = req.individual._id;
+  const userId = req.individual.id;
 
     const updatedData = {};
     const allowedFields = [

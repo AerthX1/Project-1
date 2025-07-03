@@ -13,4 +13,5 @@ router.put('/profile', verifyToken, updateProfile);
 router.post("/send-otp", sendOtp);
 router.post("/reset-password", resetPassword);
 
+
 module.exports = router;
