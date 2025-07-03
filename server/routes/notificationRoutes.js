@@ -3,12 +3,12 @@ const router = express.Router();
 const Notification = require("../models/Notification");
 
 const verifyIndividual = require("../middleware/individualAuthMiddleware");
-const verifyOrganization = require("../middleware/authMiddleware");
+const verifyToken = require("../middleware/authMiddleware");
 
 router.get("/individual", verifyIndividual, async (req, res) => {
   try {
     const notifications = await Notification.find({
-      userId: req.individual._id,
+           userId: req.user.id,
       userType: "Individual",
     }).sort({ timestamp: -1 });
 
@@ -19,7 +19,7 @@ router.get("/individual", verifyIndividual, async (req, res) => {
   }
 });
 
-router.get("/organization", verifyOrganization, async (req, res) => {
+router.get("/organization", verifyToken, async (req, res) => {
   try {
     const notifications = await Notification.find({
       userId: req.user.id,
