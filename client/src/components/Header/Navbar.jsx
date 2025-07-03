@@ -1,19 +1,9 @@
-
 import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/authSlice";
 import ProfileDropdown from "./ProfileDropdown";
 import DefaultAvatar from "./DefaultAvatar";
-
-import React, { useState } from 'react';
-
-import { Link } from 'react-router-dom';
-
-import { Link, NavLink } from 'react-router-dom';
-
-import Logo from '../../assets/AerthxLogo.jpg';
- 
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,23 +22,12 @@ const Navbar = () => {
   };
 
   return (
-
-    <nav className="bg-white shadow-md px-6 py-4 relative z-50">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-2">
-          {/* <img src={Logo} alt="AerthX Logo" className="h-10 w-auto object-contain" /> */}
-          <h1 className="text-2xl font-bold text-black">AerthX</h1>
-
     <nav className="bg-white shadow-md w-full px-4 py-3 lg:px-6 lg:py-4 relative z-50">
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
-
           <h1 className="text-4xl sm:text-5xl font-extrabold text-black">
             AerthX
           </h1>
-
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-black">AerthX</h1>
-
         </div>
 
         <div className="lg:hidden">
@@ -60,17 +39,6 @@ const Navbar = () => {
             ☰
           </button>
         </div>
-
-
-        <ul className="hidden lg:flex items-center gap-6 text-sm text-gray-800">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/marketplace">Marketplace</Link></li>
-
-          <li className="relative group">
-            <Link to="/solution" className="flex items-center gap-1">
-              Solutions <span>▾</span>
-            </Link>
-            <div className="absolute top-5 left-0 bg-white shadow-lg border rounded-md px-4 py-2 z-10 hidden group-hover:block">
 
         <ul className="hidden lg:flex items-center gap-6 xl:gap-9 text-lg xl:text-xl font-bold text-gray-800">
           <li>
@@ -109,31 +77,20 @@ const Navbar = () => {
             >
               Solutions <span>▾</span>
             </NavLink>
-
             <div className="absolute top-7 -left-7 bg-white shadow-lg border rounded-md px-4 py-2 z-10 hidden group-hover:block">
               <Link to="/solutions/business" className="block p-3 hover:text-green-600">
                 Businesses
               </Link>
               <Link to="/solutions/individuals" className="block p-3 hover:text-green-600">
                 Individuals
-
-            <div className="absolute top-7 left-0 bg-white shadow-lg border rounded-md px-4 py-2 z-10 hidden group-hover:block">
-
-              <Link to="/solution1" className="block py-1 hover:text-green-600">
-                Solution 1
-
               </Link>
               <Link to="/solutions/api" className="block p-3 hover:text-green-600">
                 API & Integration
               </Link>
-          <Link to="/solution1" className="block py-1 hover:text-green-600">Solution 1</Link>
-              <Link to="/solution2" className="block py-1 hover:text-green-600">Solution 2</Link>
-
             </div>
           </li>
 
           <li className="relative group">
-
             <NavLink
               to="/service"
               className={({ isActive }) =>
@@ -209,59 +166,15 @@ const Navbar = () => {
 
             </li>
           )}
-
-
-        
-
-            <Link to="/service" className="flex items-center gap-1">
-              Services <span>▾</span>
-            </Link>
-            <div className="absolute top-5 left-0 bg-white shadow-lg border rounded-md  px-4 py-2 z-10 hidden group-hover:block">
-
-            <NavLink to="/service" className={({ isActive }) => `flex items-center gap-1 ${isActive ? "text-emerald-400" : "text-black"}`}>
-              Services <span>▾</span>
-            </NavLink>
-            <div className="absolute top-7 left-0 bg-white shadow-lg border rounded-md px-4 py-2 z-10 hidden group-hover:block">
-
-              <Link to="/service1" className="block py-1 hover:text-green-600">Service 1</Link>
-              <Link to="/service2" className="block py-1 hover:text-green-600">Service 2</Link>
-            </div>
-          </li>
-
-
-          <li><Link to="/pricing">Pricing</Link></li>
-          <li><Link to="/resources">Resources</Link></li>
-
-          <Link
-            to="/register"
-            className="ml-4 px-4 py-2 bg-green-400 text-white rounded-lg font-semibold hover:bg-green-500 transition-all"
-
-          <li><NavLink to="/pricing" className={({ isActive }) => `flex items-center gap-1 ${isActive ? "text-emerald-400" : "text-black"}`}>Pricing</NavLink></li>
-          <li><NavLink to="/resources" className={({ isActive }) => `flex items-center gap-1 ${isActive ? "text-emerald-400" : "text-black"}`}>Resources</NavLink></li>
-
-          <Link
-            to="/register"
-            className="ml-2 xl:ml-4 px-3 xl:px-4 py-2 bg-green-400 text-white rounded-lg font-semibold hover:bg-green-500 transition-all"
-
-          >
-            Register Here
-          </Link>
-
         </ul>
       </div>
 
       {isMenuOpen && (
-
         <div
           className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center space-y-4 text-lg text-gray-800 px-4"
           role="dialog"
           aria-modal="true"
         >
-
-        <div className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center space-y-4 text-lg text-gray-800">
-
-        <div className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center space-y-4 text-lg text-gray-800 px-4">
-
           <button
             onClick={() => setIsMenuOpen(false)}
             className="absolute top-6 right-6 text-3xl font-bold"
