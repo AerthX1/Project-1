@@ -13,7 +13,7 @@ const getIndividualProfile = async (req, res) => {
 
 const updateIndividualProfile = async (req, res) => {
   try {
-  const userId = req.individual.id;
+  const userId = req.user.id;
 
     const updatedData = {};
     const allowedFields = [

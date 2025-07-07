@@ -53,6 +53,7 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
             className="block px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
           >
             Notification
+            
           </Link>
         </li>
         <li>

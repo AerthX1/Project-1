@@ -34,10 +34,10 @@ const founders = [
     image: "/path/to/founder5.jpg",
   },
   {
-    name: "Hardik Patil",
+    name: "Founder 6",
     role: "Co-Founder & Operations Head",
     bio: "Handles internal operations, platform development, and execution strategy.",
-    image: "/path/to/hardik.jpg",
+    image: "/path/to/Founder6.jpg",
   },
 ];
 

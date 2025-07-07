@@ -25,8 +25,7 @@ export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async ({ token, userType, formData }, { rejectWithValue }) => {
     try {
-      const route =
-      userType === "individual" ? "individual/profile" : "profile/profile";
+   const route = userType === "individual" ? "individual/profile" : "profile/profile";
 
       const res = await axios.put(`${API_URL}/${route}`, formData, {
         headers: {

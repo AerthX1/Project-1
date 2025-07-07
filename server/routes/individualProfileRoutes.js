@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => {
     try {
-      const userName = req.individual?.fullName?.replace(/\s+/g, "_") || req.individual?.id || "unknown";
+      const userName = req.user?.fullName?.replace(/\s+/g, "_") || req.user?.id || "unknown";
 
       const now = new Date();
       const istOffset = 5.5 * 60 * 60 * 1000; 
