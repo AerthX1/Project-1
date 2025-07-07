@@ -156,10 +156,12 @@ reducers: {
         state.token = action.payload.token;
         state.userType = action.payload.userType;
       })
-      .addCase(loginIndividual.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
+     .addCase(loginIndividual.rejected, (state, action) => {
+  state.loading = false;
+  state.error = action.payload;
+  state.user = null; 
+})
+
   },
 });
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginOrganization, loginIndividual } from "../../../shared-redux/src/slices/authSlice";
+import { loginOrganization, loginIndividual, setUser  } from "../../../shared-redux/src/slices/authSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -43,9 +43,14 @@ const Login = () => {
   navigate("/");
 }
 
-    } catch (err) {
-      setError(err || "Login failed. Please try again.");
-    } finally {
+  } catch (err) {
+  const message =
+    typeof err === "string"
+      ? err
+      : err?.message || "Login failed. Please try again.";
+  setError(message);
+}
+finally {
       setLoading(false);
     }
   };
