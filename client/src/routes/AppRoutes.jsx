@@ -1,7 +1,7 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import Root from '../layout/Root';
 import Home from '../pages/Home';
-import MarketPlace from '../pages/MarketPlace'
+import MarketplaceHero from '../pages/MarketplaceHero'
 import Pricing from '../pages/Pricing';
 import Register from '../pages/Register';
 import Resource from '../pages/Resource';
@@ -11,16 +11,15 @@ import BusinessSolutions from '../pages/BusinessSolutions';
 import IndividualSolutions from '../pages/IndividualSolutions';
 import APIIntegration from '../pages/APIIntegration';
 import Profile from '../pages/Profile';
-import AdminDashboard from '../pages/AdminDashboard';
-import AdminRoute from "../components/Admin/AdminRoute";
-import RegisterChoice from '../pages/RegisterChoice';
 import RegisterIndividual from '../pages/RegisterIndividual';
 import ForgotPassword from '../pages/ForgotPassword';
 import HelpSupport from '../pages/HelpSupport';
 import NotificationPage from '../pages/NotificationPage';
 import About from '../pages/About';
 import Settings from '../pages/Settings';
-
+import RegisterChoice from "../pages/RegisterChoice"
+import AdminDashboard from "../../../admin-frontend/src/pages/AdminDashboard";
+import AdminRoute from "../../../admin-frontend/src/components/Admin/AdminRoute";
 
 
 const router = createBrowserRouter(
@@ -29,7 +28,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<Root />}>
    <Route index element={<Home />} />
    <Route path='home' element={<Home/>}/>  
-  <Route path="marketplace" element={<MarketPlace />} />
+  <Route path="MarketplaceHero" element={<MarketplaceHero />} />
   <Route path="pricing" element={<Pricing/>}/>
  <Route path="resources" element={<Resource />} />
  <Route path="solutions" element={<Solutions/>}/>
@@ -48,8 +47,7 @@ const router = createBrowserRouter(
     <Route path="/about" element={<About />} />
     <Route path="/settings" element={<Settings />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-    <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-
+      <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} /> 
      </>
   )
 );

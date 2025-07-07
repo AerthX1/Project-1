@@ -39,7 +39,7 @@ export default function Home() {
             <p>All our carbon credits come from rigorously verified and certified projects — ensuring real, measurable climate impact.</p>
           </div>
           <div className="bg-gray-100 p-6 rounded shadow">
-            <h3 className="font-semibold text-lg mb-2">Blockchain Transparency</h3>
+            <h3 className="font-semibold text-lg mb-2">Blockchain Transparency (Upcoming)</h3>
             <p>Every carbon credit is securely recorded on the blockchain, making each transaction transparent and tamper-proof.</p>
           </div>
           <div className="bg-gray-100 p-6 rounded shadow">
@@ -67,7 +67,7 @@ export default function Home() {
       <section className="py-12 bg-white">
         <h2 className="text-2xl md:text-3xl font-bold mb-10">Our Process</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 md:px-20">
-          {['Explore Projects', 'Buy Credits', 'Tokenization & Ownership', 'Track & Download'].map((title, i) => (
+          {['Explore Projects', 'Buy Credits', 'Tokenization & Ownership (Upcoming)', 'Track & Download'].map((title, i) => (
             <div key={i} className="bg-gray-100 p-4 rounded shadow text-center">
               <p className="font-semibold text-lg">{title}</p>
               <p className="mt-2 text-sm text-gray-700">

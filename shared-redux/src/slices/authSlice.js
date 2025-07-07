@@ -84,16 +84,20 @@ const authSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {
-    logout(state) {
-      state.user = null;
-      state.token = null;
-      state.userType = null;
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("userType");
-    },
+reducers: {
+  logout(state) {
+    state.user = null;
+    state.token = null;
+    state.userType = null;
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("userType");
   },
+  setUser(state, action) {
+    state.user = action.payload;
+  },
+},
+
   extraReducers: (builder) => {
     builder
 
@@ -103,7 +107,7 @@ const authSlice = createSlice({
       })
       .addCase(registerOrganization.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
+          state.user = action.payload.user;
         state.token = action.payload.token;
         state.userType = action.payload.userType;
       })
@@ -159,5 +163,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setUser } = authSlice.actions;
 export default authSlice.reducer;

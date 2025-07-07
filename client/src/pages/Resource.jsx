@@ -24,11 +24,11 @@ const faqData = [
     answer:
       "The cost varies based on the project and market conditions but typically ranges from $5 to $15 per carbon credit.",
   },
-  {
-    question: "How does blockchain ensure transparency?",
-    answer:
-      "Blockchain creates a tamper-proof and publicly verifiable ledger of all carbon credit transactions, ensuring trust and traceability.",
-  },
+  // {
+  //   question: "How does blockchain ensure transparency?",
+  //   answer:
+  //     "Blockchain creates a tamper-proof and publicly verifiable ledger of all carbon credit transactions, ensuring trust and traceability.",
+  // },
   {
     question: "Are carbon credits legally binding?",
     answer:
@@ -108,9 +108,9 @@ const Resource = () => {
     <ListItem>
       <strong>How to Buy Carbon Credits:</strong> Learn how to choose and purchase credits safely.
     </ListItem>
-    <ListItem>
+    {/* <ListItem>
       <strong>Blockchain Transparency Explained:</strong> How blockchain ensures trust and traceability.
-    </ListItem>
+    </ListItem> */}
     <ListItem>
       <strong>Using Aearthex Dashboard:</strong> Monitor carbon footprint, subscriptions, and progress.
     </ListItem>
@@ -158,7 +158,7 @@ const Resource = () => {
         </div>
       </Section>
 
-      <section
+      {/* <section
         className="bg-white border border-gray-200 rounded-xl shadow-sm p-8 max-w-4xl mx-auto transition-all duration-300"
         aria-labelledby="referral-heading"
       >
@@ -211,7 +211,7 @@ const Resource = () => {
             Join Referral Program
           </button>
         </div>
-      </section>
+      </section> */}
     </main>
   );
 };
