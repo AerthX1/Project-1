@@ -4,7 +4,7 @@ const getProfile = async (req, res) => {
   try {
     const org = await Organization.findById(req.user.id).select("-password");
     if (!org) return res.status(404).json({ error: "Organization not found" });
-    res.json(org);
+    res.json({ org });
   } catch (err) {
     console.error("Error in getProfile:", err);
     res.status(500).json({ error: "Server error" });
@@ -45,7 +45,8 @@ const updateProfile = async (req, res) => {
       return res.status(404).json({ message: "No such organization to update" });
     }
 
-    res.status(200).json(updatedProfile);
+res.status(200).json({ org: updatedProfile });
+
   } catch (error) {
     console.error("Error updating profile:", error);
     res.status(500).json({ message: "Server Error", error: error.message });
