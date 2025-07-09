@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile, updateProfile } from "../redux/profileSlice";
+import { fetchProfile, updateProfile } from "../../../shared-redux/src/slices/profileSlice";
 import { FaEdit, FaInfoCircle } from "react-icons/fa";
 import DefaultAvatar from "../components/Header/DefaultAvatar";
 
@@ -13,10 +13,6 @@ const Profile = () => {
   const [form, setForm] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const [successMsg, setSuccessMsg] = useState("");
-  console.log("token", token);
-console.log("userType", userType);
-console.log("profileData", profileData);
-console.log("form", form);
 
   useEffect(() => {
     if (token && userType) {
@@ -24,30 +20,34 @@ console.log("form", form);
     }
   }, [token, userType]);
 
-  useEffect(() => {
-    if (profileData) {
-      setForm({
-        orgName: profileData.orgName || "",
-        fullName: profileData.fullName || "",
-        orgType: profileData.orgType || "",
-        industry: profileData.industry || "",
-        website: profileData.website || "",
-        email: profileData.email || "",
-        description: profileData.description || "",
-        city: profileData.city || "",
-        state: profileData.state || "",
-        country: profileData.country || "",
-        phone: profileData.phone || "",
-        designation: profileData.designation || "",
-      });
+ useEffect(() => {
+  if (profileData) {
+    const data =
+      profileData.org || profileData.user || profileData; // handle all 3 cases
 
-      if (profileData.avatarUrl) {
-        setAvatar(
-          `${import.meta.env.VITE_API_URL.replace("/api", "")}${profileData.avatarUrl}`
-        );
-      }
+    console.log("💡 Mapped profile data:", data); // ← Optional debug log
+
+    setForm({
+      orgName: data.orgName || "",
+      fullName: data.fullName || "",
+      orgType: data.orgType || "",
+      industry: data.industry || "",
+      website: data.website || "",
+      email: data.email || "",
+      description: data.description || "",
+      city: data.city || "",
+      state: data.state || "",
+      country: data.country || "",
+      phone: data.phone || "",
+      designation: data.designation || "",
+    });
+
+    if (data.avatarUrl) {
+      setAvatar(`${import.meta.env.VITE_API_URL.replace("/api", "")}${data.avatarUrl}`);
     }
-  }, [profileData]);
+  }
+}, [profileData]);
+
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];

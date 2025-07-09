@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginOrganization, loginIndividual } from "../redux/authSlice";
+import { loginOrganization, loginIndividual, setUser  } from "../../../shared-redux/src/slices/authSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -34,15 +34,23 @@ const Login = () => {
       }
 
       const { user } = result;
+      dispatch(setUser(user));
 
-      if (user.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/");
-      }
-    } catch (err) {
-      setError(err || "Login failed. Please try again.");
-    } finally {
+
+    if (user.role === "admin") {
+  window.location.href = "http://localhost:5175/dashboard";
+} else {
+  navigate("/");
+}
+
+  } catch (err) {
+  const message =
+    typeof err === "string"
+      ? err
+      : err?.message || "Login failed. Please try again.";
+  setError(message);
+}
+finally {
       setLoading(false);
     }
   };

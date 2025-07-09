@@ -30,11 +30,11 @@ const featureGroups = [
         label: "Carbon Credits Allowed",
         tooltip: "Maximum carbon credits you can offset monthly.",
       },
-      {
-        key: "blockchain",
-        label: "Blockchain Integration",
-        tooltip: "Mint and verify credits directly on blockchain.",
-      },
+      // {
+      //   key: "blockchain",
+      //   label: "Blockchain Integration",
+      //   tooltip: "Mint and verify credits directly on blockchain.",
+      // },
     ],
   },
   {
@@ -511,7 +511,7 @@ const Pricing = () => {
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto mt-24 px-6">
+      {/* <section className="max-w-6xl mx-auto mt-24 px-6">
         <h2 className="text-3xl font-extrabold text-green-800 mb-8 tracking-wide drop-shadow-md">
           Minting Fee Structure
         </h2>
@@ -535,7 +535,7 @@ const Pricing = () => {
             Third-party verifications, reports, consultancy
           </p>
         </div>
-      </section>
+      </section> */}
 
       <section className="max-w-6xl mx-auto mt-24 px-6 mb-20">
         <h2 className="text-3xl font-extrabold text-green-800 mb-8 tracking-wide drop-shadow-md">
