@@ -4,12 +4,15 @@ import IncomeChart from "../components/Admin/IncomeChart";
 import LiveUserControl from "../components/Admin/LiveUserControl";
 import CarbonInventory from "../components/Admin/CarbonInventory";
 import AdminControls from "../components/Admin/AdminControls";
+import AdminAddCarbonCredit from "../components/Admin/AdminAddCarbonCredit"; 
+
 import {
   FaTachometerAlt,
   FaChartBar,
   FaUsers,
   FaLeaf,
   FaCogs,
+  FaPlusCircle,
 } from "react-icons/fa";
 
 const navItems = [
@@ -18,6 +21,7 @@ const navItems = [
   { id: "users", icon: <FaUsers />, label: "Live Users" },
   { id: "inventory", icon: <FaLeaf />, label: "Carbon Inventory" },
   { id: "controls", icon: <FaCogs />, label: "Controls" },
+  { id: "addcredit", icon: <FaPlusCircle />, label: "Add Credit" }, 
 ];
 
 const AdminDashboard = () => {
@@ -35,6 +39,8 @@ const AdminDashboard = () => {
         return <CarbonInventory />;
       case "controls":
         return <AdminControls />;
+      case "addcredit":
+        return <AdminAddCarbonCredit />;
       default:
         return <StatsOverview />;
     }
@@ -42,7 +48,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-white text-gray-900">
-
       <aside className="w-64 bg-black text-white min-h-screen p-6 hidden md:block">
         <div className="text-2xl font-bold mb-10 text-green-400">Aearthex Admin</div>
         <nav className="space-y-4">
@@ -70,7 +75,10 @@ const AdminDashboard = () => {
             Last updated: {new Date().toLocaleString()}
           </span>
         </header>
-        <div className="bg-gray-50 rounded-xl shadow p-6">{renderContent()}</div>
+
+        <div className="bg-gray-50 rounded-xl shadow p-6">
+          {renderContent()}
+        </div>
       </main>
     </div>
   );

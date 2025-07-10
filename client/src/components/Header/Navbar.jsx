@@ -14,24 +14,6 @@ const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
 
-useEffect(() => {
-  const token = localStorage.getItem("token");
-  const userType = localStorage.getItem("userType");
-
-  if (!user && token && userType) {
-    dispatch(fetchProfile({ token, userType }))
-      .unwrap()
-      .then((response) => {
-        const correctUser = userType === "organization" ? response.org : response.user;
-        dispatch(setUser(correctUser));
-      })
-      .catch((error) => {
-        console.error("❌ Failed to fetch and sync profile:", error);
-      });
-  }
-}, [dispatch, user]);
-
-
 
   const handleLogout = () => {
     dispatch(logout());
