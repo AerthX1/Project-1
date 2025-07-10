@@ -37,14 +37,11 @@ const Login = () => {
       dispatch(setUser(user));
 
 
-  if (user.role === "admin") {
+    if (user.role === "admin") {
   window.location.href = "http://localhost:5175/dashboard";
 } else {
-  const encodedUser = encodeURIComponent(JSON.stringify(user));
-  const query = `?token=${token}&userType=${userType}&user=${encodedUser}`;
-  window.open(`http://localhost:5174/${query}`, "_blank"); // opens marketplace with auth data
+  navigate("/");
 }
-
 
   } catch (err) {
   const message =

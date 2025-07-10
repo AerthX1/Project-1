@@ -69,7 +69,7 @@ export const loginIndividual = createAsyncThunk(
     try {
       const response = await axios.post(`${API_URL}/individual/login`, { email, password });
       const { token, user } = response.data;
-      console.log("Saving token and user", token, org);
+      console.log("Saving token and user", token, user);
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userType", "individual");

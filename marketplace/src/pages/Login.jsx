@@ -38,9 +38,18 @@ const Login = () => {
    if (user.role === "admin") {
   window.location.href = "http://localhost:5175/dashboard";
 } else {
+  const token = localStorage.getItem("token");
+const userType = localStorage.getItem("userType");
+
+if (token && userType && user) {
   const encodedUser = encodeURIComponent(JSON.stringify(user));
   const query = `?token=${token}&userType=${userType}&user=${encodedUser}`;
-  window.open(`http://localhost:5174/${query}`, "_blank"); // opens marketplace with auth data
+  window.open(`http://localhost:5174/${query}`, "_blank");
+} else {
+  console.error("Missing token, userType, or user data for redirect");
+  alert("Login succeeded, but marketplace sync failed. Please try again.");
+}
+
 }
 
 

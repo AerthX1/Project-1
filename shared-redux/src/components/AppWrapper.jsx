@@ -38,7 +38,11 @@ const AppWrapper = ({ children }) => {
         .unwrap()
         .then((res) => {
           console.log("Profile loaded:", res);
-          const correctUser = userType === "organization" ? res.org : res.user;
+        const correctUser =
+  userType === "organization"
+    ? res?.org || res?.user
+    : res?.user || res?.org;
+
           dispatch(setUser(correctUser));
         })
         .catch((err) => console.error("Profile sync error:", err));
