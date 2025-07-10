@@ -71,6 +71,8 @@ export const loginIndividual = createAsyncThunk(
       const { token, user } = response.data;
       console.log("Saving token and user", token, user);
       localStorage.setItem("token", token);
+
+        localStorage.setItem("forceReload", Date.now().toString());
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userType", "individual");
       console.log("Saved to localStorage:", {
@@ -104,6 +106,8 @@ reducers: {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("userType");
+
+      localStorage.setItem("forceReload", Date.now().toString());
   },
   setUser(state, action) {
     state.user = action.payload;
