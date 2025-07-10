@@ -34,14 +34,16 @@ const MarketplaceHero = () => {
             conscious climate action with clarity and trust.
           </p>
 
-    <a
-  href="http://localhost:5174"
+<a
+  href={`http://localhost:5174?token=${localStorage.getItem("token")}&userType=${localStorage.getItem("userType")}&user=${encodeURIComponent(localStorage.getItem("user"))}`}
   target="_blank"
   rel="noopener noreferrer"
-  className="mt-6 inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-7 py-3 rounded-full text-lg shadow-lg hover:shadow-xl transition duration-300 ease-in-out"
+  className="..."
 >
   🌍 Explore Marketplace
 </a>
+
+
         </div>
       </div>
 

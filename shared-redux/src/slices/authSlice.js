@@ -27,9 +27,15 @@ export const loginOrganization = createAsyncThunk(
     try {
       const response = await axios.post(`${API_URL}/organization/login`, { email, password });
       const { token, org } = response.data;
+      console.log("Saving token and user", token, org);
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(org));
       localStorage.setItem("userType", "organization");
+      console.log("Saved to localStorage:", {
+  token: localStorage.getItem("token"),
+  user: localStorage.getItem("user"),
+  userType: localStorage.getItem("userType"),
+});
       return { token, user: org, userType: "organization" };
     } catch (error) {
       return rejectWithValue(
@@ -63,9 +69,15 @@ export const loginIndividual = createAsyncThunk(
     try {
       const response = await axios.post(`${API_URL}/individual/login`, { email, password });
       const { token, user } = response.data;
+      console.log("Saving token and user", token, org);
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userType", "individual");
+      console.log("Saved to localStorage:", {
+  token: localStorage.getItem("token"),
+  user: localStorage.getItem("user"),
+  userType: localStorage.getItem("userType"),
+});
       return { token, user, userType: "individual" };
     } catch (error) {
       return rejectWithValue(

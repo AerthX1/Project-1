@@ -35,11 +35,14 @@ const Login = () => {
 
       const { user } = result;
 
-      if (user.role === "admin") {
-  window.location.href = "http://localhost:5175/dashboard"; 
+   if (user.role === "admin") {
+  window.location.href = "http://localhost:5175/dashboard";
 } else {
-  navigate("/");
+  const encodedUser = encodeURIComponent(JSON.stringify(user));
+  const query = `?token=${token}&userType=${userType}&user=${encodedUser}`;
+  window.open(`http://localhost:5174/${query}`, "_blank"); // opens marketplace with auth data
 }
+
 
     } catch (err) {
       setError(err || "Login failed. Please try again.");
