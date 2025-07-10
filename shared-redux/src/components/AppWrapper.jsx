@@ -14,7 +14,6 @@ const AppWrapper = ({ children }) => {
     const queryUser = params.get("user");
 
     if (queryToken && queryUserType && queryUser) {
-      console.log("🔄 Restoring auth from query params");
       localStorage.setItem("token", queryToken);
       localStorage.setItem("userType", queryUserType);
       localStorage.setItem("user", queryUser);
@@ -31,7 +30,6 @@ const AppWrapper = ({ children }) => {
     const userType = localStorage.getItem("userType");
     const localUser = JSON.parse(localStorage.getItem("user"));
 
-    console.log("AppWrapper loaded", { token, userType, user: localUser });
 
     if (token && userType && (!localUser || (!localUser.fullName && !localUser.orgName))) {
       dispatch(fetchProfile({ token, userType }))
@@ -48,7 +46,6 @@ const AppWrapper = ({ children }) => {
         .catch((err) => console.error("Profile sync error:", err));
     }
 
-    // 🔁 Sync login/logout across tabs using localStorage event
     const handleStorageChange = (e) => {
       if (e.key === "forceReload") {
         console.log("🔁 Detected login/logout in another tab. Reloading...");
