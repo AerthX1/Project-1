@@ -40,4 +40,7 @@ If you are developing a production application, we recommend using TypeScript wi
 10. npm install @headlessui/react
 11. npm install zxcvbn react-hot-toast @headlessui/react
 
+<<<<<<< HEAD
+=======
 let started
+>>>>>>> d7943c9d1763e46f62352e48b27c26171279fa7b
