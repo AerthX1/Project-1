@@ -8,6 +8,10 @@ const MarketPlace = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedPlace, setSelectedPlace] = useState('');
+  const [selectedVintage, setSelectedVintage] = useState('');
+
   const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -25,10 +29,16 @@ const MarketPlace = () => {
     fetchProjects();
   }, []);
 
-  const filteredProjects = projects.filter(project =>
-    project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    project.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProjects = projects.filter(project => {
+    const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          project.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesCategory = selectedCategory ? project.category?.toLowerCase() === selectedCategory.toLowerCase() : true;
+    const matchesPlace = selectedPlace ? project.country?.toLowerCase() === selectedPlace.toLowerCase() : true;
+    const matchesVintage = selectedVintage ? String(project.vintage) === selectedVintage : true;
+
+    return matchesSearch && matchesCategory && matchesPlace && matchesVintage;
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4 flex justify-center">
@@ -59,7 +69,11 @@ const MarketPlace = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Category</label>
-                <select className="w-full bg-gray-100 px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full bg-gray-100 px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
                   <option value="">All Categories</option>
                   <option value="energy">Energy</option>
                   <option value="reforestation">Reforestation</option>
@@ -67,7 +81,11 @@ const MarketPlace = () => {
               </div>
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Place Name</label>
-                <select className="w-full bg-gray-100 px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                <select
+                  value={selectedPlace}
+                  onChange={(e) => setSelectedPlace(e.target.value)}
+                  className="w-full bg-gray-100 px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
                   <option value="">All Places</option>
                   <option value="mumbai">Mumbai</option>
                   <option value="gujarat">Gujarat</option>
@@ -76,7 +94,11 @@ const MarketPlace = () => {
               </div>
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Vintage</label>
-                <select className="w-full bg-gray-100 px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                <select
+                  value={selectedVintage}
+                  onChange={(e) => setSelectedVintage(e.target.value)}
+                  className="w-full bg-gray-100 px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
                   <option value="">Any Year</option>
                   <option value="2022">2022</option>
                   <option value="2023">2023</option>
@@ -86,9 +108,13 @@ const MarketPlace = () => {
           </div>
         )}
 
-        {searchTerm && (
+        {(searchTerm || selectedCategory || selectedPlace || selectedVintage) && (
           <div className="text-sm text-gray-600 mb-4">
-            Showing results for: <span className="font-medium text-gray-800">{searchTerm}</span>
+            Showing results for:
+            <span className="font-medium text-gray-800 mx-1">{searchTerm || 'All'}</span>
+            {selectedCategory && <span className="mx-1">| Category: {selectedCategory}</span>}
+            {selectedPlace && <span className="mx-1">| Place: {selectedPlace}</span>}
+            {selectedVintage && <span className="mx-1">| Vintage: {selectedVintage}</span>}
           </div>
         )}
 
@@ -98,46 +124,40 @@ const MarketPlace = () => {
           <div className="text-center text-gray-400 text-sm mt-10">No projects to display.</div>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 justify-center">
-      {filteredProjects.map(project => (
-  <Link
-    to={`/project/${project._id}`}
-    key={project._id}
-    className="bg-white w-[300px] mx-auto rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-2xl hover:border-green-400 hover:scale-[1.03] transition-all duration-300 ease-in-out block"
-  >
-    <img
-      src={`http://localhost:5000${project.image}`}
-      alt={project.title}
-      className="w-full h-40 object-cover"
-    />
-    <div className="p-4 flex flex-col justify-between">
-      <div className="mb-3">
-        <h3 className="text-lg font-semibold text-green-700">${project.pricePerTon?.toFixed(2)}</h3>
-        <h4 className="text-md font-bold text-gray-800 truncate mt-1">{project.title}</h4>
-        <p className="text-sm text-gray-600 mt-1 line-clamp-3">{project.info}</p>
-      </div>
-
-      <div className="flex flex-wrap gap-2 mt-auto">
-        {project.country && (
-          <span className="bg-gray-100 px-3 py-1 text-xs rounded-full text-gray-700 border">{project.country}</span>
-        )}
-        {project.category && (
-          <span className="bg-gray-100 px-3 py-1 text-xs rounded-full text-blue-700 border border-blue-200">
-            🌿 {project.category}
-          </span>
-        )}
-        {project.vintage && (
-          <span className="bg-gray-100 px-3 py-1 text-xs rounded-full text-gray-700 border">{project.vintage}</span>
-        )}
-        {project.sdgs?.length > 0 && (
-          <span className="bg-green-50 px-3 py-1 text-xs rounded-full text-green-700 border border-green-200">
-            🌍 {project.sdgs.length} SDGs
-          </span>
-        )}
-      </div>
-    </div>
-  </Link>
-))}
-
+            {filteredProjects.map(project => (
+              <Link
+                to={`/project/${project._id}`}
+                key={project._id}
+                className="bg-white w-[300px] mx-auto rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-2xl hover:border-green-400 hover:scale-[1.03] transition-all duration-300 ease-in-out block"
+              >
+                <img
+                  src={`http://localhost:5000${project.image}`}
+                  alt={project.title}
+                  className="w-full h-40 object-cover"
+                />
+                <div className="p-4 flex flex-col justify-between">
+                  <div className="mb-3">
+                    <h3 className="text-lg font-semibold text-green-700">${project.pricePerTon?.toFixed(2)}</h3>
+                    <h4 className="text-md font-bold text-gray-800 truncate mt-1">{project.title}</h4>
+                    <p className="text-sm text-gray-600 mt-1 line-clamp-3">{project.info}</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    {project.country && (
+                      <span className="bg-gray-100 px-3 py-1 text-xs rounded-full text-gray-700 border">{project.country}</span>
+                    )}
+                    {project.category && (
+                      <span className="bg-gray-100 px-3 py-1 text-xs rounded-full text-blue-700 border border-blue-200">🌿 {project.category}</span>
+                    )}
+                    {project.vintage && (
+                      <span className="bg-gray-100 px-3 py-1 text-xs rounded-full text-gray-700 border">{project.vintage}</span>
+                    )}
+                    {project.sdgs?.length > 0 && (
+                      <span className="bg-green-50 px-3 py-1 text-xs rounded-full text-green-700 border border-green-200">🌍 {project.sdgs.length} SDGs</span>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         )}
       </div>

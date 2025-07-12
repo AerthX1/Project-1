@@ -13,6 +13,7 @@ const router = createBrowserRouter(
           <AdminRoute>
             <AdminDashboard />
           </AdminRoute>
+          
         }
       />
       <Route path="*" element={<NotFound />} />

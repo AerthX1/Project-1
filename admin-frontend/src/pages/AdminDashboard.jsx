@@ -5,6 +5,8 @@ import LiveUserControl from "../components/Admin/LiveUserControl";
 import CarbonInventory from "../components/Admin/CarbonInventory";
 import AdminControls from "../components/Admin/AdminControls";
 import AdminAddCarbonCredit from "../components/Admin/AdminAddCarbonCredit"; 
+import AdminManageCarbonCredits from "../components/Admin/AdminManageCarbonCredits";
+import AdminUpdateCarbonCredit from "../components/Admin/AdminUpdateCarbonCredit"; 
 
 import {
   FaTachometerAlt,
@@ -13,6 +15,7 @@ import {
   FaLeaf,
   FaCogs,
   FaPlusCircle,
+  FaEdit,
 } from "react-icons/fa";
 
 const navItems = [
@@ -22,12 +25,18 @@ const navItems = [
   { id: "inventory", icon: <FaLeaf />, label: "Carbon Inventory" },
   { id: "controls", icon: <FaCogs />, label: "Controls" },
   { id: "addcredit", icon: <FaPlusCircle />, label: "Add Credit" }, 
+  { id: "managecredits", icon: <FaEdit />, label: "Manage Credits" }
+
 ];
 
 const AdminDashboard = () => {
-  const [selected, setSelected] = useState("overview");
+  const [selectedCreditId, setSelectedCreditId] = useState(null); 
+  const [selected, setSelected] = useState("overview"); 
 
-  const renderContent = () => {
+const renderContent = () => {
+  if (selectedCreditId) {
+    return <AdminUpdateCarbonCredit id={selectedCreditId} goBack={() => setSelectedCreditId(null)} />;
+  }
     switch (selected) {
       case "overview":
         return <StatsOverview />;
@@ -39,6 +48,8 @@ const AdminDashboard = () => {
         return <CarbonInventory />;
       case "controls":
         return <AdminControls />;
+  case "managecredits":
+      return <AdminManageCarbonCredits onEdit={(id) => setSelectedCreditId(id)} />;
       case "addcredit":
         return <AdminAddCarbonCredit />;
       default:
