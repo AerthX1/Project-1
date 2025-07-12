@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const API = import.meta.env.VITE_API_URL;
 
-const AdminManageCarbonCredits = () => {
+const AdminManageCarbonCredits = ({ onEdit }) => {
   const [credits, setCredits] = useState([]);
   const [openMenuId, setOpenMenuId] = useState(null);
 const navigate = useNavigate();
@@ -36,9 +36,8 @@ const navigate = useNavigate();
   };
 
 const handleUpdate = (credit) => {
-   
-    navigate(`/admin/carbon-credits/update/${credit._id}`);
-  };
+  if (typeof onEdit === 'function') onEdit(credit._id);
+};
 
   return (
     <div className="p-6">

@@ -102,14 +102,48 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', upload.single('image'), async (req, res) => {
   try {
-    const updated = await CarbonCredit.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updated);
+    const data = req.body;
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : data.imageUrl || '';
+
+    const updatedCredit = await CarbonCredit.findByIdAndUpdate(
+      req.params.id,
+      {
+        title: data.title || '',
+        name: data.name || '',
+        verifiedBy: data.verifiedBy || '',
+        category: data.category || '',
+        projectType: data.projectType || '',
+        projectDeveloper: data.projectDeveloper || '',
+        methodology: data.methodology || '',
+        projectDuration: data.projectDuration || '',
+        tons: parseFloat(data.tons) || 0,
+        pricePerTon: parseFloat(data.pricePerTon) || 0,
+        totalPrice: (parseFloat(data.pricePerTon) || 0) * (parseFloat(data.tons) || 0),
+        info: data.info || '',
+        country: data.country || '',
+        state: data.state || '',
+        city: data.city || '',
+        placeName: data.placeName || '',
+        vintage: data.vintage || '',
+        vintageYear: data.vintageYear || '',
+        retired: data.retired === 'true' || data.retired === true,
+        sdgs: typeof data.sdgs === 'string' ? data.sdgs.split(',').map(s => s.trim()) : [],
+        registryLink: data.registryLink || '',
+        additionalNotes: data.additionalNotes || '',
+        image: imagePath,
+      },
+      { new: true }
+    );
+
+    res.json({ message: "Carbon Credit Updated", data: updatedCredit });
   } catch (err) {
+    console.error("❌ Update Error:", err.message);
     res.status(500).json({ message: 'Update failed', error: err.message });
   }
 });
+
 
 
 
