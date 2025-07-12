@@ -5,6 +5,7 @@ const multer = require('multer');
 const path = require('path');
 
 
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
   filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
@@ -65,5 +66,51 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch credits', error: err.message });
   }
 });
+
+
+router.get('/total-tons', async (req, res) => {
+  try {
+    const result = await CarbonCredit.aggregate([
+      {
+        $match: {
+          retired: { $ne: true }, 
+          tons: { $type: "number" } 
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalTons: { $sum: "$tons" }
+        }
+      }
+    ]);
+
+    const totalTons = result[0]?.totalTons || 0;
+    res.json({ totalTons });
+  } catch (err) {
+    console.error("❌ Error in /carbon-credits/total-tons:", err.message);
+    res.status(500).json({ message: "Failed to fetch total tons", error: err.message });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    await CarbonCredit.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Delete failed', error: err.message });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const updated = await CarbonCredit.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: 'Update failed', error: err.message });
+  }
+});
+
+
 
 module.exports = router;
