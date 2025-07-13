@@ -7,6 +7,8 @@ import AdminControls from "../components/Admin/AdminControls";
 import AdminAddCarbonCredit from "../components/Admin/AdminAddCarbonCredit"; 
 import AdminManageCarbonCredits from "../components/Admin/AdminManageCarbonCredits";
 import AdminUpdateCarbonCredit from "../components/Admin/AdminUpdateCarbonCredit"; 
+import AdminUserData from "../components/Admin/AdminUserData";
+
 
 import {
   FaTachometerAlt,
@@ -25,7 +27,9 @@ const navItems = [
   { id: "inventory", icon: <FaLeaf />, label: "Carbon Inventory" },
   { id: "controls", icon: <FaCogs />, label: "Controls" },
   { id: "addcredit", icon: <FaPlusCircle />, label: "Add Credit" }, 
-  { id: "managecredits", icon: <FaEdit />, label: "Manage Credits" }
+  { id: "managecredits", icon: <FaEdit />, label: "Manage Credits" },
+  { id: "userdata", icon: <FaUsers />, label: "User Data" },
+
 
 ];
 
@@ -52,6 +56,8 @@ const renderContent = () => {
       return <AdminManageCarbonCredits onEdit={(id) => setSelectedCreditId(id)} />;
       case "addcredit":
         return <AdminAddCarbonCredit />;
+        case "userdata":
+  return <AdminUserData />;
       default:
         return <StatsOverview />;
     }
