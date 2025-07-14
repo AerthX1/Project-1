@@ -4,12 +4,20 @@ import IncomeChart from "../components/Admin/IncomeChart";
 import LiveUserControl from "../components/Admin/LiveUserControl";
 import CarbonInventory from "../components/Admin/CarbonInventory";
 import AdminControls from "../components/Admin/AdminControls";
+import AdminAddCarbonCredit from "../components/Admin/AdminAddCarbonCredit"; 
+import AdminManageCarbonCredits from "../components/Admin/AdminManageCarbonCredits";
+import AdminUpdateCarbonCredit from "../components/Admin/AdminUpdateCarbonCredit"; 
+import AdminUserData from "../components/Admin/AdminUserData";
+
+
 import {
   FaTachometerAlt,
   FaChartBar,
   FaUsers,
   FaLeaf,
   FaCogs,
+  FaPlusCircle,
+  FaEdit,
 } from "react-icons/fa";
 
 const navItems = [
@@ -18,12 +26,21 @@ const navItems = [
   { id: "users", icon: <FaUsers />, label: "Live Users" },
   { id: "inventory", icon: <FaLeaf />, label: "Carbon Inventory" },
   { id: "controls", icon: <FaCogs />, label: "Controls" },
+  { id: "addcredit", icon: <FaPlusCircle />, label: "Add Credit" }, 
+  { id: "managecredits", icon: <FaEdit />, label: "Manage Credits" },
+  { id: "userdata", icon: <FaUsers />, label: "User Data" },
+
+
 ];
 
 const AdminDashboard = () => {
-  const [selected, setSelected] = useState("overview");
+  const [selectedCreditId, setSelectedCreditId] = useState(null); 
+  const [selected, setSelected] = useState("overview"); 
 
-  const renderContent = () => {
+const renderContent = () => {
+  if (selectedCreditId) {
+    return <AdminUpdateCarbonCredit id={selectedCreditId} goBack={() => setSelectedCreditId(null)} />;
+  }
     switch (selected) {
       case "overview":
         return <StatsOverview />;
@@ -35,6 +52,12 @@ const AdminDashboard = () => {
         return <CarbonInventory />;
       case "controls":
         return <AdminControls />;
+  case "managecredits":
+      return <AdminManageCarbonCredits onEdit={(id) => setSelectedCreditId(id)} />;
+      case "addcredit":
+        return <AdminAddCarbonCredit />;
+        case "userdata":
+  return <AdminUserData />;
       default:
         return <StatsOverview />;
     }
@@ -42,7 +65,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-white text-gray-900">
-
       <aside className="w-64 bg-black text-white min-h-screen p-6 hidden md:block">
         <div className="text-2xl font-bold mb-10 text-green-400">Aearthex Admin</div>
         <nav className="space-y-4">
@@ -70,7 +92,10 @@ const AdminDashboard = () => {
             Last updated: {new Date().toLocaleString()}
           </span>
         </header>
-        <div className="bg-gray-50 rounded-xl shadow p-6">{renderContent()}</div>
+
+        <div className="bg-gray-50 rounded-xl shadow p-6">
+          {renderContent()}
+        </div>
       </main>
     </div>
   );

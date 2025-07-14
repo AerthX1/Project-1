@@ -1,11 +1,25 @@
-
-import React from "react";
-import starterImage from "../assets/starterImage.jpeg";
+import React, { useEffect, useState } from "react";
 import starterVideo from "../assets/introfirstvideo.mp4";
 import graph from "../assets/graph.jpg";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Home() {
+
+  const [totalTons, setTotalTons] = useState(0);
+
+useEffect(() => {
+  const fetchTotalTons = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/carbon-credits/total-tons`);
+      setTotalTons(res.data.totalTons || 0);
+    } catch (error) {
+      console.error("Error fetching total tons:", error.message);
+    }
+  };
+
+  fetchTotalTons();
+}, []);
   return (
     <div className="flex flex-col items-center text-center w-full">
       <section className="relative w-full h-[120vh] flex items-center justify-center overflow-hidden">
@@ -52,7 +66,10 @@ export default function Home() {
         <section className="py-32 bg-[#0a0d0f] text-white w-full text-center flex justify-evenly items-center px-4  md:px-20">
        <div className="flex flex-col items-center ">
          <h2 className="text-4xl font-bold mb-4">Live Carbon Credits Available</h2>
-        <p className="text-4xl font-bold text-green-500">1,245,320 <span className="text-white text-2xl">Tons CO2</span></p>
+      <p className="text-4xl font-bold text-green-500">
+  {totalTons.toLocaleString()} <span className="text-white text-2xl">Tons CO2</span>
+</p>
+
         <div className="mt-8 space-x-4">
           <Link to='/marketplace' className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded">Buy Credits</Link>
           <button className="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded">Track Usage</button>

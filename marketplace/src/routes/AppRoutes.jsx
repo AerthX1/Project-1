@@ -4,6 +4,8 @@ import MarketplacePage from '../pages/MarketplacePage';
 import RegisterChoice from '../pages/RegisterChoice';
 import Login from '../pages/Login';
 import MarketPlace from '../pages/MarketPlace';
+import SingleProject from '../pages/SingleProject';
+import PaymentPage from '../pages/PaymentPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -11,10 +13,13 @@ const router = createBrowserRouter(
       <Route path="/" element={<Root />}>
         <Route index element={<MarketplacePage />} />
         <Route path="marketplace" element={<MarketPlace />} />
+        <Route path="/project/:id" element={<SingleProject />} />
+
       </Route>
 
       <Route path="/register-choice" element={<RegisterChoice />} />
       <Route path="/signin" element={<Login />} />
+      <Route path="/payment/:id" element={<PaymentPage />} />
     </>
   )
 );
