@@ -21,7 +21,7 @@ const MarketplaceHero = () => {
 
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 sm:px-8">
           <img
-            src="/logo-dark.png"
+            src="client\src\assets\AerthxLogo.jpg"
             alt="Aearthex Logo"
             className="w-20 h-20 object-contain hover:scale-110 transition duration-300"
           />
@@ -101,16 +101,16 @@ const MarketplaceHero = () => {
         </p>
         <div className="flex flex-wrap justify-center items-center gap-8">
           <img
-            src="/verra-logo.png"
+            src="/Verra-logo.png"
             alt="Verra"
             className="h-10 grayscale hover:grayscale-0 transition duration-300"
           />
           <img
-            src="/goldstandard-logo.png"
+            src="/gold-standard.png"
             alt="Gold Standard"
             className="h-10 grayscale hover:grayscale-0 transition duration-300"
           />
-          <img
+         <img
             src="/climateaction-logo.png"
             alt="UN Climate"
             className="h-10 grayscale hover:grayscale-0 transition duration-300"

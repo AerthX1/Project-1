@@ -34,15 +34,15 @@ export default function Home() {
       <section className="py-12 bg-white">
         <h2 className="text-2xl md:text-3xl font-bold mb-10">Why Choose Aearthx ?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-20">
-          <div className="bg-gray-100 p-6 rounded shadow">
+          <div className="bg-gray-50 p-6 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">Verified Projects</h3>
             <p>All our carbon credits come from rigorously verified and certified projects — ensuring real, measurable climate impact.</p>
           </div>
-          <div className="bg-gray-100 p-6 rounded shadow">
+          <div className="bg-gray-50 p-6 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">Blockchain Transparency (Upcoming)</h3>
             <p>Every carbon credit is securely recorded on the blockchain, making each transaction transparent and tamper-proof.</p>
           </div>
-          <div className="bg-gray-100 p-6 rounded shadow">
+          <div className="bg-gray-50 p-6 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">Instant Reporting</h3>
             <p>Get real-time reports to track your carbon credits, offsets, and environmental progress — perfect for audits and ESG goals.</p>
           </div>
@@ -68,7 +68,7 @@ export default function Home() {
         <h2 className="text-2xl md:text-3xl font-bold mb-10">Our Process</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 md:px-20">
           {['Explore Projects', 'Buy Credits', 'Tokenization & Ownership (Upcoming)', 'Track & Download'].map((title, i) => (
-            <div key={i} className="bg-gray-100 p-4 rounded shadow text-center">
+            <div key={i} className="bg-gray-50 p-4 rounded shadow text-center">
               <p className="font-semibold text-lg">{title}</p>
               <p className="mt-2 text-sm text-gray-700">
                 {i === 0 && 'Browse and choose a certified project'}
@@ -108,8 +108,8 @@ export default function Home() {
           We source certified carbon credits from globally recognized registries ensuring environmental integrity and transparency.
         </p>
         <div className="flex justify-center items-center space-x-10">
-          <img src="/verra-logo.png" alt="Verra" className="h-10" />
-          <img src="/goldstandard-logo.png" alt="Gold Standard" className="h-10" />
+          <img src="/Verra-Logo.png" alt="Verra" className="h-10" />
+          <img src="/gold-standard.png" alt="Gold Standard" className="h-10" />
           <img src="/coming-soon.png" alt="Coming Soon" className="h-10 opacity-60" />
         </div>
       </section>
