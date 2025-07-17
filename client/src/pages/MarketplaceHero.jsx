@@ -8,6 +8,9 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 import starterImage from "../assets/starterImage.jpeg";
+import aerthxlogo from "../assets/AerthxLogo.jpg";
+import goldstandard from "../assets/gold-standard.png";
+import verra from "../assets/Verra-Logo.png";
 
 const MarketplaceHero = () => {
 
@@ -15,15 +18,15 @@ const MarketplaceHero = () => {
     <section className="bg-white">
       <div className="relative h-[calc(100vh-64px)] w-full overflow-hidden shadow-sm">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-20"
+          className="absolute inset-0 bg-cover bg-center opacity-30"
           style={{ backgroundImage: `url(${starterImage})` }}
         ></div>
 
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 sm:px-8">
           <img
-            src="/logo-dark.png"
+            src={aerthxlogo}
             alt="Aearthex Logo"
-            className="w-20 h-20 object-contain hover:scale-110 transition duration-300"
+            className="w-50 h-50 object-contain hover:scale-110 transition duration-300"
           />
           <h1 className="text-4xl md:text-5xl font-extrabold text-green-800 leading-tight tracking-tight mt-4">
             Powering a Transparent Global Carbon Credit Marketplace
@@ -38,7 +41,7 @@ const MarketplaceHero = () => {
   href={`http://localhost:5174?token=${localStorage.getItem("token")}&userType=${localStorage.getItem("userType")}&user=${encodeURIComponent(localStorage.getItem("user"))}`}
   target="_blank"
   rel="noopener noreferrer"
-  className="..."
+  className="mt-25 bg-green-500 hover:bg-green-700 text-white font-semibold py-3 px-14 rounded-xl border-2"
 >
   🌍 Explore Marketplace
 </a>
@@ -103,16 +106,16 @@ const MarketplaceHero = () => {
         </p>
         <div className="flex flex-wrap justify-center items-center gap-8">
           <img
-            src="/verra-logo.png"
+            src={verra}
             alt="Verra"
             className="h-10 grayscale hover:grayscale-0 transition duration-300"
           />
           <img
-            src="/goldstandard-logo.png"
+            src={goldstandard}
             alt="Gold Standard"
             className="h-10 grayscale hover:grayscale-0 transition duration-300"
           />
-          <img
+         <img
             src="/climateaction-logo.png"
             alt="UN Climate"
             className="h-10 grayscale hover:grayscale-0 transition duration-300"

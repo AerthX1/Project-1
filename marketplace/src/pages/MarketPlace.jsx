@@ -178,7 +178,7 @@ const MarketPlace = () => {
                     {project.sdgs?.length > 0 && (
                       <span className="bg-green-50 px-3 py-1 text-xs rounded-full text-green-700 border border-green-200">🌍 {project.sdgs.length} SDGs</span>
                     )}
-                  </div>
+                  </div> 
                 </div>
               </Link>
             ))}

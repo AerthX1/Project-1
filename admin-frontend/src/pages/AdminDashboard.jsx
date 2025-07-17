@@ -9,6 +9,7 @@ import AdminManageCarbonCredits from "../components/Admin/AdminManageCarbonCredi
 import AdminUpdateCarbonCredit from "../components/Admin/AdminUpdateCarbonCredit"; 
 import AdminUserData from "../components/Admin/AdminUserData";
 
+
 import {
   FaTachometerAlt,
   FaChartBar,
@@ -28,6 +29,8 @@ const navItems = [
   { id: "addcredit", icon: <FaPlusCircle />, label: "Add Credit" }, 
   { id: "managecredits", icon: <FaEdit />, label: "Manage Credits" },
   { id: "userdata", icon: <FaUsers />, label: "User Data" }, 
+  { id: "userdata", icon: <FaUsers />, label: "User Data" },
+
 
 ];
 

@@ -21,7 +21,19 @@ router.post('/', upload.fields([{ name: 'image' }, { name: 'backgroundImage' }])
 const backgroundImagePath = req.files?.backgroundImage?.[0]
   ? `/uploads/${req.files.backgroundImage[0].filename}`
   : '';
+router.post('/', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'backgroundImage', maxCount: 1 }
+]), async (req, res) => {
+  try {
+    const data = req.body;
+     const imagePath = req.files?.image?.[0]
+      ? `/uploads/${req.files.image[0].filename}`
+      : data.imageUrl || '';
 
+    const backgroundImagePath = req.files?.backgroundImage?.[0]
+      ? `/uploads/${req.files.backgroundImage[0].filename}`
+      : data.backgroundImageUrl || '';
 
     const credit = new CarbonCredit({
       title: data.title || '',
@@ -47,6 +59,7 @@ const backgroundImagePath = req.files?.backgroundImage?.[0]
       registryLink: data.registryLink || '',
       additionalNotes: data.additionalNotes || '',
       image: imagePath,
+      backgroundImage: backgroundImagePath,
     });
 
     await credit.save();
@@ -114,6 +127,19 @@ router.put('/:id', upload.fields([{ name: 'image' }, { name: 'backgroundImage' }
 const backgroundImagePath = req.files?.backgroundImage?.[0]
   ? `/uploads/${req.files.backgroundImage[0].filename}`
   : '';
+router.put('/:id', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'backgroundImage', maxCount: 1 }
+]), async (req, res) => {
+  try {
+    const data = req.body;
+        const imagePath = req.files?.image?.[0]
+      ? `/uploads/${req.files.image[0].filename}`
+      : data.imageUrl || '';
+
+    const backgroundImagePath = req.files?.backgroundImage?.[0]
+      ? `/uploads/${req.files.backgroundImage[0].filename}`
+      : data.backgroundImageUrl || '';
 
     const updatedCredit = await CarbonCredit.findByIdAndUpdate(
       req.params.id,
@@ -141,6 +167,7 @@ const backgroundImagePath = req.files?.backgroundImage?.[0]
         registryLink: data.registryLink || '',
         additionalNotes: data.additionalNotes || '',
         image: imagePath,
+        backgroundImage: backgroundImagePath,
       },
       { new: true }
     );
