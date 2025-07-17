@@ -26,20 +26,25 @@ const SingleProject = () => {
   const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    const fetchProject = async () => {
-      try {
-        const res = await axios.get(`${API}/carbon-credits`);
-        const found = res.data.find((p) => p._id === id);
-        setProject(found);
-      } catch (err) {
-        console.error("❌ Failed to load project:", err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchProject = async () => {
+    try {
+      const res = await axios.get(`${API}/carbon-credits`);
+      const found = res.data.find((p) => p._id === id);
+      setProject(found);
+    } catch (err) {
+      console.error("❌ Failed to load project:", err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchProject();
-  }, [id]);
+  fetchProject();
+}, [id]);
+
+
+  const handleBuyClick = () => {
+    navigate(/payment/`${project._id}`);
+  };
 
   const handleBuyClick = () => {
     navigate(`/payment/${project._id}`);
@@ -74,6 +79,14 @@ const SingleProject = () => {
         </div>
       </div>
 
+<section className="px-6 sm:px-12 py-12 bg-gray-50 border-b border-gray-200">
+ <div className="w-full mx-auto">
+
+    <div className="flex items-center gap-3 mb-6">
+      <Info className="w-6 h-6 text-green-600" />
+      <h2 className="text-2xl sm:text-3xl font-bold text-green-700">Project Overview</h2>
+    </div>
+
 <div className="w-full text-center px-6 sm:px-12 pt-12 mb-8">
   <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-wide font-serif">
     {project.title}
@@ -99,7 +112,6 @@ const SingleProject = () => {
     <span className="text-sm sm:text-base text-gray-800">{project.verifiedBy}</span>
   </div>
 </div>
-
 
     <div className="flex items-center gap-3">
       <FileText className="text-green-600 w-5 h-5 shrink-0" />
@@ -148,6 +160,7 @@ const SingleProject = () => {
     </div>
   </div>
 </section>
+
 
       <section className="px-6 sm:px-12 py-12 bg-white grid grid-cols-1 md:grid-cols-2 gap-8">
   <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8 text-gray-800">
@@ -209,6 +222,7 @@ const SingleProject = () => {
 </div>
 
 
+       <div className="bg-green-50 border border-green-100 rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col justify-between space-y-6">
 
         <div className="bg-green-50 border border-green-100 rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col justify-between space-y-6">
   <div>
@@ -235,6 +249,10 @@ const SingleProject = () => {
     </div>
   </div>
 
+<div className="text-sm sm:text-base text-gray-600 italic text-center mt-4">
+  Small actions create big change. Offset your carbon footprint today 🌱
+</div>
+
 <div className="text-base sm:text-base text-gray-600 italic text-center mt-4">
     Small actions create big change. Offset your carbon footprint today 🌱
   </div>
@@ -242,6 +260,7 @@ const SingleProject = () => {
 
       </section>
 
+    {project.sdgs?.length > 0 && (
 {project.sdgs?.length > 0 && (
   <section className="w-full px-6 sm:px-12 py-14 bg-gray-50 border-t border-gray-200">
     <div className="max-w-7xl mx-auto">
@@ -265,6 +284,10 @@ const SingleProject = () => {
   </section>
 )}
 
+    {project.additionalNotes && (
+  <section className="w-full px-6 sm:px-12 py-10 bg-white border-t border-gray-200">
+    <h3 className="text-xl font-semibold text-green-700 mb-4">Additional Notes</h3>
+    <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
 {project.additionalNotes && (
   <section className="w-full px-6 sm:px-12 py-10 bg-white border-t border-gray-200">
     <h3 className="text-xl font-semibold text-green-700 mb-4">Additional Notes</h3>
@@ -274,6 +297,7 @@ const SingleProject = () => {
   </section>
 )}
 
+      <section className="w-full py-16 px-6 sm:px-12 bg-gradient-to-r from-green-700 via-green-600 to-green-500 text-white text-center">
      <section className="w-full py-16 px-6 sm:px-12 bg-gradient-to-r from-green-700 via-green-600 to-green-500 text-white text-center">
   <div className="max-w-4xl mx-auto">
     <h2 className="text-2xl sm:text-3xl font-bold mb-4 leading-snug">

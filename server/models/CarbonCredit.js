@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const CarbonCreditSchema = new mongoose.Schema({
   image: { type: String },
+  backgroundImage: { type: String },
 backgroundImage: { type: String },
   title: { type: String, required: true },
   name: { type: String, required: true },
