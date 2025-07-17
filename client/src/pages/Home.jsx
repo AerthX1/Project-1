@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import starterVideo from "../assets/introfirstvideo.mp4";
 import graph from "../assets/graph.jpg";
+import comming from "../assets/comming-soon.png";
+import goldstandard from "../assets/gold-standard.png";
+import verra from "../assets/Verra-Logo.png";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -38,9 +41,11 @@ useEffect(() => {
           <h1 className="text-white text-3xl md:text-5xl  font-bold mb-32 hover:text-emerald-300">
             Empowering Businesses to Go Carbon Neutral
           </h1>
-          <Link to='/marketplace' className="mt-32 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-14 rounded-xl border-2">
-            Buy Credits
+          <Link to="/marketplace"className="mt-25 inline-block bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-semibold py-3 px-14 rounded-full shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 border-2 border-green-700"
+          >
+           Buy Credits
           </Link>
+
         </div>
       </section>
 
@@ -48,15 +53,15 @@ useEffect(() => {
       <section className="py-12 bg-white">
         <h2 className="text-2xl md:text-3xl font-bold mb-10">Why Choose Aearthx ?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-20">
-          <div className="bg-gray-50 p-6 rounded shadow">
+          <div className="bg-gray-50 hover:bg-gray-100 p-6 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">Verified Projects</h3>
             <p>All our carbon credits come from rigorously verified and certified projects — ensuring real, measurable climate impact.</p>
           </div>
-          <div className="bg-gray-50 p-6 rounded shadow">
+          <div className="bg-gray-50 hover:bg-gray-100 p-6 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">Blockchain Transparency (Upcoming)</h3>
             <p>Every carbon credit is securely recorded on the blockchain, making each transaction transparent and tamper-proof.</p>
           </div>
-          <div className="bg-gray-50 p-6 rounded shadow">
+          <div className="bg-gray-50 hover:bg-gray-100 p-6 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">Instant Reporting</h3>
             <p>Get real-time reports to track your carbon credits, offsets, and environmental progress — perfect for audits and ESG goals.</p>
           </div>
@@ -85,7 +90,7 @@ useEffect(() => {
         <h2 className="text-2xl md:text-3xl font-bold mb-10">Our Process</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 md:px-20">
           {['Explore Projects', 'Buy Credits', 'Tokenization & Ownership (Upcoming)', 'Track & Download'].map((title, i) => (
-            <div key={i} className="bg-gray-50 p-4 rounded shadow text-center">
+            <div key={i} className="bg-gray-50  hover:bg-gray-100 p-4 rounded shadow text-center">
               <p className="font-semibold text-lg">{title}</p>
               <p className="mt-2 text-sm text-gray-700">
                 {i === 0 && 'Browse and choose a certified project'}
@@ -101,19 +106,19 @@ useEffect(() => {
       <section className="py-12 bg-gray-50">
         <h2 className="text-2xl md:text-3xl font-bold mb-10">Who We Help</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 md:px-20">
-          <div className="bg-white p-4 rounded shadow">
+          <div className="bg-white  hover:bg-gray-100 p-4 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">Corporates & Enterprises</h3>
             <p>Use your carbon actions to meet ESG goals and strengthen your brand image.</p>
           </div>
-          <div className="bg-white p-4 rounded shadow">
+          <div className="bg-white  hover:bg-gray-100 p-4 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">E-Commerce & Startups</h3>
             <p>Integrate carbon offsetting directly into your product delivery.</p>
           </div>
-          <div className="bg-white p-4 rounded shadow">
+          <div className="bg-white  hover:bg-gray-100 p-4 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">Individuals & Freelancers</h3>
             <p>Track and offset personal emissions such as flights, electricity, and more.</p>
           </div>
-          <div className="bg-white p-4 rounded shadow">
+          <div className="bg-white  hover:bg-gray-100 p-4 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">Educational Institutions & NGOs</h3>
             <p>Promote sustainability and educate communities with real environmental action.</p>
           </div>
@@ -124,10 +129,10 @@ useEffect(() => {
         <p className="text-lg max-w-2xl mx-auto mb-6">
           We source certified carbon credits from globally recognized registries ensuring environmental integrity and transparency.
         </p>
-        <div className="flex justify-center items-center space-x-10">
-          <img src="/Verra-Logo.png" alt="Verra" className="h-10" />
-          <img src="/gold-standard.png" alt="Gold Standard" className="h-10" />
-          <img src="/coming-soon.png" alt="Coming Soon" className="h-10 opacity-60" />
+        <div className="flex justify-center items-center space-x-20">
+          <img src={verra} alt="Verra" className="h-25" />
+          <img src={goldstandard} alt="Gold Standard" className="h-25" />
+          <img src={comming} alt="Coming Soon" className="h-25 opacity-60" />
         </div>
       </section>
         <section className="bg-green-500 w-full text-white py-12 px-4 text-center">
@@ -138,7 +143,7 @@ useEffect(() => {
         Join businesses making a difference. Start your climate-positive journey with Aearthex today.
       </p>
       <div className="flex flex-col sm:flex-row justify-center gap-4">
-        <button className="bg-white text-green-600 font-semibold py-2 px-6 rounded-md shadow hover:bg-gray-100 transition">
+        <button className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
           View Pricing Plans
         </button>
         <button className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
