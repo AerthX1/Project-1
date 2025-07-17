@@ -11,6 +11,7 @@ const individualRoutes = require("./routes/individualRoutes");
 const individualProfileRoutes = require("./routes/individualProfileRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const carbonCreditRoutes = require('./routes/carbonCredits');
+const adminRoutes = require('./routes/adminRoutes'); 
 
 const app = express();
 dotenv.config();
@@ -32,7 +33,7 @@ app.use("/api/individual", individualProfileRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user/notifications", notificationRoutes);
 app.use('/api/carbon-credits', carbonCreditRoutes);
-  
+app.use('/api/admin', adminRoutes); 
 
 const PORT = process.env.PORT || 5000;  
 mongoose.connect(process.env.MONGO_URI)

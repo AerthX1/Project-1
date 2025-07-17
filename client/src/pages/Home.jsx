@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from "react";
-import React from "react";
 import starterImage from "../assets/starterImage.jpeg";
 import starterVideo from "../assets/introfirstvideo.mp4";
 import graph from "../assets/graph.jpg";

@@ -9,6 +9,8 @@ const AdminAddCarbonCredit = () => {
     city: '', placeName: '', vintage: '', vintageYear: '',
     retired: false, sdgs: '', registryLink: '', additionalNotes: '', imageUrl: ''
   });
+  const [backgroundFile, setBackgroundFile] = useState(null);
+
 
   const [file, setFile] = useState(null);
 
@@ -28,6 +30,7 @@ const AdminAddCarbonCredit = () => {
 
     for (let key in formData) data.append(key, formData[key]);
     if (file) data.append('image', file);
+      if (backgroundFile) data.append('backgroundImage', backgroundFile);
 
     try {
       const API = import.meta.env.VITE_API_URL;
@@ -43,6 +46,7 @@ const AdminAddCarbonCredit = () => {
         retired: false, sdgs: '', registryLink: '', additionalNotes: '', imageUrl: ''
       });
       setFile(null);
+        setBackgroundFile(null);
     } catch (err) {
       alert('❌ Failed to add credit');
       console.error(err);
@@ -173,6 +177,14 @@ const AdminAddCarbonCredit = () => {
 
           {renderInput('imageUrl', '🌐 Image URL (optional)', 'https://example.com/project.jpg')}
         </div>
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">🌄 Upload Background Image</label>
+  <input
+    type="file"
+    onChange={(e) => setBackgroundFile(e.target.files[0])}
+    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
+  />
+</div>
 
         <div className="text-center pt-4">
           <button

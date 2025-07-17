@@ -11,6 +11,7 @@ const MarketPlace = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPlace, setSelectedPlace] = useState('');
   const [selectedVintage, setSelectedVintage] = useState('');
+  const [priceRange, setPriceRange] = useState('');
 
   const API = import.meta.env.VITE_API_URL;
 
@@ -30,14 +31,20 @@ const MarketPlace = () => {
   }, []);
 
   const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          project.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.name.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesCategory = selectedCategory ? project.category?.toLowerCase() === selectedCategory.toLowerCase() : true;
     const matchesPlace = selectedPlace ? project.country?.toLowerCase() === selectedPlace.toLowerCase() : true;
     const matchesVintage = selectedVintage ? String(project.vintage) === selectedVintage : true;
 
-    return matchesSearch && matchesCategory && matchesPlace && matchesVintage;
+    let matchesPrice = true;
+    if (priceRange === "low") matchesPrice = project.pricePerTon < 10;
+    else if (priceRange === "mid") matchesPrice = project.pricePerTon >= 10 && project.pricePerTon <= 30;
+    else if (priceRange === "high") matchesPrice = project.pricePerTon > 30;
+
+    return matchesSearch && matchesCategory && matchesPlace && matchesVintage && matchesPrice;
   });
 
   return (
@@ -66,7 +73,7 @@ const MarketPlace = () => {
 
         {filterOpen && (
           <div className="bg-white rounded-xl shadow-md px-6 py-5 mb-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Category</label>
                 <select
@@ -79,6 +86,7 @@ const MarketPlace = () => {
                   <option value="reforestation">Reforestation</option>
                 </select>
               </div>
+
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Place Name</label>
                 <select
@@ -92,6 +100,7 @@ const MarketPlace = () => {
                   <option value="amazon">Amazon Forest</option>
                 </select>
               </div>
+
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Vintage</label>
                 <select
@@ -104,17 +113,32 @@ const MarketPlace = () => {
                   <option value="2023">2023</option>
                 </select>
               </div>
+
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Price Range</label>
+                <select
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(e.target.value)}
+                  className="w-full bg-gray-100 px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option value="">All Prices</option>
+                  <option value="low">Low (Below $10)</option>
+                  <option value="mid">Mid ($10 - $30)</option>
+                  <option value="high">High (Above $30)</option>
+                </select>
+              </div>
             </div>
           </div>
         )}
 
-        {(searchTerm || selectedCategory || selectedPlace || selectedVintage) && (
+        {(searchTerm || selectedCategory || selectedPlace || selectedVintage || priceRange) && (
           <div className="text-sm text-gray-600 mb-4">
             Showing results for:
             <span className="font-medium text-gray-800 mx-1">{searchTerm || 'All'}</span>
             {selectedCategory && <span className="mx-1">| Category: {selectedCategory}</span>}
             {selectedPlace && <span className="mx-1">| Place: {selectedPlace}</span>}
             {selectedVintage && <span className="mx-1">| Vintage: {selectedVintage}</span>}
+            {priceRange && <span className="mx-1">| Price: {priceRange}</span>}
           </div>
         )}
 

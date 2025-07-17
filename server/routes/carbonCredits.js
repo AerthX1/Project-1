@@ -3,8 +3,8 @@ const router = express.Router();
 const CarbonCredit = require('../models/CarbonCredit');
 const multer = require('multer');
 const path = require('path');
-
-
+const Individual = require('../models/Individual');
+const Organization = require('../models/Organization');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
@@ -13,10 +13,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', upload.fields([{ name: 'image' }, { name: 'backgroundImage' }]), async (req, res) => {
+
   try {
     const data = req.body;
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : data.imageUrl || '';
+    const imagePath = req.files?.image?.[0] ? `/uploads/${req.files.image[0].filename}` : data.imageUrl || '';
+const backgroundImagePath = req.files?.backgroundImage?.[0]
+  ? `/uploads/${req.files.backgroundImage[0].filename}`
+  : '';
 
 
     const credit = new CarbonCredit({
@@ -102,10 +106,14 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', upload.single('image'), async (req, res) => {
+router.put('/:id', upload.fields([{ name: 'image' }, { name: 'backgroundImage' }]), async (req, res) => {
+
   try {
     const data = req.body;
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : data.imageUrl || '';
+  const imagePath = req.files?.image?.[0] ? `/uploads/${req.files.image[0].filename}` : data.imageUrl || '';
+const backgroundImagePath = req.files?.backgroundImage?.[0]
+  ? `/uploads/${req.files.backgroundImage[0].filename}`
+  : '';
 
     const updatedCredit = await CarbonCredit.findByIdAndUpdate(
       req.params.id,

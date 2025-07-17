@@ -11,6 +11,8 @@ const AdminUpdateCarbonCredit = ({ id, goBack }) => {
     retired: false, sdgs: '', registryLink: '', additionalNotes: '', imageUrl: ''
   });
   const [file, setFile] = useState(null);
+const [backgroundFile, setBackgroundFile] = useState(null);
+
 
   const API = import.meta.env.VITE_API_URL;
 
@@ -47,6 +49,7 @@ const AdminUpdateCarbonCredit = ({ id, goBack }) => {
     const data = new FormData();
     for (let key in formData) data.append(key, formData[key]);
     if (file) data.append('image', file);
+    if (backgroundFile) data.append('backgroundImage', backgroundFile); 
 
 try {
   await axios.put(`${API}/carbon-credits/${id}`, data, {
@@ -189,6 +192,16 @@ try {
           </div>
 
           {renderInput('imageUrl', '🌐 Image URL (optional)', 'https://example.com/project.jpg')}
+
+          <div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">🌄 Upload Background Image (optional)</label>
+  <input
+    type="file"
+    onChange={(e) => setBackgroundFile(e.target.files[0])}
+    className="block w-full text-sm text-gray-500 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
+  />
+</div>
+
         </div>
 
         <div className="text-center pt-4">
@@ -205,3 +218,4 @@ try {
 };
 
 export default AdminUpdateCarbonCredit;
+
