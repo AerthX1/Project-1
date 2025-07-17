@@ -12,7 +12,6 @@ const individualProfileRoutes = require("./routes/individualProfileRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const carbonCreditRoutes = require('./routes/carbonCredits');
 const adminRoutes = require('./routes/adminRoutes'); 
-const adminRoutes = require("./routes/adminRoutes");
 const app = express();
 dotenv.config();
 

@@ -6,28 +6,22 @@ const path = require('path');
 const Individual = require('../models/Individual');
 const Organization = require('../models/Organization');
 
+// File upload setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
   filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
 });
-
 const upload = multer({ storage });
 
-router.post('/', upload.fields([{ name: 'image' }, { name: 'backgroundImage' }]), async (req, res) => {
-
-  try {
-    const data = req.body;
-    const imagePath = req.files?.image?.[0] ? `/uploads/${req.files.image[0].filename}` : data.imageUrl || '';
-const backgroundImagePath = req.files?.backgroundImage?.[0]
-  ? `/uploads/${req.files.backgroundImage[0].filename}`
-  : '';
+// Create carbon credit
 router.post('/', upload.fields([
   { name: 'image', maxCount: 1 },
   { name: 'backgroundImage', maxCount: 1 }
 ]), async (req, res) => {
   try {
     const data = req.body;
-     const imagePath = req.files?.image?.[0]
+
+    const imagePath = req.files?.image?.[0]
       ? `/uploads/${req.files.image[0].filename}`
       : data.imageUrl || '';
 
@@ -64,19 +58,16 @@ router.post('/', upload.fields([
 
     await credit.save();
     res.status(201).json({ message: 'Carbon Credit Created', data: credit });
-
   } catch (err) {
     console.error("❌ Server Error in POST /carbon-credits:", err.message);
     res.status(500).json({ message: 'Server Error', error: err.message });
   }
 });
 
-
+// Get all credits
 router.get('/', async (req, res) => {
-
   try {
     const credits = await CarbonCredit.find().sort({ createdAt: -1 });
-    
     res.status(200).json(credits);
   } catch (err) {
     console.error("❌ Server Error in GET /carbon-credits:", err.message);
@@ -84,14 +75,14 @@ router.get('/', async (req, res) => {
   }
 });
 
-
+// Get total tons of unretired credits
 router.get('/total-tons', async (req, res) => {
   try {
     const result = await CarbonCredit.aggregate([
       {
         $match: {
-          retired: { $ne: true }, 
-          tons: { $type: "number" } 
+          retired: { $ne: true },
+          tons: { $type: "number" }
         }
       },
       {
@@ -110,6 +101,7 @@ router.get('/total-tons', async (req, res) => {
   }
 });
 
+// Delete credit by ID
 router.delete('/:id', async (req, res) => {
   try {
     await CarbonCredit.findByIdAndDelete(req.params.id);
@@ -119,21 +111,15 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', upload.fields([{ name: 'image' }, { name: 'backgroundImage' }]), async (req, res) => {
-
-  try {
-    const data = req.body;
-  const imagePath = req.files?.image?.[0] ? `/uploads/${req.files.image[0].filename}` : data.imageUrl || '';
-const backgroundImagePath = req.files?.backgroundImage?.[0]
-  ? `/uploads/${req.files.backgroundImage[0].filename}`
-  : '';
+// Update credit
 router.put('/:id', upload.fields([
   { name: 'image', maxCount: 1 },
   { name: 'backgroundImage', maxCount: 1 }
 ]), async (req, res) => {
   try {
     const data = req.body;
-        const imagePath = req.files?.image?.[0]
+
+    const imagePath = req.files?.image?.[0]
       ? `/uploads/${req.files.image[0].filename}`
       : data.imageUrl || '';
 
@@ -178,8 +164,5 @@ router.put('/:id', upload.fields([
     res.status(500).json({ message: 'Update failed', error: err.message });
   }
 });
-
-
-
 
 module.exports = router;
