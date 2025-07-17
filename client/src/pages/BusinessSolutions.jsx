@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import BusinessImage from "../assets/business.jpg";
+import BusinessImage from "../assets/B_esg.png";
 
 const BusinessSolutions = () => {
   return (
@@ -22,7 +22,7 @@ const BusinessSolutions = () => {
             <li>Role-based access for teams</li>
           </ul>
         </div>
-        {/* <img src={BusinessImage} alt="ESG Dashboard" className="rounded-lg shadow-lg" /> */}
+        {<img src={BusinessImage} alt="ESG Dashboard" className="rounded-lg shadow-lg" />}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
