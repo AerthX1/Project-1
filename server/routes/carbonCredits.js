@@ -13,10 +13,19 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'backgroundImage', maxCount: 1 }
+]), async (req, res) => {
   try {
     const data = req.body;
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : data.imageUrl || '';
+     const imagePath = req.files?.image?.[0]
+      ? `/uploads/${req.files.image[0].filename}`
+      : data.imageUrl || '';
+
+    const backgroundImagePath = req.files?.backgroundImage?.[0]
+      ? `/uploads/${req.files.backgroundImage[0].filename}`
+      : data.backgroundImageUrl || '';
 
 
     const credit = new CarbonCredit({
@@ -43,6 +52,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       registryLink: data.registryLink || '',
       additionalNotes: data.additionalNotes || '',
       image: imagePath,
+      backgroundImage: backgroundImagePath,
     });
 
     await credit.save();
@@ -102,10 +112,19 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', upload.single('image'), async (req, res) => {
+router.put('/:id', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'backgroundImage', maxCount: 1 }
+]), async (req, res) => {
   try {
     const data = req.body;
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : data.imageUrl || '';
+        const imagePath = req.files?.image?.[0]
+      ? `/uploads/${req.files.image[0].filename}`
+      : data.imageUrl || '';
+
+    const backgroundImagePath = req.files?.backgroundImage?.[0]
+      ? `/uploads/${req.files.backgroundImage[0].filename}`
+      : data.backgroundImageUrl || '';
 
     const updatedCredit = await CarbonCredit.findByIdAndUpdate(
       req.params.id,
@@ -133,6 +152,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
         registryLink: data.registryLink || '',
         additionalNotes: data.additionalNotes || '',
         image: imagePath,
+        backgroundImage: backgroundImagePath,
       },
       { new: true }
     );
