@@ -58,7 +58,7 @@ finally {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login to Aearthex</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Login to Aerthx</h2>
 
         {error && (
           <div className="mb-4 text-red-600 text-sm font-semibold text-center">

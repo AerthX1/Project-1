@@ -43,7 +43,7 @@ const Solutions = () => {
         <section className="flex-1 border border-green-300 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300 bg-white">
           <h2 className="text-xl md:text-2xl font-semibold text-green-700">API & Integration</h2>
           <p className="mt-3 text-gray-700">
-            Plug Aearthex into your product. Use developer APIs, embed widgets, and manage enterprise impact with seamless integration.
+            Plug Aerthx into your product. Use developer APIs, embed widgets, and manage enterprise impact with seamless integration.
           </p>
           <Link
             to="/solutions/api"

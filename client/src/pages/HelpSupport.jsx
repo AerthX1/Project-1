@@ -79,7 +79,7 @@ const HelpSupport = () => {
           <FaRegQuestionCircle className="text-indigo-600" /> Help & Support
         </h1>
         <p className="text-gray-500 mt-4 max-w-2xl mx-auto text-lg">
-          Find answers to your questions, report issues, and learn how to get the most from Aearthex.
+          Find answers to your questions, report issues, and learn how to get the most from Aerthx.
         </p>
       </div>
 
@@ -111,7 +111,7 @@ const HelpSupport = () => {
           {[{
             icon: <FaEnvelope className="text-indigo-600 text-3xl mb-3" />,
             title: 'Email Us',
-            desc: 'support@aearthex.com',
+            desc: 'support@aerthx.com',
             href: 'mailto:support@aearthex.com'
           }, {
             icon: <FaPhone className="text-indigo-600 text-3xl mb-3" />,
@@ -122,7 +122,7 @@ const HelpSupport = () => {
             icon: <FaDiscord className="text-indigo-600 text-3xl mb-3" />,
             title: 'Join Discord',
             desc: 'Community Chat',
-            href: 'https://discord.gg/aearthex'
+            href: 'https://discord.gg/aerthx'
           }].map((item, idx) => (
             <div key={idx} className="bg-white p-6 rounded-xl border hover:shadow-xl transition-all duration-300 text-center">
               {item.icon}
@@ -158,7 +158,7 @@ const HelpSupport = () => {
     </div>
   ),
   label: 'X (formerly Twitter)',
-  link: 'https://x.com/Aearthex',
+  link: 'https://x.com/Aerthx',
   bg: 'bg-gray-100 hover:bg-gray-200 transition-colors duration-300 group'
 }
 
@@ -188,10 +188,10 @@ const HelpSupport = () => {
           <FaBug /> Report a Bug
         </h2>
         <p className="text-gray-600 max-w-xl mx-auto mb-6">
-          Found an issue while using Aearthex? Let us know and we’ll fix it as soon as possible.
+          Found an issue while using Aerthx? Let us know and we’ll fix it as soon as possible.
         </p>
         <a
-          href="https://forms.gle/report-aearthex-issue"
+          href="https://forms.gle/report-aerthx-issue"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
@@ -204,7 +204,7 @@ const HelpSupport = () => {
   <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">User Guides & Resources</h2>
   <div className="grid md:grid-cols-3 gap-8">
     {[{
-      title: "Getting Started with Aearthex",
+      title: "Getting Started with Aerthx",
       desc: "Learn how to set up your account, explore projects, and make your first purchase.",
       href: "/docs/getting-started"
     }, {
@@ -232,7 +232,7 @@ const HelpSupport = () => {
     <a href="/terms-of-service" className="underline hover:text-indigo-900 transition">Terms of Service</a>
     <a href="/refund-policy" className="underline hover:text-indigo-900 transition">Refund Policy</a>
   </div>
-  <p className="mt-6 text-sm text-gray-400">© {new Date().getFullYear()} Aearthex. All rights reserved.</p>
+  <p className="mt-6 text-sm text-gray-400">© {new Date().getFullYear()} Aerthx. All rights reserved.</p>
 </footer>
 </div>
 );

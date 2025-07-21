@@ -8,43 +8,50 @@ const MarketplacePage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [highestPricedProject, setHighestPricedProject] = useState(null);
   const [dailySuggestions, setDailySuggestions] = useState([]);
+  const [lowestPricedProjects, setLowestPricedProjects] = useState([]);
   const API = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`${API}/carbon-credits`);
-        const allProjects = res.data;
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${API}/carbon-credits`);
+      const allProjects = res.data;
 
-        const filtered = allProjects
-          .filter((p) => String(p.vintage).trim() === "2024")
-          .sort((a, b) => b.vintage - a.vintage);
+      const filtered = allProjects
+        .filter((p) => String(p.vintage).trim() === "2024")
+        .sort((a, b) => b.vintage - a.vintage);
 
-        setProjects(filtered.slice(0, 5));
+      setProjects(filtered.slice(0, 5));
 
-        const mostExpensive = allProjects.reduce(
-          (max, curr) =>
-            curr.pricePerTon > (max?.pricePerTon || 0) ? curr : max,
-          null
-        );
-        setHighestPricedProject(mostExpensive);
+      const mostExpensive = allProjects.reduce(
+        (max, curr) =>
+          curr.pricePerTon > (max?.pricePerTon || 0) ? curr : max,
+        null
+      );
+      setHighestPricedProject(mostExpensive);
 
-        const seed = new Date().toISOString().split("T")[0];
-        let hash = 0;
-        for (let i = 0; i < seed.length; i++) {
-          hash = seed.charCodeAt(i) + ((hash << 5) - hash);
-        }
-        const shuffled = [...allProjects].sort((a, b) => {
-          return ((hash * a._id.length) % 1000) - ((hash * b._id.length) % 1000);
-        });
-        setDailySuggestions(shuffled.slice(0, 4));
-      } catch (err) {
-        console.error("Failed to load projects", err);
+      const seed = new Date().toISOString().split("T")[0];
+      let hash = 0;
+      for (let i = 0; i < seed.length; i++) {
+        hash = seed.charCodeAt(i) + ((hash << 5) - hash);
       }
-    };
+      const shuffled = [...allProjects].sort((a, b) => {
+        return ((hash * a._id.length) % 1000) - ((hash * b._id.length) % 1000);
+      });
+      setDailySuggestions(shuffled.slice(0, 4));
 
-    fetchData();
-  }, []);
+      const sortedByPrice = [...allProjects]
+        .filter((p) => p.pricePerTon)
+        .sort((a, b) => a.pricePerTon - b.pricePerTon);
+
+      setLowestPricedProjects(sortedByPrice.slice(0, 4));
+    } catch (err) {
+      console.error("Failed to load projects", err);
+    }
+  };
+
+  fetchData();
+}, []);
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev === 0 ? projects.length - 1 : prev - 1));
@@ -188,6 +195,37 @@ const MarketplacePage = () => {
             <h3 className="text-lg font-semibold truncate">
               {project.title}
             </h3>
+            <p className="text-green-300 mt-1 font-medium">
+              💰 ${project.pricePerTon?.toFixed(2)} / Ton
+            </p>
+          </div>
+        </Link>
+      ))}
+    </div>
+  </div>
+)}
+{lowestPricedProjects.length > 0 && (
+  <div className="mt-16 px-6 sm:px-12">
+    <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">
+      💸 Most Affordable Projects
+    </h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {lowestPricedProjects.map((project) => (
+        <Link
+          to={`/project/${project._id}`}
+          key={project._id}
+          className="rounded-xl shadow-md hover:shadow-xl overflow-hidden relative group h-64 sm:h-72"
+        >
+          <img
+            src={`http://localhost:5000${
+              project.backgroundImage || project.image
+            }`}
+            alt={project.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition" />
+          <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
+            <h3 className="text-lg font-semibold truncate">{project.title}</h3>
             <p className="text-green-300 mt-1 font-medium">
               💰 ${project.pricePerTon?.toFixed(2)} / Ton
             </p>
