@@ -8,7 +8,7 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 import starterImage from "../assets/starterImage.jpeg";
-import aerthxlogo from "../assets/AerthxLogo.jpg";
+import aerthxlogo from "../assets/aerthxlogo.png";
 import goldstandard from "../assets/gold-standard.png";
 import verra from "../assets/Verra-Logo.png";
 
