@@ -56,7 +56,7 @@ const About = () => {
 
       <section className="bg-gradient-to-tr from-green-200 via-white to-green-100 py-20 px-6 text-center">
         <h1 className="text-5xl font-extrabold text-green-900 mb-4 tracking-tight">
-          About Aearthex
+          About Aerthx
         </h1>
         <p className="text-xl max-w-3xl mx-auto text-gray-700">
           Driving environmental impact with trusted, easy-to-use climate tools for everyone.
@@ -131,7 +131,7 @@ const About = () => {
   <div className="max-w-4xl mx-auto text-center">
     <h2 className="text-4xl font-bold mb-4">Ready to Make a Difference?</h2>
     <p className="text-lg mb-8">
-      Whether you're an individual, business, or organization — Aearthex makes climate action simple, credible, and impactful.
+      Whether you're an individual, business, or organization — Aerthx makes climate action simple, credible, and impactful.
     </p>
     <div className="flex flex-col sm:flex-row justify-center gap-4">
       <a

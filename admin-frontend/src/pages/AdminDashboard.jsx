@@ -28,6 +28,7 @@ const navItems = [
   { id: "controls", icon: <FaCogs />, label: "Controls" },
   { id: "addcredit", icon: <FaPlusCircle />, label: "Add Credit" }, 
   { id: "managecredits", icon: <FaEdit />, label: "Manage Credits" },
+  { id: "userdata", icon: <FaUsers />, label: "User Data" }, 
   { id: "userdata", icon: <FaUsers />, label: "User Data" },
 
 

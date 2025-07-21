@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import starterImage from "../assets/starterImage.jpeg";
 import starterVideo from "../assets/introfirstvideo.mp4";
 import graph from "../assets/graph.jpg";
 import comming from "../assets/comming-soon.png";
@@ -41,17 +42,30 @@ useEffect(() => {
           <h1 className="text-white text-3xl md:text-5xl  font-bold mb-32 hover:text-emerald-300">
             Empowering Businesses to Go Carbon Neutral
           </h1>
+<<<<<<< HEAD
           <Link to="/marketplace"className="mt-20 inline-block bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-semibold py-3 px-14 rounded-full shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 border-2 border-green-700"
           >
            Buy Credits
           </Link>
+=======
+    <Link
+  to="MarketplaceHero"
+  className="inline-block bg-white text-green-700 font-medium tracking-wide text-lg py-3 px-10 pl-16 pr-16 rounded-full border border-green-700 shadow-md hover:bg-green-600 hover:text-white hover:shadow-lg transition-transform duration-300 transform hover:-translate-y-1"
+>
+  Buy Credits
+</Link>
+
+
+
+
+>>>>>>> e4f9ea85436c52902df0db42f2798bd43ff8e3fe
 
         </div>
       </section>
 
 
       <section className="py-12 bg-white">
-        <h2 className="text-2xl md:text-3xl font-bold mb-10">Why Choose Aearthx ?</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-10">Why Choose Aerthx ?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-20">
           <div className="bg-gray-50 hover:bg-gray-100 p-6 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">Verified Projects</h3>
@@ -76,7 +90,7 @@ useEffect(() => {
 </p>
 
         <div className="mt-8 space-x-4">
-          <Link to='/marketplace' className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded">Buy Credits</Link>
+          <Link to='/MarketplaceHero' className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded">Buy Credits</Link>
           <button className="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded">Track Usage</button>
         </div>
          </div>
@@ -140,15 +154,15 @@ useEffect(() => {
         Ready to Offset Your Carbon Footprint?
       </h2>
       <p className="text-sm sm:text-base md:text-lg mb-6 max-w-2xl mx-auto">
-        Join businesses making a difference. Start your climate-positive journey with Aearthex today.
+        Join businesses making a difference. Start your climate-positive journey with Aerthx today.
       </p>
       <div className="flex flex-col sm:flex-row justify-center gap-4">
-        <button className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
+        <Link to="/pricing" className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
           View Pricing Plans
-        </button>
-        <button className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
+        </Link>
+        <Link className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
           Contact Us
-        </button>
+        </Link>
       </div>
     </section>
     </div>
