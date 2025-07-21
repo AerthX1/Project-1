@@ -5,6 +5,7 @@ import { logout,setUser } from "../../../../shared-redux/src/slices/authSlice";
 import { fetchProfile } from "../../../../shared-redux/src/slices/profileSlice";
 import ProfileDropdown from "./ProfileDropdown";
 import DefaultAvatar from "./DefaultAvatar";
+import aerthxlogo from "../../assets/aerthxlogo.png";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -23,9 +24,10 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-md w-full px-4 py-3 lg:px-6 lg:py-4 relative z-50">
       <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate("/")}>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-black">AerthX</h1>
-        </div>
+       <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate("/")}>
+  <img src={aerthxlogo} alt="AerthX Logo" className="h-10 sm:h-12 object-contain" />
+</div>
+
 
         <ul className="flex items-center gap-6 xl:gap-9 text-lg xl:text-xl font-bold text-gray-800">
           <li>
