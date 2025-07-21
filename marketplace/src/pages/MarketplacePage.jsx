@@ -67,14 +67,13 @@ useEffect(() => {
 
   return (
     <div className="w-full">
-      <div className="relative w-full h-[700px] sm:h-[550px] overflow-hidden shadow-lg">
-       <img
-  src={`http://localhost:5000${
-    current.backgroundImage || current.image
-  }`}
-  alt={current.title}
-  className="w-full h-full object-cover absolute inset-0"
-/>
+      <div className="relative w-full h-[900px] sm:h-[700px] overflow-hidden shadow-lg">
+  <img
+    src={`http://localhost:5000${current.backgroundImage || current.image}`}
+    alt={current.title}
+    className="w-full h-full object-cover absolute inset-0"
+  />
+
 
         <div className="absolute inset-0 bg-black/50 z-0" />
 
