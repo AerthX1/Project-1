@@ -23,10 +23,9 @@ const Profile = () => {
  useEffect(() => {
   if (profileData) {
     const data =
-      profileData.org || profileData.user || profileData; // handle all 3 cases
+      profileData.org || profileData.user || profileData; 
 
-    console.log("💡 Mapped profile data:", data); // ← Optional debug log
-
+    console.log("💡 Mapped profile data:", data);
     setForm({
       orgName: data.orgName || "",
       fullName: data.fullName || "",
@@ -229,10 +228,10 @@ const Profile = () => {
               <div className="relative group">
                 <FaInfoCircle className="text-green-400 cursor-pointer" />
                 <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-72 bg-green-950 text-green-100 text-sm p-3 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 border border-green-700">
-                  Aearthex is committed to climate transparency and blockchain-backed carbon credits. Learn why we’re trusted by green leaders.
+                  Aerthx is committed to climate transparency and blockchain-backed carbon credits. Learn why we’re trusted by green leaders. (Upcoming)
                 </div>
               </div>
-              Why Organizations Trust Aearthex
+              Why Organizations Trust Aerthx
             </h3>
             <ul className="list-disc list-inside text-sm space-y-1 text-green-100">
               <li>

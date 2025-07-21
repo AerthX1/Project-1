@@ -58,14 +58,14 @@ const MarketplaceHero = () => {
         <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 sm:px-12 text-center ">
           <img
             src={aerthxlogo}
-            alt="Aearthex Logo"
+            alt="Aerthx Logo"
             className="w-64 sm:w-72 md:w-80 lg:w-96 mb-40 mt-4"
           />
          <h1 className="text-4xl sm:text-6xl font-extrabold mb-10 text-gray-700">
             Powering a Transparent Global Carbon Credit Marketplace
           </h1>
         <p className="text-lg sm:text-xl max-w-2xl text-gray-500">
-            Join the movement to fight climate change. Aearthex connects you to
+            Join the movement to fight climate change. Aerthx connects you to
             certified carbon credit projects worldwide — empowering action with
             clarity and trust.
           </p>

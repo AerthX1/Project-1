@@ -37,7 +37,7 @@ const faqData = [
   {
     question: "How do I track my offset impact?",
     answer:
-      "You can monitor your offset progress and emissions reduction through the Aearthex dashboard, with detailed reports and analytics.",
+      "You can monitor your offset progress and emissions reduction through the Aerthx dashboard, with detailed reports and analytics.",
   },
   {
     question: "Can I cancel or change my subscription later?",
@@ -95,7 +95,7 @@ const Resource = () => {
     >
   <header className="text-center max-w-3xl mx-auto px-4 sm:px-0">
   <h1 className="text-4xl md:text-5xl font-bold text-green-700 mb-6 tracking-wide">
-    Explore Aearthex Resources
+    Explore Aerthx Resources
   </h1>
   <p className="text-gray-600 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
     Access comprehensive guides, FAQs, and referral insights crafted to help you navigate carbon offsetting and sustainability with ease.
@@ -112,13 +112,13 @@ const Resource = () => {
       <strong>Blockchain Transparency Explained:</strong> How blockchain ensures trust and traceability.
     </ListItem> */}
     <ListItem>
-      <strong>Using Aearthex Dashboard:</strong> Monitor carbon footprint, subscriptions, and progress.
+      <strong>Using Aerthx Dashboard:</strong> Monitor carbon footprint, subscriptions, and progress.
     </ListItem>
     <ListItem>
       <strong>Offset Strategies:</strong> Best practices for individual and organizational carbon offsetting.
     </ListItem>
     <ListItem>
-      <strong>ESG Reporting with Aearthex:</strong> Generate reports aligned with industry standards.
+      <strong>ESG Reporting with Aerthx:</strong> Generate reports aligned with industry standards.
     </ListItem>
   </ul>
   <Link
@@ -136,7 +136,7 @@ const Resource = () => {
       Building a Greener Future Together
     </h3>
     <p className="text-gray-700 text-lg leading-relaxed max-w-xl mx-auto">
-      Aearthex is a young and ambitious platform committed to driving sustainability and transparency in carbon offsetting.  
+      Aerthx is a young and ambitious platform committed to driving sustainability and transparency in carbon offsetting.  
       We’re currently laying the groundwork and look forward to sharing impactful success stories as we grow.  
       Stay tuned for exciting updates and real-world results.
     </p>

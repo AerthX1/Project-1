@@ -1,31 +1,58 @@
+import { Link } from "react-router-dom";
+import { useState } from "react";
+
 const Footer = () => {
+  const [showSolutions, setShowSolutions] = useState(false);
+
   return (
-    <footer className="bg-[#0B1120] text-white px-6 py-10 mt-10">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between gap-10">
-        <div className="flex-1 min-w-[250px]">
-          <h2 className="text-green-500 text-2xl font-bold mb-2">Aerthx</h2>
-          <p className="text-gray-300 mb-4">
+    <footer className="bg-[#0B1120] text-white px-6 py-16 mt-24">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div>
+          <h2 className="text-green-500 text-3xl font-bold mb-4">Aerthx</h2>
+          <p className="text-gray-400 text-sm leading-relaxed mb-6">
             Your trusted partner in carbon offset, ESG reporting, and sustainable innovation.
           </p>
-          <div className="text-sm space-y-1">
-            <p className="flex items-center gap-2">
-              <span>📧</span> aerthx01@gmail.com
-            </p>
-            <p className="flex items-center gap-2">
-              <span>📞</span> +91-98765-XXXX
-            </p>
+          <div className="text-sm text-gray-400 space-y-1">
+            <p className="flex items-center gap-2">📧 aerthx01@gmail.com</p>
+            <p className="flex items-center gap-2">📞 +91-98765-XXXX</p>
           </div>
-          <div className="flex gap-4 mt-4 text-xl text-gray-400">
-            <a href="#"><i className="fab fa-linkedin hover:text-white" /></a>
-            <a href="#"><i className="fab fa-instagram hover:text-white" /></a>
-            <a href="#"><i className="fab fa-facebook hover:text-white" /></a>
-            <a href="#"><i className="fab fa-twitter hover:text-white" /></a>
+          <div className="flex gap-4 mt-4 text-xl text-gray-500">
+            <a href="#"><i className="fab fa-linkedin hover:text-white transition" /></a>
+            <a href="https://www.instagram.com/_aerthx_?igsh=MWRpMGdiYzFtMGQ3bw=="><i className="fab fa-instagram hover:text-white transition" /></a>
+            <a href="#"><i className="fab fa-facebook hover:text-white transition" /></a>
+            <a href="#"><i className="fab fa-twitter hover:text-white transition" /></a>
           </div>
         </div>
 
-        <div className="flex-1 min-w-[250px]">
-          <h3 className="text-white text-lg font-semibold mb-3">Services</h3>
-          <ul className="text-gray-300 space-y-2 text-sm">
+        <div>
+          <h3 className="text-xl font-semibold mb-4">Navigate</h3>
+          <ul className="space-y-2 text-gray-400 text-sm">
+            <li><Link to="/" className="hover:text-white transition">Home</Link></li>
+            <li><Link to="/MarketplaceHero" className="hover:text-white transition">Marketplace</Link></li>
+            <li>
+              <button
+                onClick={() => setShowSolutions(!showSolutions)}
+                className="flex items-center justify-between w-full hover:text-white transition"
+              >
+                <span>Solutions</span>
+                <span>{showSolutions ? "▲" : "▼"}</span>
+              </button>
+              {showSolutions && (
+                <ul className="pl-4 mt-2 space-y-2 text-sm">
+                  <li><Link to="/solutions/business" className="hover:text-white transition">Businesses</Link></li>
+                  <li><Link to="/solutions/individuals" className="hover:text-white transition">Individuals</Link></li>
+                  <li><Link to="/solutions/api" className="hover:text-white transition">API & Integration</Link></li>
+                </ul>
+              )}
+            </li>
+            <li><Link to="/pricing" className="hover:text-white transition">Pricing</Link></li>
+            <li><Link to="/resources" className="hover:text-white transition">Resources</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="text-xl font-semibold mb-4">Services</h3>
+          <ul className="space-y-2 text-gray-400 text-sm">
             <li>Carbon Footprint & Analysis</li>
             <li>Carbon Credit Project Development</li>
             <li>Mitigation and Reduction</li>
@@ -37,20 +64,20 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className="flex-1 min-w-[250px]">
-          <h3 className="text-white text-lg font-semibold mb-3">Stay Updated</h3>
-          <p className="text-gray-300 text-sm mb-4">
-          Receive expert analysis and the latest trends in the carbon market directly via email.
+        <div>
+          <h3 className="text-xl font-semibold mb-4">Stay Updated</h3>
+          <p className="text-gray-400 text-sm mb-4">
+            Receive expert analysis and the latest trends in the carbon market via email.
           </p>
           <form className="flex flex-col sm:flex-row gap-2">
             <input
               type="email"
               placeholder="e.g., name@example.com"
-              className="px-4 py-2 text-white rounded-md w-full sm:w-auto sm:flex-1"
+              className="pl-3 pr-3 bg-[#1E293B] text-white rounded-md w-full"
             />
             <button
               type="submit"
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md"
+              className="bg-green-500 hover:bg-green-600 transition text-white px-4 py-2 rounded-md"
             >
               Subscribe
             </button>
@@ -58,8 +85,9 @@ const Footer = () => {
         </div>
       </div>
 
-      <hr className="my-8 border-gray-700" />
-      <p className="text-center text-sm text-gray-400">
+      <hr className="my-10 border-gray-700" />
+
+      <p className="text-center text-sm text-gray-500">
         © 2025 Aerthx. All rights reserved.
       </p>
     </footer>
