@@ -70,26 +70,16 @@ const Navbar = () => {
               </Link>
             </div>
           </li>
-
-          <li className="relative group">
-            <NavLink
-              to="/service"
+          <li>
+           <NavLink
+              to="/services"
               className={({ isActive }) =>
                 `flex items-center gap-1 ${isActive ? "text-emerald-400" : "text-black"}`
               }
             >
-              Services <span>▾</span>
-            </NavLink>
-            <div className="absolute top-7 left-0 bg-white shadow-lg border rounded-md px-4 py-2 z-10 hidden group-hover:block">
-              <Link to="/service1" className="block py-1 hover:text-green-600">
-                Service 1
-              </Link>
-              <Link to="/service2" className="block py-1 hover:text-green-600">
-                Service 2
-              </Link>
-            </div>
-          </li>
-
+              Services
+           </NavLink>
+         </li>
           <li>
             <NavLink
               to="/pricing"

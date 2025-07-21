@@ -20,6 +20,7 @@ import Settings from '../pages/Settings';
 import RegisterChoice from "../pages/RegisterChoice"
 import AdminDashboard from "../../../admin-frontend/src/pages/AdminDashboard";
 import AdminRoute from "../../../admin-frontend/src/components/Admin/AdminRoute";
+import Services from '../pages/Services';
 
 
 const router = createBrowserRouter(
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
   <Route path="pricing" element={<Pricing/>}/>
  <Route path="resources" element={<Resource />} />
  <Route path="solutions" element={<Solutions/>}/>
+ <Route path="services" element={<Services/>}/>
  <Route path="/solutions/business" element={<BusinessSolutions/>}/>
   <Route path="/solutions/individuals" element={<IndividualSolutions/>}/>
     <Route path="/solutions/api" element={<APIIntegration/>}/>
