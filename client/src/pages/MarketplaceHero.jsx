@@ -49,11 +49,12 @@ const MarketplaceHero = () => {
   return (
     <section className="bg-white text-gray-900">
       <div className="relative min-h-screen w-full overflow-hidden">
-        <img
-          src={starterImage}
-          alt="Marketplace Background"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+       <img
+  src={starterImage}
+  alt="Marketplace Background"
+  className="absolute inset-0 w-full h-full object-cover"
+/>
+
 
         <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 sm:px-12 text-center ">
           <img

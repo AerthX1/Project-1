@@ -42,12 +42,14 @@ useEffect(() => {
           <h1 className="text-white text-3xl md:text-5xl  font-bold mb-32 hover:text-emerald-300">
             Empowering Businesses to Go Carbon Neutral
           </h1>
-     <Link
+    <Link
   to="MarketplaceHero"
-  className="inline-block bg-green-600 hover:bg-green-700 text-white font-medium tracking-wide text-lg py-3 px-10 pl-16 pr-16 rounded-full shadow-md hover:shadow-xl transition-transform duration-300 transform hover:-translate-y-1 border border-green-800"
+  className="inline-block bg-white text-green-700 font-medium tracking-wide text-lg py-3 px-10 pl-16 pr-16 rounded-full border border-green-700 shadow-md hover:bg-green-600 hover:text-white hover:shadow-lg transition-transform duration-300 transform hover:-translate-y-1"
 >
   Buy Credits
 </Link>
+
+
 
 
 
