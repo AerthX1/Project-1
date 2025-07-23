@@ -60,7 +60,7 @@ const MarketplaceHero = () => {
           <img
             src={aerthxlogo}
             alt="Aerthx Logo"
-            className="w-64 sm:w-72 md:w-80 lg:w-96 mb-40 mt-4"
+            className="w-64 sm:w-72 md:w-80 lg:w-72 mb-20 mt-4"
           />
          <h1 className="text-4xl sm:text-6xl font-extrabold mb-10 text-gray-700">
             Powering a Transparent Global Carbon Credit Marketplace

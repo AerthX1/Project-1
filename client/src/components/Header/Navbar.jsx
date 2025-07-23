@@ -25,7 +25,7 @@ const Navbar = () => {
     <nav className="bg-white shadow-md w-full px-4 py-3 lg:px-6 lg:py-4 relative z-50">
       <div className="flex justify-between items-center">
        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate("/")}>
-  <img src={aerthxlogo} alt="AerthX Logo" className="h-10 sm:h-12 object-contain" />
+  <img src={aerthxlogo} alt="AerthX Logo" className="h-10 sm:h-12 ml-1   object-contain" />
 </div>
 
 
