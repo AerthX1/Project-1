@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile, updateProfile } from "../../../shared-redux/src/slices/profileSlice";
 import { FaEdit, FaInfoCircle } from "react-icons/fa";
-import DefaultAvatar from "../components/Header/DefaultAvatar";
-import { setUser } from "../../../shared-redux/src/slices/authSlice";
+import DefaultAvatar from "../Components/Header/ProfileDropdown";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -70,20 +69,12 @@ const Profile = () => {
       }
 
         try {
-       const res = await dispatch(updateProfile({ token, userType, formData }));
-if (res.payload?.avatarUrl) {
-  const fullAvatarUrl = `${import.meta.env.VITE_API_URL.replace("/api", "")}${res.payload.avatarUrl}`;
-  
+        const res = await dispatch(updateProfile({ token, userType, formData }));
+        setSuccessMsg("Profile updated successfully!");
 
-  const updatedUser = {
-    ...(userType === "organization" ? res.payload.org : res.payload.user),
-    avatarUrl: res.payload.avatarUrl, 
-  };
-
-  dispatch(setUser(updatedUser));
-  localStorage.setItem("user", JSON.stringify(updatedUser));
-}
-     
+        if (res.payload?.avatarUrl) {
+          setAvatar(`${import.meta.env.VITE_API_URL.replace("/api", "")}${res.payload.avatarUrl}?t=${Date.now()}`);
+        }
 
       } catch (error) {
         console.error("Error updating profile:", error);

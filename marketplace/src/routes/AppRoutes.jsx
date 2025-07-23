@@ -6,6 +6,7 @@ import Login from '../pages/Login';
 import MarketPlace from '../pages/MarketPlace';
 import SingleProject from '../pages/SingleProject';
 import PaymentPage from '../pages/PaymentPage';
+import Profile from '../pages/Profile';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -16,7 +17,7 @@ const router = createBrowserRouter(
         <Route path="/project/:id" element={<SingleProject />} />
 
       </Route>
-
+ <Route path="/profile" element={<Profile />} />
       <Route path="/register-choice" element={<RegisterChoice />} />
       <Route path="/signin" element={<Login />} />
       <Route path="/payment/:id" element={<PaymentPage />} />

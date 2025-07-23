@@ -13,8 +13,16 @@ const Navbar = () => {
   const isAuthenticated = !!user;
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+const profile = useSelector((state) => state.profile.data);
+const token = useSelector((state) => state.auth.token);
+const userType = useSelector((state) => state.auth.userType);
 
 
+useEffect(() => {
+  if (token && userType) {
+    dispatch(fetchProfile({ token, userType }));
+  }
+}, [token, userType, dispatch]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -109,10 +117,22 @@ const Navbar = () => {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center gap-2"
               >
-                <DefaultAvatar
-                  name={user.fullName || user.orgName || "User"}
-                  size={36}
-                />
+   <DefaultAvatar
+  name={user.fullName || user.orgName || "User"}
+  size={40}
+  avatarUrl={
+    profile?.user?.avatarUrl
+      ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.user.avatarUrl}`
+      : profile?.org?.avatarUrl
+        ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.org.avatarUrl}`
+        : user.avatarUrl
+          ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.avatarUrl}`
+          : null
+  }
+/>
+
+
+
                 <span className="text-gray-700 font-semibold hidden sm:inline">
                   {user.fullName?.split(" ")[0] || user.orgName}
                 </span>
