@@ -19,3 +19,4 @@ install
 3. npm install react-icons
 4.  npm i axios
 5. npm install lucide-react
+6. npm install jwt-decode
