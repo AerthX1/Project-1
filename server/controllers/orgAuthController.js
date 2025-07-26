@@ -1,7 +1,6 @@
 const Organization = require("../models/Organization");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const validateEmail = require("../utils/validateEmail");
 const sendEmail = require("../utils/sendEmail");
 const Notification = require("../models/Notification");
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerOrganization } from "../../../shared-redux/src/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { validateEmailFrontend } from "../utils/validateEmail";
+import axios from "axios";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -12,6 +12,7 @@ const Register = () => {
   const [emailError, setEmailError] = useState("");
 const [emailChecking, setEmailChecking] = useState(false);
 const emailTimerRef = useRef(null);
+const API_URL = import.meta.env.VITE_API_URL;
 
   const [form, setForm] = useState({
     orgName: "",
@@ -70,26 +71,22 @@ if (name === "email") {
 
 };
 
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  if (!form.termsAgreed) {
-    return alert("Please agree to Terms & Conditions");
-  }
-
-  if (emailError || emailChecking) {
-    return alert("Please enter a valid email address.");
-  }
+  if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
+  if (emailError || emailChecking) return;
 
   try {
-    const result = await dispatch(registerOrganization(form));
-    if (!result.error) navigate("/");
+    const res = await axios.post(`${API_URL}/auth/send-otp`, { email: form.email });
+    if (res.status === 200) {
+      navigate("/verify-otp", { state: { form, userType: "organization" } });
+    }
   } catch (err) {
-    console.error("Frontend error:", err.message);
+    alert(err.response?.data?.message || "Failed to send OTP");
   }
 };
-
-
   
 
   return (
