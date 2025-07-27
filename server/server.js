@@ -15,6 +15,12 @@ const adminRoutes = require('./routes/adminRoutes');
 const app = express();
 dotenv.config();
 
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} body:`, req.body);
+  next();
+});
+
+
 app.use(cors({
   origin:  ["http://localhost:5173", "http://localhost:5174" ,"http://localhost:5175"],
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -32,8 +38,7 @@ app.use("/api/individual", individualProfileRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user/notifications", notificationRoutes);
 app.use('/api/carbon-credits', carbonCreditRoutes);
-app.use('/api/admin', adminRoutes); 
-app.use("/api/admin", adminRoutes);
+app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 5000;  
 mongoose.connect(process.env.MONGO_URI)

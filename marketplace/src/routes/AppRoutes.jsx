@@ -7,6 +7,7 @@ import MarketPlace from '../pages/MarketPlace';
 import SingleProject from '../pages/SingleProject';
 import PaymentPage from '../pages/PaymentPage';
 import Profile from '../pages/Profile';
+import VerifyOtp from '../pages/VerifyOtp';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
       </Route>
  <Route path="/profile" element={<Profile />} />
       <Route path="/register-choice" element={<RegisterChoice />} />
+      <Route path="/verify-otp" element={<VerifyOtp />} />
       <Route path="/signin" element={<Login />} />
       <Route path="/payment/:id" element={<PaymentPage />} />
     </>

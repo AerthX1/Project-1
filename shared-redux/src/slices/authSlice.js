@@ -45,6 +45,31 @@ export const loginOrganization = createAsyncThunk(
   }
 );
 
+export const verifyOtpAction = createAsyncThunk(
+  "auth/verifyOtp",
+  async ({ email, otp, form, userType }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API_URL}/auth/verify-otp`, {
+        email,
+        otp,
+        form,
+        userType,
+      });
+
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("userType", userType);
+
+      return { token, user, userType };
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "OTP verification failed"
+      );
+    }
+  }
+);
+
 export const registerIndividual = createAsyncThunk(
   "auth/registerIndividual",
   async (formData, { rejectWithValue }) => {
@@ -131,6 +156,21 @@ reducers: {
         state.loading = false;
         state.error = action.payload;
       })
+
+      .addCase(verifyOtpAction.pending, (state) => {
+  state.loading = true;
+  state.error = null;
+})
+.addCase(verifyOtpAction.fulfilled, (state, action) => {
+  state.loading = false;
+  state.user = action.payload.user;
+  state.token = action.payload.token;
+  state.userType = action.payload.userType;
+})
+.addCase(verifyOtpAction.rejected, (state, action) => {
+  state.loading = false;
+  state.error = action.payload;
+})  
 
       .addCase(loginOrganization.pending, (state) => {
         state.loading = true;

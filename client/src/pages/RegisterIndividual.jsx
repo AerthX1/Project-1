@@ -42,24 +42,8 @@ const API_URL = import.meta.env.VITE_API_URL;
         return;
       }
 
-    try {
-  const res = await validateEmailFrontend(value);
+      setEmailError("");
   setEmailChecking(false);
-
-  if (
-    res?.format_valid === false ||
-    res?.mx_found === false ||
-    res?.smtp_check === false ||  
-    res?.disposable === true
-  ) {
-    setEmailError("Invalid or disposable email address.");
-  } else {
-    setEmailError(""); 
-  }
-} catch (error) {
-  setEmailChecking(false);
-  setEmailError("Email validation failed.");
-}
 
     }, 500); 
   }
@@ -72,14 +56,20 @@ const handleSubmit = async (e) => {
   if (emailError || emailChecking) return;
 
   try {
-    const res = await axios.post(`${API_URL}/auth/send-otp`, { email: form.email });
+    const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
+
+    console.log("send-otp API response:", res); 
+
     if (res.status === 200) {
-      navigate("/verify-otp", { state: { form, userType: "individual" } });
+      console.log("Navigate called"); 
+      navigate("/verify-otp", { state: { form, userType: "Individual" } });
     }
   } catch (err) {
+    console.error("send-otp API error:", err); 
     alert(err.response?.data?.message || "Failed to send OTP");
   }
 };
+
 
   const statesOfIndia = [
     "Maharashtra", "Gujarat", "Karnataka", "Tamil Nadu", "Delhi", "Rajasthan",

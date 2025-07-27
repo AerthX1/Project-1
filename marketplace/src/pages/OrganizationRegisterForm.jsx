@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerOrganization } from "../../../shared-redux/src/slices/authSlice";
 import { useNavigate, Link } from "react-router-dom";
-import { validateEmailFrontend } from "../utils/validateEmail";
+import axios from "axios";
 
 const OrganizationRegisterForm = () => {
   const dispatch = useDispatch();
@@ -11,6 +11,7 @@ const OrganizationRegisterForm = () => {
   const [emailError, setEmailError] = useState("");
   const [emailChecking, setEmailChecking] = useState(false);
   const emailTimerRef = useRef(null);
+const API_URL = import.meta.env.VITE_API_URL;
 
   const [form, setForm] = useState({
     orgName: "",
@@ -46,46 +47,38 @@ const OrganizationRegisterForm = () => {
           return;
         }
 
-        try {
-          const res = await validateEmailFrontend(value);
-          setEmailChecking(false);
-
-          if (
-            res?.format_valid === false ||
-            res?.mx_found === false ||
-            res?.smtp_check === false ||
-            res?.disposable === true
-          ) {
-            setEmailError("Invalid or disposable email address.");
-          } else {
-            setEmailError("");
-          }
-        } catch (err) {
-          setEmailChecking(false);
-          setEmailError("Email validation failed.");
-        }
+        setEmailError("");
+  setEmailChecking(false);
+ 
       }, 500);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  console.log("Register form submitted");
+  console.log("API_URL is:", API_URL);
 
-    if (!form.termsAgreed) {
-      return alert("Please agree to Terms & Conditions");
-    }
+  if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
+  if (emailError || emailChecking) return;
 
-    if (emailError || emailChecking) {
-      return alert("Please enter a valid email address.");
-    }
+try {
+  console.log("Sending OTP request...");
+  const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email }); 
+  console.log("send-otp response:", res);
 
-    try {
-      const result = await dispatch(registerOrganization(form));
-      if (!result.error) navigate("/marketplace");
-    } catch (err) {
-      console.error("Frontend error:", err.message);
-    }
-  };
+  if (res.status === 200 || res.status === 201) {
+    console.log("Navigate called");
+    navigate("/verify-otp", { state: { form, userType: "organization" } });
+  } else {
+    console.log("Unexpected status:", res.status);
+  }
+} catch (err) {
+  console.error("send-otp API error:", err);
+  alert(err.response?.data?.message || "Failed to send OTP");
+}
+};
+
 
   return (
     <div className="max-w-4xl mx-auto mt-12 p-6 bg-white rounded shadow-md">
