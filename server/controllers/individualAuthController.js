@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Individual = require("../models/Individual");
-const validateEmail = require("../utils/validateEmail");
 const sendEmail = require("../utils/sendEmail");
 const Notification = require("../models/Notification"); 
 

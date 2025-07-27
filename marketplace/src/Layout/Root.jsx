@@ -1,9 +1,10 @@
-import React from 'react';
+import React from "react";
 import { Outlet } from 'react-router-dom';
 import MarketplaceNavbarControls from '../Components/Header/MarketplaceNavbarControls';
 import Footer from '../Components/Footer/Footer';  
 
 const Root = () => {
+ 
   return (
     <div>
       <MarketplaceNavbarControls />
@@ -13,6 +14,6 @@ const Root = () => {
       <Footer />
     </div>
   );
-};
+};  
 
 export default Root;

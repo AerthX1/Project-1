@@ -6,12 +6,26 @@ import DefaultAvatar from "./DefaultAvatar";
 
 const ProfileDropdown = ({ onClose, onLogout }) => {
   const user = useSelector((state) => state.auth.user);
+  const profile = useSelector((state) => state.profile.data);
   if (!user) return null;
 
   return (
     <div className="absolute right-0 mt-3 w-80 bg-white rounded-lg shadow-lg z-50 p-6 border border-gray-200">
       <div className="flex items-center gap-4 mb-6">
-        <DefaultAvatar name={user.fullName || user.orgName || "User"} size={48} />
+<DefaultAvatar
+  name={user.fullName || user.orgName || "User"}
+  size={40}
+  avatarUrl={
+    profile?.user?.avatarUrl
+      ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.user.avatarUrl}`
+      : profile?.org?.avatarUrl
+        ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.org.avatarUrl}`
+        : user.avatarUrl
+          ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.avatarUrl}`
+          : null
+  }
+/>
+
         <div>
           <p className="font-semibold text-gray-900 text-lg truncate max-w-[220px]">
             {user.fullName || user.orgName || "User"}

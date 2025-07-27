@@ -7,11 +7,23 @@ import DefaultAvatar from "../../../../client/src/components/Header/DefaultAvata
 const ProfileDropdown = ({ onClose, onLogout }) => {
   const user = useSelector((state) => state.auth.user);
   if (!user) return null;
-
+const profile = useSelector((state) => state.profile.data);
   return (
     <div className="absolute right-0 mt-3 w-80 bg-white rounded-lg shadow-lg z-50 p-6 border border-gray-200">
       <div className="flex items-center gap-4 mb-6">
-        <DefaultAvatar name={user.fullName || user.orgName || "User"} size={48} />
+        <DefaultAvatar
+  name={user.fullName || user.orgName || "User"}
+  size={40}
+  avatarUrl={
+    profile?.user?.avatarUrl
+      ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.user.avatarUrl}`
+      : profile?.org?.avatarUrl
+        ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.org.avatarUrl}`
+        : user.avatarUrl
+          ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.avatarUrl}`
+          : null
+  }
+/>
         <div>
           <p className="font-semibold text-gray-900 text-lg truncate max-w-[220px]">
             {user.fullName || user.orgName || "User"}
@@ -27,16 +39,15 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
   Switch to Organization Dashboard
 </Link>
 
-      <ul className="text-sm space-y-3">
-        <li>
-              <a
-  href="http://localhost:5173/profile" 
+   <Link
+            to="/profile"
             onClick={onClose}
-            className="block px-4 py-2 rounded-md hover:bg-indigo-50  text-gray-700 transition"
+            className="block px-4 py-2 rounded-md hover:bg-indigo-50  font-medium transition"
           >
-            Profile
-          </a>
-        </li>
+  Profile
+</Link>
+
+      <ul className="text-sm space-y-3">
          <li>
               <Link
   to="/marketplace"

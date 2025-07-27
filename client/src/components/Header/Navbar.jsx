@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout,setUser } from "../../../../shared-redux/src/slices/authSlice";
@@ -13,8 +13,29 @@ const Navbar = () => {
   const isAuthenticated = !!user;
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+const profile = useSelector((state) => state.profile.data);
+const token = useSelector((state) => state.auth.token);
+const userType = useSelector((state) => state.auth.userType);
+const dropdownRef = useRef(null);
 
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownOpen(false);
+    }
+  };
 
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
+useEffect(() => {
+  if (token && userType) {
+    dispatch(fetchProfile({ token, userType }));
+  }
+}, [token, userType, dispatch]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -22,10 +43,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md w-full px-4 py-3 lg:px-6 lg:py-4 relative z-50">
+    <nav className="bg-white shadow-md w-full px-4 py-3 lg:px-6 lg:py-4 relative z-50" ref={dropdownRef}>
       <div className="flex justify-between items-center">
        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate("/")}>
-  <img src={aerthxlogo} alt="AerthX Logo" className="h-10 sm:h-12 object-contain" />
+  <img src={aerthxlogo} alt="AerthX Logo" className="h-10 sm:h-12 ml-1   object-contain" />
 </div>
 
 
@@ -109,13 +130,20 @@ const Navbar = () => {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center gap-2"
               >
-                <DefaultAvatar
-                  name={user.fullName || user.orgName || "User"}
-                  size={36}
-                />
-                <span className="text-gray-700 font-semibold hidden sm:inline">
-                  {user.fullName?.split(" ")[0] || user.orgName}
-                </span>
+   <DefaultAvatar
+  name={user.fullName || user.orgName || "User"}
+  size={40}
+  avatarUrl={
+    profile?.user?.avatarUrl
+      ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.user.avatarUrl}`
+      : profile?.org?.avatarUrl
+        ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.org.avatarUrl}`
+        : user.avatarUrl
+          ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.avatarUrl}`
+          : null
+  }
+/>
+
               </button>
               {dropdownOpen && (
                 <ProfileDropdown onClose={() => setDropdownOpen(false)} onLogout={handleLogout} />

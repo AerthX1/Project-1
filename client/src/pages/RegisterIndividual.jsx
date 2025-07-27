@@ -2,8 +2,7 @@ import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerIndividual } from "../../../shared-redux/src/slices/authSlice";
 import { useNavigate, Link } from "react-router-dom";
-import { validateEmailFrontend } from "../utils/validateEmail";
-
+import axios from "axios";
 
 const RegisterIndividual = () => {
   const dispatch = useDispatch();
@@ -12,7 +11,7 @@ const RegisterIndividual = () => {
 const [emailError, setEmailError] = useState("");
 const [emailChecking, setEmailChecking] = useState(false);
 const emailTimerRef = useRef(null);
-
+const API_URL = import.meta.env.VITE_API_URL;
 
   const [form, setForm] = useState({
     fullName: "",
@@ -66,19 +65,21 @@ const emailTimerRef = useRef(null);
   }
 };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
+
   if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
   if (emailError || emailChecking) return;
 
   try {
-    const result = await dispatch(registerIndividual(form));
-    if (!result.error) navigate("/");
+    const res = await axios.post(`${API_URL}/auth/send-otp`, { email: form.email });
+    if (res.status === 200) {
+      navigate("/verify-otp", { state: { form, userType: "individual" } });
+    }
   } catch (err) {
-    console.error("Frontend error:", err.message);
+    alert(err.response?.data?.message || "Failed to send OTP");
   }
 };
-
 
   const statesOfIndia = [
     "Maharashtra", "Gujarat", "Karnataka", "Tamil Nadu", "Delhi", "Rajasthan",

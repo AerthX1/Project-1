@@ -21,6 +21,7 @@ import RegisterChoice from "../pages/RegisterChoice"
 import AdminDashboard from "../../../admin-frontend/src/pages/AdminDashboard";
 import AdminRoute from "../../../admin-frontend/src/components/Admin/AdminRoute";
 import Services from '../pages/Services';
+import VerifyOtp from '../pages/VerifyOtp';
 
 
 const router = createBrowserRouter(
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
   <Route path="/register-choice" element={<RegisterChoice  />} />
   <Route path="/register" element={<Register/>}/>
   <Route path="/register-individual" element={<RegisterIndividual />} />
+  <Route path="/verify-otp" element={<VerifyOtp />} />
    <Route path="/signin" element={<Login />} />
     <Route path='/profile' element={<Profile/>}/>
     <Route path="/help" element={<HelpSupport />} />
