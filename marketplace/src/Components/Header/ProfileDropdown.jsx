@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaGlobe, FaQuestionCircle } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import DefaultAvatar from "../../../../client/src/components/Header/DefaultAvatar";
+import DefaultAvatar from "../Header/DefaultAvatar";
 
 const ProfileDropdown = ({ onClose, onLogout }) => {
   const user = useSelector((state) => state.auth.user);

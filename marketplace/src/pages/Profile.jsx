@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile, updateProfile } from "../../../shared-redux/src/slices/profileSlice";
 import { FaEdit, FaInfoCircle } from "react-icons/fa";
-import DefaultAvatar from "../Components/Header/ProfileDropdown";
+import DefaultAvatar from "../Components/Header/DefaultAvatar";
 
 const Profile = () => {
   const dispatch = useDispatch();

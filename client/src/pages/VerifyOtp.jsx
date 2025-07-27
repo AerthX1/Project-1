@@ -55,18 +55,17 @@ const VerifyOtp = () => {
 
     try {
       const res = await axios.post(`${API_URL}/auth/verify-otp`, {
-        email,
-        otp,
-        form, 
-        userType, 
-      });
+  email,
+  otp,
+  form, 
+  userType, 
+});
 
-      console.log("Verify OTP API response:", res);
+if (res.status === 201) { 
+  setVerificationMessage("OTP verified successfully! Registration complete.");
+  navigate("/");
+}
 
-      if (res.status === 201) { 
-        setVerificationMessage("OTP verified successfully! Registration complete.");
-        navigate("/");
-      }
     } catch (err) {
       console.error("Verify OTP API error:", err);
       setVerificationMessage(err.response?.data?.message || "OTP verification failed. Please try again.");
