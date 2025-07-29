@@ -47,25 +47,9 @@ if (name === "email") {
       setEmailChecking(false);
       return;
     }
-
-    try {
-      const res = await validateEmailFrontend(value);
-      setEmailChecking(false);
-
-      if (
-        res?.format_valid === false ||
-        res?.mx_found === false ||
-        res?.smtp_check === false || 
-        res?.disposable === true
-      ) {
-        setEmailError("Invalid or disposable email address.");
-      } else {
-        setEmailError(""); 
-      }
-    } catch (err) {
-      setEmailChecking(false);
-      setEmailError("Email validation failed.");
-    }
+  setEmailError("");
+  setEmailChecking(false);
+ 
   }, 500);
 }
 
@@ -74,19 +58,30 @@ if (name === "email") {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+  console.log("Register form submitted");
+  console.log("API_URL is:", API_URL);
 
   if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
   if (emailError || emailChecking) return;
 
-  try {
-    const res = await axios.post(`${API_URL}/auth/send-otp`, { email: form.email });
-    if (res.status === 200) {
-      navigate("/verify-otp", { state: { form, userType: "organization" } });
-    }
-  } catch (err) {
-    alert(err.response?.data?.message || "Failed to send OTP");
+try {
+  console.log("Sending OTP request...");
+  const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email }); 
+  console.log("send-otp response:", res);
+
+  if (res.status === 200 || res.status === 201) {
+    console.log("Navigate called");
+    navigate("/verify-otp", { state: { form, userType: "organization" } });
+  } else {
+    console.log("Unexpected status:", res.status);
   }
+} catch (err) {
+  console.error("send-otp API error:", err);
+  alert(err.response?.data?.message || "Failed to send OTP");
+}
 };
+
+
   
 
   return (

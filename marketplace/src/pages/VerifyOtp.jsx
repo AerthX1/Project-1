@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { verifyOtpAction } from "../../../shared-redux/src/slices/authSlice";
+import { verifyOtpAction } from "../../../shared-redux/src/slices/authSlice"; 
 import axios from "axios";
 
 const VerifyOtp = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error, user, token } = useSelector((state) => state.auth); 
+  const { loading, error, user, token } = useSelector((state) => state.auth);
 
   const [otp, setOtp] = useState("");
   const [resendTimer, setResendTimer] = useState(60);
@@ -21,7 +21,7 @@ const VerifyOtp = () => {
 
   useEffect(() => {
     if (!form || !userType) {
-      navigate("/register");
+      navigate("/register"); 
       alert("Please complete the registration form first.");
     }
   }, [form, userType, navigate]);
@@ -55,17 +55,18 @@ const VerifyOtp = () => {
 
     try {
       const res = await axios.post(`${API_URL}/auth/verify-otp`, {
-  email,
-  otp,
-  form, 
-  userType, 
-});
+        email,
+        otp,
+        form, 
+        userType, 
+      });
 
-if (res.status === 201) { 
-  setVerificationMessage("OTP verified successfully! Registration complete.");
-  navigate("/");
-}
+      console.log("Verify OTP API response:", res);
 
+      if (res.status === 201) { 
+        setVerificationMessage("OTP verified successfully! Registration complete.");
+        navigate("/");
+      }
     } catch (err) {
       console.error("Verify OTP API error:", err);
       setVerificationMessage(err.response?.data?.message || "OTP verification failed. Please try again.");

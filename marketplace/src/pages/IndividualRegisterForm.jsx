@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerIndividual } from "../../../shared-redux/src/slices/authSlice";
 import { useNavigate, Link } from "react-router-dom";
-import { validateEmailFrontend } from "../utils/validateEmail";
+import axios from "axios";
 
 const IndividualRegisterForm = () => {
   const dispatch = useDispatch();
@@ -12,6 +12,7 @@ const IndividualRegisterForm = () => {
   const [emailError, setEmailError] = useState("");
   const [emailChecking, setEmailChecking] = useState(false);
   const emailTimerRef = useRef(null);
+const API_URL = import.meta.env.VITE_API_URL;
 
   const [form, setForm] = useState({
     fullName: "",
@@ -45,42 +46,33 @@ const IndividualRegisterForm = () => {
           return;
         }
 
-        try {
-          const res = await validateEmailFrontend(value);
-          setEmailChecking(false);
-
-          if (
-            res?.format_valid === false ||
-            res?.mx_found === false ||
-            res?.smtp_check === false ||
-            res?.disposable === true
-          ) {
-            setEmailError("Invalid or disposable email address.");
-          } else {
             setEmailError("");
-          }
-        } catch (err) {
-          setEmailChecking(false);
-          setEmailError("Email validation failed.");
-        }
+  setEmailChecking(false);
       }, 500);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
-    if (emailError || emailChecking) return;
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const result = await dispatch(registerIndividual(form));
-      if (!result.error) {
-        navigate("/marketplace");
-      }
-    } catch (err) {
-      console.error("Frontend error:", err.message);
+  if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
+  if (emailError || emailChecking) return;
+
+  try {
+    const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
+
+    console.log("send-otp API response:", res); 
+
+    if (res.status === 200) {
+      console.log("Navigate called"); 
+      navigate("/verify-otp", { state: { form, userType: "Individual" } });
     }
-  };
+  } catch (err) {
+    console.error("send-otp API error:", err); 
+    alert(err.response?.data?.message || "Failed to send OTP");
+  }
+};
+
 
   const statesOfIndia = [
     "Maharashtra", "Gujarat", "Karnataka", "Tamil Nadu", "Delhi",

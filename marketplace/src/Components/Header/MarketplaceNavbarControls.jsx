@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, setUser } from "../../../../shared-redux/src/slices/authSlice";
 import { fetchProfile } from "../../../../shared-redux/src/slices/profileSlice";
-import DefaultAvatar from "../../../../client/src/components/Header/DefaultAvatar";
+import DefaultAvatar from "../Header/DefaultAvatar";
 import ProfileDropdown from "../Header/ProfileDropdown";
 
 const MarketplaceNavbarControls = () => {

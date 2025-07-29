@@ -89,7 +89,7 @@ const resetPassword = async (req, res) => {
 
   try {
     const otpDoc = await OtpToken.findOne({ email });
-    if (!otpDoc) return res.status(400).json({ error: "OTP expired or invalid" });
+ if (!otpDoc || otpDoc.otp !== otp) return res.status(400).json({ error: "OTP expired or invalid" });
 
     const hashed = await bcrypt.hash(password, 10);
 
