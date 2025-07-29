@@ -42,35 +42,31 @@ const VerifyOtp = () => {
     setOtp(e.target.value);
   };
 
-  const handleVerify = async (e) => {
-    e.preventDefault();
-    setVerificationMessage("");
+ const handleVerify = async (e) => {
+  e.preventDefault();
+  setVerificationMessage("");
 
-    if (!otp) {
-      setVerificationMessage("Please enter the OTP.");
-      return;
+  if (!otp) {
+    setVerificationMessage("Please enter the OTP.");
+    return;
+  }
+
+  try {
+    const resultAction = await dispatch(
+      verifyOtpAction({ email: form.email, otp, form, userType })
+    );
+
+    if (verifyOtpAction.fulfilled.match(resultAction)) {
+      setVerificationMessage("OTP verified successfully! Registration complete.");
+      navigate("/");
+    } else {
+      setVerificationMessage(resultAction.payload || "OTP verification failed.");
     }
+  } catch (err) {
+    setVerificationMessage("Something went wrong. Try again.");
+  }
+};
 
-    const email = form?.email;
-
-    try {
-      const res = await axios.post(`${API_URL}/auth/verify-otp`, {
-  email,
-  otp,
-  form, 
-  userType, 
-});
-
-if (res.status === 201) { 
-  setVerificationMessage("OTP verified successfully! Registration complete.");
-  navigate("/");
-}
-
-    } catch (err) {
-      console.error("Verify OTP API error:", err);
-      setVerificationMessage(err.response?.data?.message || "OTP verification failed. Please try again.");
-    }
-  };
 
   const handleResendOtp = async () => {
     setCanResend(false);
