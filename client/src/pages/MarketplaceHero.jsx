@@ -66,7 +66,7 @@ const MarketplaceHero = () => {
             Powering a Transparent Global Carbon Credit Marketplace
           </h1>
         <p className="text-lg sm:text-xl max-w-2xl text-gray-500">
-            Join the movement to fight climate change. Aerthx connects you to
+            Join the movement to fight climate change. AerthX connects you to
             certified carbon credit projects worldwide — empowering action with
             clarity and trust.
           </p>

@@ -228,7 +228,7 @@ const Profile = () => {
               <div className="relative group">
                 <FaInfoCircle className="text-green-400 cursor-pointer" />
                 <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-72 bg-green-950 text-green-100 text-sm p-3 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 border border-green-700">
-                  Aerthx is committed to climate transparency and blockchain-backed carbon credits. Learn why we’re trusted by green leaders. (Upcoming)
+                  AerthX is committed to climate transparency and blockchain-backed carbon credits. Learn why we’re trusted by green leaders. (Upcoming)
                 </div>
               </div>
               Why Organizations Trust Aerthx

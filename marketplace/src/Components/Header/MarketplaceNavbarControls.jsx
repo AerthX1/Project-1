@@ -55,7 +55,7 @@ useEffect(() => {
           className="flex items-center space-x-2 cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <h1 className="text-2xl font-bold text-black">Aerthx</h1>
+          <h1 className="text-2xl font-bold text-black">AerthX</h1>
         </div>
 
         {isHomePage && (

@@ -1,4 +1,6 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import bgImage from '../assets/servicesBg.jpg'; 
 
 const Services = () => {
   const services = [
@@ -65,30 +67,49 @@ const Services = () => {
   ];
 
   return (
-    <main className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-3xl md:text-4xl font-bold text-center text-green-700 mb-4">AerthX Services</h1>
-      <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-        Discover how AerthX empowers businesses, individuals, and projects to take climate action with blockchain-backed carbon credit solutions.
-      </p>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {services.map((service, index) => (
-          <div key={index} className="bg-white p-6 rounded-lg shadow-black hover:shadow-lg transition duration-300 flex flex-col justify-between">
-            <div>
-              <h3 className="text-xl font-semibold mb-2 text-green-700">{service.title}</h3>
-              <p className="mb-4 text-gray-600">{service.description}</p>
-              <ul className="mb-4 list-disc list-inside text-gray-600 space-y-1">
-                {service.features.map((feature, idx) => (
-                  <li key={idx}>{feature}</li>
-                ))}
-              </ul>
-            </div>
-            <button className="mt-auto bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-              {service.buttonText}
-            </button>
-          </div>
-        ))}
+    <div
+      className="relative bg-cover bg-center bg-no-repeat min-h-screen flex flex-col justify-center"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-opacity-50"></div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-12 flex flex-col items-center">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-center text-green-100 mb-4">
+          AerthX Services
+        </h1>
+        <p className="text-center text-gray-100 mb-10 max-w-3xl leading-relaxed">
+          Discover how AerthX empowers businesses, individuals, and projects to take climate action with blockchain-backed carbon credit solutions.
+        </p>
+
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 justify-center">
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              className="bg-white bg-opacity-90 p-6 rounded-2xl shadow hover:shadow-xl border border-gray-100 hover:scale-105 transition-transform duration-300 flex flex-col justify-between"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <div>
+                <h3 className="text-2xl font-semibold mb-3 text-green-700">{service.title}</h3>
+                <p className="mb-5 text-gray-700">{service.description}</p>
+                <ul className="mb-6 list-disc list-inside text-gray-700 space-y-1">
+                  {service.features.map((feature, idx) => (
+                    <li key={idx}>{feature}</li>
+                  ))}
+                </ul>
+              </div>
+              <button className="bg-gradient-to-r from-green-600 to-green-500 text-white font-medium py-2.5 rounded-xl hover:from-green-700 hover:to-green-600 transition-colors duration-300">
+                {service.buttonText}
+              </button>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </main>
+    </div>
   );
 };
 

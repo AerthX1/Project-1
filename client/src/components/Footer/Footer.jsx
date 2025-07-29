@@ -5,10 +5,10 @@ const Footer = () => {
   const [showSolutions, setShowSolutions] = useState(false);
 
   return (
-    <footer className="bg-[#0B1120] text-white px-6 py-16 mt-24">
+    <footer className="bg-[#0B1120] text-white px-6 py-10 relative">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
         <div>
-          <h2 className="text-green-500 text-3xl font-bold mb-4">Aerthx</h2>
+          <h2 className="text-green-500 text-3xl font-bold mb-4">AerthX</h2>
           <p className="text-gray-400 text-sm leading-relaxed mb-6">
             Your trusted partner in carbon offset, ESG reporting, and sustainable innovation.
           </p>

@@ -52,7 +52,7 @@ useEffect(() => {
 
 
       <section className="py-12 bg-white">
-        <h2 className="text-2xl md:text-3xl font-bold mb-10">Why Choose Aerthx ?</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-10">Why Choose AerthX ?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-20">
           <div className="bg-gray-50 hover:bg-gray-100 p-6 rounded shadow">
             <h3 className="font-semibold text-lg mb-2">Verified Projects</h3>
@@ -141,7 +141,7 @@ useEffect(() => {
         Ready to Offset Your Carbon Footprint?
       </h2>
       <p className="text-sm sm:text-base md:text-lg mb-6 max-w-2xl mx-auto">
-        Join businesses making a difference. Start your climate-positive journey with Aerthx today.
+        Join businesses making a difference. Start your climate-positive journey with AerthX today.
       </p>
       <div className="flex flex-col sm:flex-row justify-center gap-4">
         <Link to="/pricing" className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">

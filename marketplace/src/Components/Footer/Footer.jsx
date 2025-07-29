@@ -3,7 +3,7 @@ const Footer = () => {
     <footer className="bg-[#0B1120] text-white px-6 py-10 mt-10">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between gap-10">
         <div className="flex-1 min-w-[250px]">
-          <h2 className="text-green-500 text-2xl font-bold mb-2">Aerthx</h2>
+          <h2 className="text-green-500 text-2xl font-bold mb-2">AerthX</h2>
           <p className="text-gray-300 mb-4">
             Your trusted partner in carbon offset, ESG reporting, and sustainable innovation.
           </p>
@@ -60,7 +60,7 @@ const Footer = () => {
 
       <hr className="my-8 border-gray-700" />
       <p className="text-center text-sm text-gray-400">
-        © 2025 Aerthx. All rights reserved.
+        © 2025 AerthX. All rights reserved.
       </p>
     </footer>
   );
