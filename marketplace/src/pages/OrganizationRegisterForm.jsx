@@ -17,7 +17,6 @@ const API_URL = import.meta.env.VITE_API_URL;
     orgName: "",
     orgType: "",
     industry: "",
-    website: "",
     phone: "",
     country: "",
     state: "",
@@ -25,8 +24,6 @@ const API_URL = import.meta.env.VITE_API_URL;
     fullName: "",
     email: "",
     password: "",
-    designation: "",
-    employeeCount: "",
     termsAgreed: false,
   });
 
@@ -125,26 +122,6 @@ try {
           <option>Technology</option>
         </select>
 
-        <select
-          name="employeeCount"
-          value={form.employeeCount}
-          onChange={handleChange}
-          className="p-2 border border-gray-300 rounded w-full"
-        >
-          <option value="">Employees</option>
-          <option>1-50</option>
-          <option>51-200</option>
-          <option>201-500</option>
-        </select>
-
-        <input
-          name="website"
-          value={form.website}
-          onChange={handleChange}
-          placeholder="Website"
-          className="p-2 border border-gray-300 rounded w-full"
-          required
-        />
         <input
           name="phone"
           value={form.phone}
@@ -185,14 +162,7 @@ try {
           className="p-2 border border-gray-300 rounded w-full"
           required
         />
-        <input
-          name="designation"
-          value={form.designation}
-          onChange={handleChange}
-          placeholder="Designation"
-          className="p-2 border border-gray-300 rounded w-full"
-          required
-        />
+  
         <input
           type="email"
           name="email"

@@ -10,7 +10,6 @@ const registerOrganization = async (req, res) => {
       orgName,
       orgType,
       industry,
-      website,
       phone,
       country,
       state,
@@ -18,14 +17,13 @@ const registerOrganization = async (req, res) => {
       fullName,
       email,
       password,
-      designation,
       termsAgreed,
     } = req.body;
 
     if (
-      !orgName || !orgType || !industry || !website || !phone ||
+      !orgName || !orgType || !industry  || !phone ||
       !country || !state || !city || !fullName || !email ||
-      !password || !designation
+      !password 
     ) {
       return res.status(400).json({ message: "Please fill all required fields." });
     }
@@ -59,7 +57,6 @@ if (
       orgName,
       orgType,
       industry,
-      website,
       phone,
       country,
       state,
@@ -67,7 +64,6 @@ if (
       fullName,
       email,
       password: hashedPassword,
-      designation,
       termsAgreed,
     });
 

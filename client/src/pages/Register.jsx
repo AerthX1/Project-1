@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerOrganization, setUser } from "../../../shared-redux/src/slices/authSlice";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 
 const Register = () => {
@@ -10,15 +10,16 @@ const Register = () => {
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
   const [emailError, setEmailError] = useState("");
-const [emailChecking, setEmailChecking] = useState(false);
-const emailTimerRef = useRef(null);
-const API_URL = import.meta.env.VITE_API_URL;
+  const [emailChecking, setEmailChecking] = useState(false);
+  const emailTimerRef = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [form, setForm] = useState({
     orgName: "",
     orgType: "",
     industry: "",
-    website: "",
     phone: "",
     country: "",
     state: "",
@@ -26,234 +27,308 @@ const API_URL = import.meta.env.VITE_API_URL;
     fullName: "",
     email: "",
     password: "",
-    designation: "",
-    employeeCount: "",
     termsAgreed: false,
   });
 
-const handleChange = (e) => {
-  const { name, value, type, checked } = e.target;
-  setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm({ ...form, [name]: type === "checkbox" ? checked : value });
 
-if (name === "email") {
-  setEmailChecking(true);
-  setEmailError("");
+    if (name === "email") {
+      if (emailTimerRef.current) {
+        clearTimeout(emailTimerRef.current);
+      }
 
-  if (emailTimerRef.current) clearTimeout(emailTimerRef.current);
+      if (value.trim() !== "") {
+        setEmailChecking(true);
+        setEmailError("");
 
-  emailTimerRef.current = setTimeout(async () => {
-    if (!value.includes("@") || value.length < 6) {
-      setEmailError("Invalid email format");
-      setEmailChecking(false);
+        emailTimerRef.current = setTimeout(async () => {
+          if (!value.includes("@") || value.length < 6) {
+            setEmailError("Please enter a valid email address.");
+            setEmailChecking(false);
+            return;
+          }
+          setEmailError("");
+          setEmailChecking(false);
+        }, 500);
+      } else {
+        setEmailError("");
+        setEmailChecking(false);
+      }
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Register form submitted");
+    console.log("API_URL is:", API_URL);
+
+    const requiredFields = ['orgName', 'orgType', 'industry', 'phone', 'country', 'state', 'city', 'fullName', 'email', 'password'];
+    for (const field of requiredFields) {
+        if (!form[field]) {
+            alert(`Please fill in the '${field}' field.`);
+            return;
+        }
+    }
+
+    if (!form.termsAgreed) {
+      alert("Please agree to the Terms & Conditions to register.");
       return;
     }
-  setEmailError("");
-  setEmailChecking(false);
- 
-  }, 500);
-}
+    if (emailError || emailChecking) {
+      alert("Please resolve email issues before submitting.");
+      return;
+    }
 
-};
+    try {
+      console.log("Sending OTP request...");
+      const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
+      console.log("send-otp response:", res);
 
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  console.log("Register form submitted");
-  console.log("API_URL is:", API_URL);
-
-  if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
-  if (emailError || emailChecking) return;
-
-try {
-  console.log("Sending OTP request...");
-  const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email }); 
-  console.log("send-otp response:", res);
-
-  if (res.status === 200 || res.status === 201) {
-    console.log("Navigate called");
-    navigate("/verify-otp", { state: { form, userType: "organization" } });
-  } else {
-    console.log("Unexpected status:", res.status);
-  }
-} catch (err) {
-  console.error("send-otp API error:", err);
-  alert(err.response?.data?.message || "Failed to send OTP");
-}
-};
-
-
-  
+      if (res.status === 200 || res.status === 201) {
+        console.log("Navigate called");
+        navigate("/verify-otp", { state: { form, userType: "organization" } });
+      } else {
+        console.log("Unexpected status:", res.status);
+        alert("An unexpected error occurred. Please try again.");
+      }
+    } catch (err) {
+      console.error("send-otp API error:", err);
+      alert(err.response?.data?.message || "Failed to send OTP. Please check your network and try again.");
+    }
+  };
 
   return (
-    <div className="max-w-4xl mx-auto mt-12 p-6 bg-white rounded shadow-md">
-      <h2 className="text-2xl font-bold mb-2">Organization Registration</h2>
-      <p className="text-sm text-gray-500 mb-6">
-        Provide accurate details about your organization to proceed.
-      </p>
-      {error && <p className="text-red-600 mb-4">{error}</p>}
-      <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-        <input
-          name="orgName"
-          value={form.orgName}
-          onChange={handleChange}
-          placeholder="Organization Name"
-          className="p-2 border rounded"
-          required
-        />
-        <select
-          name="orgType"
-          value={form.orgType}
-          onChange={handleChange}
-          className="p-2 border rounded"
-          required
-        >
-          <option value="">Select Type</option>
-          <option>Corporation</option>
-          <option>NGO</option>
-        </select>
+    <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-emerald-50 to-teal-100 text-gray-800 antialiased">
+      <div className="w-full max-w-4xl mx-auto py-12 px-8 sm:px-12 lg:px-16">
+        <div className="text-center mb-16">
+          {/* <img src="/your-logo.svg" alt="Company Logo" className="mx-auto h-24 w-auto mb-10 opacity-90" /> */}
+          <h1 className="text-6xl font-extrabold text-green-700 tracking-tight leading-tight">
+            Register Your Organization
+          </h1>
+          <p className="mt-6 text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Begin your journey with us. Provide accurate details to effortlessly streamline your operations and connect with a thriving community.
+          </p>
+        </div>
 
-        <select
-          name="industry"
-          value={form.industry}
-          onChange={handleChange}
-          className="p-2 border rounded"
-          required
-        >
-          <option value="">Industry</option>
-          <option>Energy</option>
-          <option>Technology</option>
-        </select>
-        <select
-          name="employeeCount"
-          onChange={handleChange}
-          className="p-2 border rounded"
-        >
-          <option value="">Employees</option>
-          <option>1-50</option>
-          <option>51-200</option>
-          <option>201-500</option>
-        </select>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg relative mb-8 text-center text-lg shadow-md" role="alert">
+            <strong className="font-semibold">Error:</strong>
+            <span className="block sm:inline ml-3">{error}</span>
+          </div>
+        )}
 
-        <input
-          name="website"
-          value={form.website}
-          onChange={handleChange}
-          placeholder="Website"
-          className="p-2 border rounded"
-          required
-        />
-        <input
-          name="phone"
-          value={form.phone}
-          onChange={handleChange}
-          placeholder="Phone"
-          className="p-2 border rounded"
-          required
-        />
-        <input
-          name="country"
-          value={form.country}
-          onChange={handleChange}
-          placeholder="Country"
-          className="p-2 border rounded"
-          required
-        />
-        <input
-          name="state"
-          value={form.state}
-          onChange={handleChange}
-          placeholder="State"
-          className="p-2 border rounded"
-          required
-        />
-        <input
-          name="city"
-          value={form.city}
-          onChange={handleChange}
-          placeholder="City"
-          className="p-2 border rounded"
-          required
-        />
-        <input
-          name="fullName"
-          value={form.fullName}
-          onChange={handleChange}
-          placeholder="Full Name"
-          className="p-2 border rounded"
-          required
-        />
-        <input
-          name="designation"
-          value={form.designation}
-          onChange={handleChange}
-          placeholder="Designation"
-          className="p-2 border rounded"
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          value={form.email}
-         onChange={handleChange}
-          placeholder="Email"
-          className="p-2 border rounded"
-          required
-        />
-{emailChecking && (
-  <p className="col-span-2 text-blue-500 text-sm">Checking email...</p>
-)}
-{emailError && (
-  <p className="col-span-2 text-red-500 text-sm">{emailError}</p>
-)}
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-7"> 
+          <div className="md:col-span-2">
+            <label htmlFor="orgName" className="block text-base font-semibold text-gray-700 mb-2">Organization Name</label>
+            <input
+              id="orgName"
+              name="orgName"
+              value={form.orgName}
+              onChange={handleChange}
+              placeholder="Your Organization's Legal Name"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
+              required
+            />
+          </div>
 
+          <div>
+            <label htmlFor="orgType" className="block text-base font-semibold text-gray-700 mb-2">Organization Type</label>
+            <div className="relative">
+              <select
+                id="orgType"
+                name="orgType"
+                value={form.orgType}
+                onChange={handleChange}
+                className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg appearance-none cursor-pointer pr-10" 
+                required
+              >
+                <option value="">Select Type</option>
+                <option value="Corporation">Corporation</option>
+                <option value="NGO">NGO (Non-Governmental Organization)</option>
+                <option value="Partnership">Partnership</option>
+                <option value="Sole Proprietorship">Sole Proprietorship</option>
+                <option value="Other">Other</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 6.757 7.586 5.343 9z"/></svg>
+              </div>
+            </div>
+          </div>
 
-        <input
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          placeholder="Password"
-          className="p-2 border rounded"
-          required
-        />
+          <div>
+            <label htmlFor="industry" className="block text-base font-semibold text-gray-700 mb-2">Industry</label>
+            <div className="relative">
+              <select
+                id="industry"
+                name="industry"
+                value={form.industry}
+                onChange={handleChange}
+                className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg appearance-none cursor-pointer pr-10"
+                required
+              >
+                <option value="">Select Industry</option>
+                <option value="Technology">Technology</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Finance">Finance</option>
+                <option value="Education">Education</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Retail">Retail</option>
+                <option value="Energy">Energy</option>
+                <option value="Consulting">Consulting</option>
+                <option value="Hospitality">Hospitality</option>
+                <option value="Other">Other</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 6.757 7.586 5.343 9z"/></svg>
+              </div>
+            </div>
+          </div>
 
-   <div className="col-span-2 flex items-center gap-2">
-  <input
-    type="checkbox"
-    name="termsAgreed"
-    checked={form.termsAgreed}
-    onChange={handleChange}
-  />
-  <label className={`text-sm ${!form.termsAgreed ? "text-red-600" : ""}`}>
-    I agree to the{" "}
-    <a href="#" className="text-green-600 underline">
-      Terms & Conditions
-    </a>{" "}
-    *
-  </label>
-</div>
+          <div className="md:col-span-2">
+            <label htmlFor="phone" className="block text-base font-semibold text-gray-700 mb-2">Phone Number</label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="e.g., +91 98765 43210"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
+              required
+            />
+          </div>
 
+          <div>
+            <label htmlFor="country" className="block text-base font-semibold text-gray-700 mb-2">Country</label>
+            <input
+              id="country"
+              name="country"
+              value={form.country}
+              onChange={handleChange}
+              placeholder="Country"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
+              required
+            />
+          </div>
 
-       <button
-  type="submit"
-  disabled={loading || !form.termsAgreed}
-  className={`col-span-2 py-2 rounded mt-2 text-white 
-    ${!form.termsAgreed ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-gray-400"}`}
->
-  {loading ? "Registering..." : "Register Organization"}
-</button>
+          <div>
+            <label htmlFor="state" className="block text-base font-semibold text-gray-700 mb-2">State / Province</label>
+            <input
+              id="state"
+              name="state"
+              value={form.state}
+              onChange={handleChange}
+              placeholder="State / Province"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
+              required
+            />
+          </div>
 
+          <div className="md:col-span-2">
+            <label htmlFor="city" className="block text-base font-semibold text-gray-700 mb-2">City</label>
+            <input
+              id="city"
+              name="city"
+              value={form.city}
+              onChange={handleChange}
+              placeholder="City"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
+              required
+            />
+          </div>
 
-      <Link
-  to="/signin"
-  className="col-span-2 block w-full mt-6 py-3 text-center border-2 border-green-700 text-green-700 font-semibold rounded-lg
-             hover:bg-green-700 hover:text-white transition-colors duration-300
-             focus:outline-none focus:ring-4 focus:ring-green-400 focus:ring-offset-2"
-  aria-label="Sign in to your Aearthex account"
->
-  Already have an account? Sign In
-</Link>
-      </form>
+          <div className="md:col-span-2">
+            <label htmlFor="fullName" className="block text-base font-semibold text-gray-700 mb-2">Your Full Name (Primary Contact)</label>
+            <input
+              id="fullName"
+              name="fullName"
+              value={form.fullName}
+              onChange={handleChange}
+              placeholder="Full Name of Primary Contact"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
+              required
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label htmlFor="email" className="block text-base font-semibold text-gray-700 mb-2">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="Your Business Email"
+              className={`w-full p-4 border-b-2 ${emailError ? 'border-red-500' : 'border-gray-300'} bg-transparent focus:outline-none ${emailError ? 'focus:border-red-500' : 'focus:border-green-600'} transition-all duration-300 text-lg placeholder-gray-500`}
+              required
+            />
+            {emailChecking && (
+              <p className="text-blue-600 text-sm mt-2 animate-pulse">Checking email availability...</p>
+            )}
+            {emailError && (
+              <p className="text-red-500 text-sm mt-2">{emailError}</p>
+            )}
+          </div>
+
+         <div className="md:col-span-2 relative">
+      <label htmlFor="password" className="block text-base font-semibold text-gray-700 mb-2">
+        Password
+      </label>
+      <input
+        id="password"
+        type={showPassword ? "text" : "password"}
+        name="password"
+        value={form.password}
+        onChange={handleChange}
+        placeholder="Create a strong password"
+        className="w-full p-4 pr-12 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
+        required
+      />
+      <div
+        className="absolute top-11 right-4 cursor-pointer text-gray-600 hover:text-green-600 transition"
+        onClick={() => setShowPassword((prev) => !prev)}
+      >
+        {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+      </div>
+    </div>
+          <div className="md:col-span-2 flex items-start mt-6"> 
+            <input
+              id="termsAgreed"
+              type="checkbox"
+              name="termsAgreed"
+              checked={form.termsAgreed}
+              onChange={handleChange}
+              className="mt-1 h-5 w-5 text-green-600 focus:ring-green-500 border-gray-300 rounded-sm cursor-pointer"
+            />
+            <label htmlFor="termsAgreed" className={`ml-4 text-base ${!form.termsAgreed ? "text-red-600" : "text-gray-700"} cursor-pointer leading-relaxed`}>
+              I agree to the{" "}
+              <a href="#" className="text-green-600 hover:text-green-700 underline font-semibold" onClick={(e) => e.preventDefault()}>Terms & Conditions</a> and{" "}
+              <a href="#" className="text-green-600 hover:text-green-700 underline font-semibold" onClick={(e) => e.preventDefault()}>Privacy Policy</a> *
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading || !form.termsAgreed || emailChecking || emailError}
+            className={`md:col-span-2 w-full py-4 px-6 rounded-xl font-bold text-xl text-white transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl mt-12 mb-6
+              ${!form.termsAgreed || emailChecking || emailError || loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-3 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-emerald-50"
+              }`}
+          >
+            {loading ? "Registering..." : "Register Organization"}
+          </button>
+
+          <Link
+            to="/signin"
+            className="md:col-span-2 text-center text-green-700 hover:text-green-900 mt-4 text-lg underline font-medium transition duration-200"
+          >
+            Already have an account? Sign In
+          </Link>
+        </form>
+      </div>
     </div>
   );
 };
