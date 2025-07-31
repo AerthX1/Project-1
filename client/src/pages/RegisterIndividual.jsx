@@ -7,20 +7,21 @@ import axios from "axios";
 const RegisterIndividual = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { error } = useSelector((state) => state.auth);
   const [emailError, setEmailError] = useState("");
   const [emailChecking, setEmailChecking] = useState(false);
   const emailTimerRef = useRef(null);
   const API_URL = import.meta.env.VITE_API_URL;
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     fullName: "",
     email: "",
     password: "",
     designation: "",
-    country: "", 
-    state: "",   
+    country: "",
+    state: "",
     city: "",
     phone: "",
     termsAgreed: false,
@@ -59,10 +60,10 @@ const RegisterIndividual = () => {
 
     const requiredFields = ['fullName', 'email', 'password', 'country', 'city'];
     for (const field of requiredFields) {
-        if (!form[field]) {
-            alert(`Please fill in the '${field}' field.`);
-            return;
-        }
+      if (!form[field]) {
+        alert(`Please fill in the '${field}' field.`);
+        return;
+      }
     }
 
     if (!form.termsAgreed) {
@@ -73,6 +74,8 @@ const RegisterIndividual = () => {
       alert("Please resolve email issues before submitting.");
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       console.log("Sending OTP request for individual registration...");
@@ -90,15 +93,16 @@ const RegisterIndividual = () => {
     } catch (err) {
       console.error("send-otp API error:", err);
       alert(err.response?.data?.message || "Failed to send OTP. Please check your network and try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
- 
+
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-50 to-purple-100 text-gray-800 antialiased">
       <div className="w-full max-w-4xl mx-auto py-12 px-8 sm:px-12 lg:px-16">
         <div className="text-center mb-16">
-          {/* <img src="/your-logo.svg" alt="Company Logo" className="mx-auto h-24 w-auto mb-10 opacity-90" /> */}
           <h1 className="text-6xl font-extrabold text-purple-700 tracking-tight leading-tight">
             Join as an Individual
           </h1>
@@ -115,7 +119,7 @@ const RegisterIndividual = () => {
         )}
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-7">
-      
+
           <div className="md:col-span-2">
             <label htmlFor="fullName" className="block text-base font-semibold text-gray-700 mb-2">Full Name</label>
             <input
@@ -262,15 +266,26 @@ const RegisterIndividual = () => {
 
           <button
             type="submit"
-            disabled={loading || !form.termsAgreed || emailChecking || emailError}
+            disabled={isSubmitting || !form.termsAgreed || emailChecking || emailError}
             className={`md:col-span-2 w-full py-4 px-6 rounded-xl font-bold text-xl text-white transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl mt-12 mb-6
-              ${!form.termsAgreed || emailChecking || emailError || loading
+              ${!form.termsAgreed || emailChecking || emailError || isSubmitting
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-3 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-indigo-50"
               }`}
           >
-            {loading ? "Registering..." : "Register Individual"}
+            {isSubmitting ? (
+              <div className="flex items-center justify-center space-x-3">
+                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l4-4-4-4v4a12 12 0 00-12 12h4z" />
+                </svg>
+                <span>Registering...</span>
+              </div>
+            ) : (
+              "Register Individual"
+            )}
           </button>
+
 
           <Link
             to="/signin"
@@ -284,4 +299,4 @@ const RegisterIndividual = () => {
   );
 };
 
-export default RegisterIndividual;  
+export default RegisterIndividual;

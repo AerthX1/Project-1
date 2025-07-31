@@ -11,7 +11,8 @@ const OrganizationRegisterForm = () => {
   const [emailError, setEmailError] = useState("");
   const [emailChecking, setEmailChecking] = useState(false);
   const emailTimerRef = useRef(null);
-const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
+  const [showPassword, setShowPassword] = useState(false);
 
   const [form, setForm] = useState({
     orgName: "",
@@ -45,36 +46,36 @@ const API_URL = import.meta.env.VITE_API_URL;
         }
 
         setEmailError("");
-  setEmailChecking(false);
- 
+        setEmailChecking(false);
+
       }, 500);
     }
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  console.log("Register form submitted");
-  console.log("API_URL is:", API_URL);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Register form submitted");
+    console.log("API_URL is:", API_URL);
 
-  if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
-  if (emailError || emailChecking) return;
+    if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
+    if (emailError || emailChecking) return;
 
-try {
-  console.log("Sending OTP request...");
-  const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email }); 
-  console.log("send-otp response:", res);
+    try {
+      console.log("Sending OTP request...");
+      const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
+      console.log("send-otp response:", res);
 
-  if (res.status === 200 || res.status === 201) {
-    console.log("Navigate called");
-    navigate("/verify-otp", { state: { form, userType: "organization" } });
-  } else {
-    console.log("Unexpected status:", res.status);
-  }
-} catch (err) {
-  console.error("send-otp API error:", err);
-  alert(err.response?.data?.message || "Failed to send OTP");
-}
-};
+      if (res.status === 200 || res.status === 201) {
+        console.log("Navigate called");
+        navigate("/verify-otp", { state: { form, userType: "organization" } });
+      } else {
+        console.log("Unexpected status:", res.status);
+      }
+    } catch (err) {
+      console.error("send-otp API error:", err);
+      alert(err.response?.data?.message || "Failed to send OTP");
+    }
+  };
 
 
   return (
@@ -162,7 +163,7 @@ try {
           className="p-2 border border-gray-300 rounded w-full"
           required
         />
-  
+
         <input
           type="email"
           name="email"
@@ -180,15 +181,24 @@ try {
           <p className="col-span-2 text-red-500 text-sm">{emailError}</p>
         )}
 
-        <input
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          placeholder="Password"
-          className="p-2 border border-gray-300 rounded w-full"
-          required
-        />
+        <div className="relative col-span-2">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            placeholder="Password"
+            className="p-2 border border-gray-300 rounded w-full pr-10"
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
 
         <div className="col-span-2 flex items-start gap-2">
           <input
@@ -228,4 +238,3 @@ try {
 };
 
 export default OrganizationRegisterForm;
-

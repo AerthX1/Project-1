@@ -20,3 +20,4 @@ install
 4.  npm i axios
 5. npm install lucide-react
 6. npm install jwt-decode
+7. npm install @heroicons/react

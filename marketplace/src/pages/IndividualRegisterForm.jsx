@@ -12,7 +12,8 @@ const IndividualRegisterForm = () => {
   const [emailError, setEmailError] = useState("");
   const [emailChecking, setEmailChecking] = useState(false);
   const emailTimerRef = useRef(null);
-const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
+  const [showPassword, setShowPassword] = useState(false);
 
   const [form, setForm] = useState({
     fullName: "",
@@ -46,33 +47,32 @@ const API_URL = import.meta.env.VITE_API_URL;
           return;
         }
 
-            setEmailError("");
-  setEmailChecking(false);
+        setEmailError("");
+        setEmailChecking(false);
       }, 500);
     }
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
-  if (emailError || emailChecking) return;
+    if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
+    if (emailError || emailChecking) return;
 
-  try {
-    const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
+    try {
+      const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
 
-    console.log("send-otp API response:", res); 
+      console.log("send-otp API response:", res);
 
-    if (res.status === 200) {
-      console.log("Navigate called"); 
-      navigate("/verify-otp", { state: { form, userType: "Individual" } });
+      if (res.status === 200) {
+        console.log("Navigate called");
+        navigate("/verify-otp", { state: { form, userType: "Individual" } });
+      }
+    } catch (err) {
+      console.error("send-otp API error:", err);
+      alert(err.response?.data?.message || "Failed to send OTP");
     }
-  } catch (err) {
-    console.error("send-otp API error:", err); 
-    alert(err.response?.data?.message || "Failed to send OTP");
-  }
-};
-
+  };
 
   const statesOfIndia = [
     "Maharashtra", "Gujarat", "Karnataka", "Tamil Nadu", "Delhi",
@@ -123,15 +123,24 @@ const API_URL = import.meta.env.VITE_API_URL;
             </p>
           )}
 
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="Password"
-            className="p-2 border border-gray-300 rounded w-full"
-            required
-          />
+          <div className="relative col-span-2">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className="p-2 border border-gray-300 rounded w-full pr-10"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
 
           <input
             name="designation"

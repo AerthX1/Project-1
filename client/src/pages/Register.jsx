@@ -13,6 +13,7 @@ const Register = () => {
   const [emailChecking, setEmailChecking] = useState(false);
   const emailTimerRef = useRef(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -66,10 +67,10 @@ const Register = () => {
 
     const requiredFields = ['orgName', 'orgType', 'industry', 'phone', 'country', 'state', 'city', 'fullName', 'email', 'password'];
     for (const field of requiredFields) {
-        if (!form[field]) {
-            alert(`Please fill in the '${field}' field.`);
-            return;
-        }
+      if (!form[field]) {
+        alert(`Please fill in the '${field}' field.`);
+        return;
+      }
     }
 
     if (!form.termsAgreed) {
@@ -80,6 +81,8 @@ const Register = () => {
       alert("Please resolve email issues before submitting.");
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       console.log("Sending OTP request...");
@@ -96,6 +99,8 @@ const Register = () => {
     } catch (err) {
       console.error("send-otp API error:", err);
       alert(err.response?.data?.message || "Failed to send OTP. Please check your network and try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -103,7 +108,6 @@ const Register = () => {
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-emerald-50 to-teal-100 text-gray-800 antialiased">
       <div className="w-full max-w-4xl mx-auto py-12 px-8 sm:px-12 lg:px-16">
         <div className="text-center mb-16">
-          {/* <img src="/your-logo.svg" alt="Company Logo" className="mx-auto h-24 w-auto mb-10 opacity-90" /> */}
           <h1 className="text-6xl font-extrabold text-green-700 tracking-tight leading-tight">
             Register Your Organization
           </h1>
@@ -119,7 +123,7 @@ const Register = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-7"> 
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-7">
           <div className="md:col-span-2">
             <label htmlFor="orgName" className="block text-base font-semibold text-gray-700 mb-2">Organization Name</label>
             <input
@@ -141,7 +145,7 @@ const Register = () => {
                 name="orgType"
                 value={form.orgType}
                 onChange={handleChange}
-                className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg appearance-none cursor-pointer pr-10" 
+                className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg appearance-none cursor-pointer pr-10"
                 required
               >
                 <option value="">Select Type</option>
@@ -272,28 +276,28 @@ const Register = () => {
             )}
           </div>
 
-         <div className="md:col-span-2 relative">
-      <label htmlFor="password" className="block text-base font-semibold text-gray-700 mb-2">
-        Password
-      </label>
-      <input
-        id="password"
-        type={showPassword ? "text" : "password"}
-        name="password"
-        value={form.password}
-        onChange={handleChange}
-        placeholder="Create a strong password"
-        className="w-full p-4 pr-12 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
-        required
-      />
-      <div
-        className="absolute top-11 right-4 cursor-pointer text-gray-600 hover:text-green-600 transition"
-        onClick={() => setShowPassword((prev) => !prev)}
-      >
-        {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
-      </div>
-    </div>
-          <div className="md:col-span-2 flex items-start mt-6"> 
+          <div className="md:col-span-2 relative">
+            <label htmlFor="password" className="block text-base font-semibold text-gray-700 mb-2">
+              Password
+            </label>
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="Create a strong password"
+              className="w-full p-4 pr-12 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
+              required
+            />
+            <div
+              className="absolute top-11 right-4 cursor-pointer text-gray-600 hover:text-green-600 transition"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+            </div>
+          </div>
+          <div className="md:col-span-2 flex items-start mt-6">
             <input
               id="termsAgreed"
               type="checkbox"
@@ -311,15 +315,26 @@ const Register = () => {
 
           <button
             type="submit"
-            disabled={loading || !form.termsAgreed || emailChecking || emailError}
+            disabled={isSubmitting || !form.termsAgreed || emailChecking || emailError}
             className={`md:col-span-2 w-full py-4 px-6 rounded-xl font-bold text-xl text-white transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl mt-12 mb-6
-              ${!form.termsAgreed || emailChecking || emailError || loading
+              ${!form.termsAgreed || emailChecking || emailError || isSubmitting
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-3 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-emerald-50"
               }`}
           >
-            {loading ? "Registering..." : "Register Organization"}
+            {isSubmitting ? (
+              <div className="flex items-center justify-center space-x-3">
+                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l4-4-4-4v4a12 12 0 00-12 12h4z" />
+                </svg>
+                <span>Registering...</span>
+              </div>
+            ) : (
+              "Register Organization"
+            )}
           </button>
+
 
           <Link
             to="/signin"
