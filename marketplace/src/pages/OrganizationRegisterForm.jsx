@@ -8,6 +8,7 @@ const OrganizationRegisterForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
+  const [localLoading, setLocalLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [emailChecking, setEmailChecking] = useState(false);
   const emailTimerRef = useRef(null);
@@ -59,7 +60,7 @@ const OrganizationRegisterForm = () => {
 
     if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
     if (emailError || emailChecking) return;
-
+setLocalLoading(true);
     try {
       console.log("Sending OTP request...");
       const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
@@ -216,14 +217,14 @@ const OrganizationRegisterForm = () => {
           </label>
         </div>
 
-        <button
-          type="submit"
-          disabled={loading || !form.termsAgreed}
-          className={`col-span-2 py-2 rounded text-white mt-2 font-semibold
-            ${!form.termsAgreed ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}`}
-        >
-          {loading ? "Registering..." : "Register Organization"}
-        </button>
+      <button
+  type="submit"
+  disabled={localLoading || !form.termsAgreed}
+  className={`col-span-2 py-2 rounded text-white mt-2 font-semibold
+    ${!form.termsAgreed ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}`}
+>
+  {localLoading ? "Registering..." : "Register Organization"}
+</button>
 
         <Link
           to="/signin"

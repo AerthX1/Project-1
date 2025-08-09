@@ -114,6 +114,7 @@ export const loginIndividual = createAsyncThunk(
   }
 );
 
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -137,6 +138,13 @@ reducers: {
   setUser(state, action) {
     state.user = action.payload;
   },
+    setToken(state, action) {
+    state.token = action.payload;
+  },
+  setUserType(state, action) {
+    state.userType = action.payload;
+  },
+
 },
 
   extraReducers: (builder) => {
@@ -206,6 +214,7 @@ reducers: {
         state.loading = true;
         state.error = null;
       })
+      
       .addCase(loginIndividual.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
@@ -221,5 +230,5 @@ reducers: {
   },
 });
 
-export const { logout, setUser } = authSlice.actions;
+export const { logout, setUser, setToken, setUserType  } = authSlice.actions;
 export default authSlice.reducer;

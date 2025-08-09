@@ -8,7 +8,7 @@ const IndividualRegisterForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
-
+const [localLoading, setLocalLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [emailChecking, setEmailChecking] = useState(false);
   const emailTimerRef = useRef(null);
@@ -58,7 +58,7 @@ const IndividualRegisterForm = () => {
 
     if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
     if (emailError || emailChecking) return;
-
+setLocalLoading(true);
     try {
       const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
 
@@ -210,14 +210,15 @@ const IndividualRegisterForm = () => {
           </label>
         </div>
 
-        <button
-          type="submit"
-          disabled={loading || !form.termsAgreed}
-          className={`w-full max-w-2xl py-2 rounded text-white mt-2 font-semibold
-            ${!form.termsAgreed ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}`}
-        >
-          {loading ? "Registering..." : "Register Individual"}
-        </button>
+      <button
+  type="submit"
+  disabled={localLoading || !form.termsAgreed}
+  className={`w-full max-w-2xl py-2 rounded text-white mt-2 font-semibold
+    ${!form.termsAgreed || localLoading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}`}
+>
+  {localLoading ? "Registering..." : "Register Individual"}
+</button>
+
 
         <Link
           to="/signin"

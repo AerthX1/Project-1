@@ -88,7 +88,7 @@ await Notification.create({
 const token = jwt.sign(
   { id: newOrg._id, email: newOrg.email, userType: "Organization" },
   process.env.JWT_SECRET,
-  { expiresIn: "1d" }
+  { expiresIn: "30d" }
 );
 
 

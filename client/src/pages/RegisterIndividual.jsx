@@ -56,7 +56,6 @@ const RegisterIndividual = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Individual registration form submitted");
 
     const requiredFields = ['fullName', 'email', 'password', 'country', 'city'];
     for (const field of requiredFields) {
@@ -78,32 +77,25 @@ const RegisterIndividual = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Sending OTP request for individual registration...");
       const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
 
-      console.log("send-otp API response:", res);
-
       if (res.status === 200 || res.status === 201) {
-        console.log("Navigate called to verify-otp");
         navigate("/verify-otp", { state: { form, userType: "Individual" } });
       } else {
-        console.log("Unexpected status:", res.status);
         alert("An unexpected error occurred. Please try again.");
       }
     } catch (err) {
-      console.error("send-otp API error:", err);
       alert(err.response?.data?.message || "Failed to send OTP. Please check your network and try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-50 to-purple-100 text-gray-800 antialiased">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-50 to-teal-100 text-gray-800 antialiased">
       <div className="w-full max-w-4xl mx-auto py-12 px-8 sm:px-12 lg:px-16">
         <div className="text-center mb-16">
-          <h1 className="text-6xl font-extrabold text-purple-700 tracking-tight leading-tight">
+          <h1 className="text-6xl font-extrabold text-green-700 tracking-tight leading-tight">
             Join as an Individual
           </h1>
           <p className="mt-6 text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
@@ -119,7 +111,6 @@ const RegisterIndividual = () => {
         )}
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-7">
-
           <div className="md:col-span-2">
             <label htmlFor="fullName" className="block text-base font-semibold text-gray-700 mb-2">Full Name</label>
             <input
@@ -128,7 +119,7 @@ const RegisterIndividual = () => {
               value={form.fullName}
               onChange={handleChange}
               placeholder="Your Full Name"
-              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-purple-600 transition-all duration-300 text-lg placeholder-gray-500"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
               required
             />
           </div>
@@ -142,7 +133,7 @@ const RegisterIndividual = () => {
               value={form.email}
               onChange={handleChange}
               placeholder="Your Email Address"
-              className={`w-full p-4 border-b-2 ${emailError ? 'border-red-500' : 'border-gray-300'} bg-transparent focus:outline-none ${emailError ? 'focus:border-red-500' : 'focus:border-purple-600'} transition-all duration-300 text-lg placeholder-gray-500`}
+              className={`w-full p-4 border-b-2 ${emailError ? 'border-red-500' : 'border-gray-300'} bg-transparent focus:outline-none ${emailError ? 'focus:border-red-500' : 'focus:border-green-600'} transition-all duration-300 text-lg placeholder-gray-500`}
               required
             />
             {emailChecking && (
@@ -162,7 +153,7 @@ const RegisterIndividual = () => {
               value={form.password}
               onChange={handleChange}
               placeholder="Create a strong password"
-              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-purple-600 transition-all duration-300 text-lg pr-12 placeholder-gray-500"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg pr-12 placeholder-gray-500"
               required
             />
             <button
@@ -193,7 +184,7 @@ const RegisterIndividual = () => {
               value={form.designation}
               onChange={handleChange}
               placeholder="e.g., Software Engineer, Manager"
-              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-purple-600 transition-all duration-300 text-lg placeholder-gray-500"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
             />
           </div>
 
@@ -206,7 +197,7 @@ const RegisterIndividual = () => {
               value={form.phone}
               onChange={handleChange}
               placeholder="e.g., +91 98765 43210"
-              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-purple-600 transition-all duration-300 text-lg placeholder-gray-500"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
             />
           </div>
 
@@ -218,7 +209,7 @@ const RegisterIndividual = () => {
               value={form.country}
               onChange={handleChange}
               placeholder="e.g., India"
-              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-purple-600 transition-all duration-300 text-lg placeholder-gray-500"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
               required
             />
           </div>
@@ -231,7 +222,7 @@ const RegisterIndividual = () => {
               value={form.state}
               onChange={handleChange}
               placeholder="e.g., Maharashtra, Gujarat"
-              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-purple-600 transition-all duration-300 text-lg placeholder-gray-500"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
             />
           </div>
 
@@ -243,7 +234,7 @@ const RegisterIndividual = () => {
               value={form.city}
               onChange={handleChange}
               placeholder="City"
-              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-purple-600 transition-all duration-300 text-lg placeholder-gray-500"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
               required
             />
           </div>
@@ -255,12 +246,12 @@ const RegisterIndividual = () => {
               name="termsAgreed"
               checked={form.termsAgreed}
               onChange={handleChange}
-              className="mt-1 h-5 w-5 text-purple-600 focus:ring-purple-500 border-gray-300 rounded-sm cursor-pointer"
+              className="mt-1 h-5 w-5 text-green-600 focus:ring-green-500 border-gray-300 rounded-sm cursor-pointer"
             />
             <label htmlFor="termsAgreed" className={`ml-4 text-base ${!form.termsAgreed ? "text-red-600" : "text-gray-700"} cursor-pointer leading-relaxed`}>
               I agree to the{" "}
-              <a href="#" className="text-purple-600 hover:text-purple-700 underline font-semibold" onClick={(e) => e.preventDefault()}>Terms & Conditions</a> and{" "}
-              <a href="#" className="text-purple-600 hover:text-purple-700 underline font-semibold" onClick={(e) => e.preventDefault()}>Privacy Policy</a> *
+              <a href="#" className="text-green-600 hover:text-green-700 underline font-semibold" onClick={(e) => e.preventDefault()}>Terms & Conditions</a> and{" "}
+              <a href="#" className="text-green-600 hover:text-green-700 underline font-semibold" onClick={(e) => e.preventDefault()}>Privacy Policy</a> *
             </label>
           </div>
 
@@ -270,7 +261,7 @@ const RegisterIndividual = () => {
             className={`md:col-span-2 w-full py-4 px-6 rounded-xl font-bold text-xl text-white transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl mt-12 mb-6
               ${!form.termsAgreed || emailChecking || emailError || isSubmitting
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-3 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-indigo-50"
+                : "bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-3 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-green-50"
               }`}
           >
             {isSubmitting ? (
@@ -286,10 +277,9 @@ const RegisterIndividual = () => {
             )}
           </button>
 
-
           <Link
             to="/signin"
-            className="md:col-span-2 text-center text-purple-700 hover:text-purple-900 mt-4 text-lg underline font-medium transition duration-200"
+            className="md:col-span-2 text-center text-green-700 hover:text-green-900 mt-4 text-lg underline font-medium transition duration-200"
           >
             Already have an account? Sign In
           </Link>

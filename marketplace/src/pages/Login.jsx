@@ -97,7 +97,7 @@ const Login = () => {
 
         <div className="w-full md:w-1/2 p-12 flex flex-col justify-center bg-white bg-opacity-95 transition-all duration-500 hover:shadow-xl">
           <h2 className="text-5xl font-extrabold mb-10 text-center text-gray-900 animate-slide-in-down">
-            Login to Aerthx
+            Login to AerthX
           </h2>
 
           {error && (

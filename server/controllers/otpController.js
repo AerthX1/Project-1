@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
 const Notification = require("../models/Notification"); 
 
+
 exports.sendRegisterOtp = async (req, res) => {
   try {
     const { email } = req.body;
@@ -31,12 +32,64 @@ exports.sendRegisterOtp = async (req, res) => {
       expiresAt: expiresAt,
     });
 
-    await sendEmail({
-      to: email,
-      subject: "Your Aearthex Registration OTP",
-      text: `Your OTP for Aearthex registration is ${otp}. It is valid for 5 minutes.`,
-      html: `<p>Your OTP is <b>${otp}</b>. It will expire in 5 minutes.</p>`,
-    });
+   await sendEmail({
+  to: email,
+  subject: "Your OTP for AerthX Registration",
+  text: `Hello,
+
+Thank you for registering with AerthX!
+
+To complete your registration, please use the following One-Time Password (OTP):
+
+Your OTP: ${otp}
+
+This OTP is valid for 5 minutes. Please do not share this code with anyone.
+
+If you did not request this code, you can safely ignore this email.
+
+Best regards,
+The AerthX Team`,
+  html: `
+    <div style="font-family: Arial, sans-serif; padding: 0; margin: 0; background-color: #f9f9f9; width: 100%; color: #333;">
+      
+      <!-- Optional Header -->
+      <div style="background-color: #0d9488; padding: 30px; text-align: center;">
+        <img src="${process.env.BASE_URL}/assets/aerthxLogo.png"  alt="AerthX Logo" style="width: 80px; height: auto;">
+        <h1 style="color: #ffffff; margin: 15px 0 0;">AerthX Registration OTP</h1>
+      </div>
+
+      <!-- Main Body -->
+      <div style="padding: 30px;">
+        <p style="font-size: 16px; line-height: 1.6;">Hello,</p>
+        <p style="font-size: 16px; line-height: 1.6;">
+          Thank you for registering with <strong>AerthX</strong>.  
+          To complete your registration, please use the following verification code:
+        </p>
+        <div style="text-align: center; margin: 25px 0;">
+          <span style="display: inline-block; padding: 14px 30px; font-size: 32px; font-weight: bold; color: #ffffff; background-color: #004d40; border-radius: 8px;">
+            ${otp}
+          </span>
+        </div>
+        <p style="font-size: 16px; line-height: 1.6;">
+          This OTP is valid for <strong>5 minutes</strong>. For your security, please do not share this code with anyone.
+        </p>
+        <p style="font-size: 16px; line-height: 1.6;">
+          If you did not request this email, please ignore it. Your account remains secure.
+        </p>
+        <br>
+        <p style="font-size: 16px; line-height: 1.6;">Best regards,</p>
+        <p style="font-size: 16px; font-weight: bold; color: #004d40;">The AerthX Team</p>
+      </div>
+
+      <!-- Footer -->
+      <div style="background-color: #e5e7eb; padding: 15px; text-align: center; font-size: 12px; color: #555;">
+        &copy; ${new Date().getFullYear()} AerthX. All rights reserved.
+      </div>
+
+    </div>
+  `,
+});
+
 
     res.status(200).json({ message: "OTP sent to your email." });
   } catch (error) {
@@ -96,30 +149,93 @@ exports.verifyRegisterOtp = async (req, res) => {
       return res.status(400).json({ message: "Invalid user type provided for registration." });
     }
 
-    await sendEmail({
-      to: newUser.email,
-      subject: "Welcome to Aearthex 🌍",
-      text: `Hello ${newUser.fullName || newUser.orgName}, welcome to Aearthex! Your registration is successful.`,
-      html: `<h2>Welcome to Aearthex, ${newUser.fullName || newUser.orgName}!</h2>
-             <p>Your account has been successfully created.</p>
-             <p>Thank you for joining our mission toward a greener future. 🌿</p>`,
-    });
+await sendEmail({
+  to: newUser.email,
+  subject: "Welcome to AerthX – Your Carbon Credit Journey Begins 🌱",
+  text: `Hello ${newUser.fullName || newUser.orgName},
+
+Welcome to the AerthX family!
+
+We are thrilled to have you join our mission to fight climate change through certified carbon credits. Your successful registration marks a significant step towards a sustainable future.
+
+We look forward to partnering with you on this journey. Please log in to your account to explore our available projects and start offsetting your carbon footprint.
+
+Best regards,
+The AerthX Team`,
+
+  html: `
+  <div style="margin:0; padding:0; background-color:#f0fdf4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    
+    <!-- Header image -->
+    <img src="${process.env.BASE_URL}/assets/RegisterImage.jpg" alt="Welcome to AerthX" 
+         style="width:100%; height:auto; display:block; border:none; margin:0; padding:0;">
+    
+    <!-- Logo & Title -->
+    <div style="text-align:center; padding:30px 20px; background-color:#0d9488;">
+    <img src="${process.env.BASE_URL}/assets/aerthxLogo.png" 
+     alt="AerthX Logo" 
+     style="width:90px; height:auto; display:block; margin:0 auto;">
+
+      <h1 style="color:#ffffff; font-size:28px; font-weight:600; margin:15px 0 0;">Welcome to AerthX</h1>
+    </div>
+
+    <!-- Body -->
+
+    <div style="padding:30px 20px; max-width:600px; margin:auto; background-color:#ffffff;">
+      <h2 style="color:#0d9488; font-size:22px; margin-bottom:20px; font-weight:500;">Hello, ${newUser.fullName || newUser.orgName}</h2>
+      <p style="font-size:16px; line-height:1.6; color:#4b5563; margin-bottom:15px;">
+        Thank you for registering with <strong>AerthX</strong>. We’re thrilled to have you as part of our mission to create a sustainable future through high-quality, certified carbon credits.
+      </p>
+      <p style="font-size:16px; line-height:1.6; color:#4b5563; margin-bottom:20px;">
+        Your account has been successfully created. We invite you to log in and explore our diverse portfolio of carbon offset projects where you can make a tangible impact.
+      </p>
+<p>
+    We are thrilled to have you join our mission to fight climate change through certified carbon credits.
+    Your successful registration marks a significant step towards a sustainable future.
+  </p>
+  <p>
+    We look forward to partnering with you on this journey. Please log in to your account to explore our available projects
+    and start offsetting your carbon footprint.
+  </p>
+  <p>Best regards,<br>The AerthX Team</p>
+     <!-- Call to Action -->
+       <div style="text-align:center; margin:30px 0;">
+        <a href="https://your-backend.com/login" 
+          style="display:inline-block; padding:12px 25px; font-size:16px; font-weight:bold; color:#ffffff; background-color:#0d9488; text-decoration:none; border-radius:50px;">
+           Explore Our Projects
+        </a>
+       </div>
+
+      <p style="font-size:16px; line-height:1.6; color:#4b5563; text-align:center;">
+        Together, we can build a greener planet for generations to come.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align:center; padding:20px; font-size:12px; color:#9ca3af;">
+      <p>&copy; ${new Date().getFullYear()} AerthX. All rights reserved.</p>
+    </div>
+
+  </div>
+  `
+});
+
 
     await Notification.create({
       userId: newUser._id,
       userType: registeredUserType,
-      title: "Welcome to Aearthex!",
+      title: "Welcome to AerthX!",
       message: `Your ${registeredUserType.toLowerCase()} account was successfully created.`,
     });
 
     const token = jwt.sign(
       { id: newUser._id, email: newUser.email, userType: registeredUserType },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "30d" }
     );
 
     res.status(201).json({ 
-      message: "Registration complete. Welcome to Aearthex!",
+      message: "Registration complete. Welcome to AerthX!",
       token,
       user: {
         id: newUser._id,

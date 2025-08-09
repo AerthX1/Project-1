@@ -12,6 +12,7 @@ const individualProfileRoutes = require("./routes/individualProfileRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const carbonCreditRoutes = require('./routes/carbonCredits');
 const adminRoutes = require('./routes/adminRoutes'); 
+const path = require('path');
 const app = express();
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
+app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 app.use("/api/organization", orgRoutes);
 app.use("/api/profile", profileRoutes);

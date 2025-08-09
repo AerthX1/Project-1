@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { verifyOtpAction } from "../../../shared-redux/src/slices/authSlice";
+import { verifyOtpAction, setUser, setToken, setUserType } from "../../../shared-redux/src/slices/authSlice";
 import axios from "axios";
 import { XCircleIcon, CheckCircleIcon, InformationCircleIcon } from "@heroicons/react/20/solid";
 
@@ -85,34 +85,47 @@ const VerifyOtp = () => {
     }
   };
 
-  const handleVerify = async (e) => {
-    e.preventDefault();
-    setVerificationMessage({ type: "", text: "" });
+ const handleVerify = async (e) => {
+  e.preventDefault();
+  setVerificationMessage({ type: "", text: "" });
 
-    const enteredOtp = otp.join("");
-    if (enteredOtp.length !== 6) {
-      setVerificationMessage({ type: "error", text: "Please enter the complete 6-digit OTP." });
-      return;
+  const enteredOtp = otp.join("");
+  if (enteredOtp.length !== 6) {
+    setVerificationMessage({ type: "error", text: "Please enter the complete 6-digit OTP." });
+    return;
+  }
+
+  try {
+    const resultAction = await dispatch(
+      verifyOtpAction({ email: form.email, otp: enteredOtp, form, userType })
+    );
+
+    if (verifyOtpAction.fulfilled.match(resultAction)) {
+      const { token, user } = resultAction.payload;
+
+   dispatch(setUser(user));
+dispatch(setToken(token));              
+dispatch(setUserType(userType));         
+
+localStorage.setItem("token", token);
+localStorage.setItem("user", JSON.stringify(user));
+localStorage.setItem("userType", userType);
+
+
+      setVerificationMessage({ type: "success", text: "OTP verified successfully! Redirecting..." });
+
+      setTimeout(() => {  
+        navigate("/", { replace: true }); 
+      }, 1500);
+    } else {
+      setVerificationMessage({ type: "error", text: resultAction.payload || "OTP verification failed. Please try again." });
     }
+  } catch (err) {
+    console.error("OTP verification error:", err);
+    setVerificationMessage({ type: "error", text: "An unexpected error occurred. Please try again later." });
+  }
+};
 
-    try {
-      const resultAction = await dispatch(
-        verifyOtpAction({ email: form.email, otp: enteredOtp, form, userType })
-      );
-
-      if (verifyOtpAction.fulfilled.match(resultAction)) {
-        setVerificationMessage({ type: "success", text: "OTP verified successfully! Redirecting..." });
-        setTimeout(() => {
-          navigate("/", { replace: true });
-        }, 1500);
-      } else {
-        setVerificationMessage({ type: "error", text: resultAction.payload || "OTP verification failed. Please try again." });
-      }
-    } catch (err) {
-      console.error("OTP verification error:", err);
-      setVerificationMessage({ type: "error", text: "An unexpected error occurred. Please try again later." });
-    }
-  };
 
   const handleResendOtp = async () => {
     setIsResending(true);

@@ -66,7 +66,7 @@ await Notification.create({
 const token = jwt.sign(
   { id: newUser._id, email: newUser.email, userType: "Individual" }, 
   process.env.JWT_SECRET,
-  { expiresIn: "1d" }
+  { expiresIn: "30d" }
 );
 
     res.status(201).json({
@@ -105,7 +105,7 @@ const loginIndividual = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, email: user.email, userType: "Individual" },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "30d" }
     );
 
     res.status(200).json({
