@@ -80,7 +80,7 @@ const profile = useSelector((state) => state.profile.data);
         </li>
         <li>
           <a
-  href="/help" 
+  href="http://localhost:5173/help" 
            
             onClick={onClose}
             className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"

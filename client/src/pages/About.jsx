@@ -56,7 +56,7 @@ const About = () => {
 
       <section className="bg-gradient-to-tr from-green-200 via-white to-green-100 py-20 px-6 text-center">
         <h1 className="text-5xl font-extrabold text-green-900 mb-4 tracking-tight">
-          About Aerthx
+          About AerthX
         </h1>
         <p className="text-xl max-w-3xl mx-auto text-gray-700">
           Driving environmental impact with trusted, easy-to-use climate tools for everyone.
@@ -135,7 +135,7 @@ const About = () => {
     </p>
     <div className="flex flex-col sm:flex-row justify-center gap-4">
       <a
-        href="/marketplace"
+        href="http://localhost:5174/" 
         className="px-6 py-3 rounded-lg bg-white text-green-700 font-semibold shadow hover:bg-gray-100 transition"
       >
         Explore Projects

@@ -7,16 +7,34 @@ import ProfileDropdown from "./ProfileDropdown";
 import DefaultAvatar from "./DefaultAvatar";
 import aerthxlogo from "../../assets/aerthxlogo.png";
 
+
 const Navbar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const isAuthenticated = !!user;
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 const profile = useSelector((state) => state.profile.data);
 const token = useSelector((state) => state.auth.token);
 const userType = useSelector((state) => state.auth.userType);
 const dropdownRef = useRef(null);
+  const isAuthenticated = !!user && !!token;
+
+function decodeJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0'))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error("Failed to decode JWT:", e);
+    return null;
+  }
+}
 
 useEffect(() => {
   const handleClickOutside = (event) => {
@@ -30,6 +48,37 @@ useEffect(() => {
     document.removeEventListener("mousedown", handleClickOutside);
   };
 }, []);
+
+useEffect(() => {
+  if (!token) {
+    // console.log("No token found");
+    return;
+  }
+
+  //   console.log("Navbar: Token in Redux state:", token);
+
+  // console.trace("Token trace in Navbar");
+  try {
+    const decoded = decodeJwt(token);
+    if (!decoded) throw new Error("Invalid token");
+
+    // console.log("Decoded token:", decoded);
+    // console.log("Token expiry (ms):", decoded.exp * 1000);
+    // console.log("Current time (ms):", Date.now());
+
+    if (decoded.exp * 1000 < Date.now()) {
+      console.log("Token expired, logging out");
+      dispatch(logout());
+      navigate("/signin");
+    }
+  } catch (error) {
+    console.error("Error decoding token:", error);
+    dispatch(logout());
+    navigate("/signin");
+  }
+}, [token, dispatch, navigate]);
+
+
 
 useEffect(() => {
   if (token && userType) {

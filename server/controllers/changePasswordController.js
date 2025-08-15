@@ -24,11 +24,13 @@ const changePassword = async (req, res) => {
     user.password = await bcrypt.hash(newPassword, 12);
     await user.save();
 
-  await Notification.create({
+ await Notification.create({
   userId: userId,
   userType: userType.charAt(0).toUpperCase() + userType.slice(1), 
-  title: "Password Changed",
-  message: "Your password was successfully updated.",
+  title: "Your password has been changed",
+  message: `This is to confirm that your password was successfully changed.
+
+If you did not initiate this change, please contact our support team immediately to secure your account.`,
   timestamp: new Date(),
   read: false,
 });

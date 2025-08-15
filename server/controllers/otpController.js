@@ -32,7 +32,7 @@ exports.sendRegisterOtp = async (req, res) => {
       expiresAt: expiresAt,
     });
 
-   await sendEmail({
+await sendEmail({
   to: email,
   subject: "Your OTP for AerthX Registration",
   text: `Hello,
@@ -50,46 +50,58 @@ If you did not request this code, you can safely ignore this email.
 Best regards,
 The AerthX Team`,
   html: `
-    <div style="font-family: Arial, sans-serif; padding: 0; margin: 0; background-color: #f9f9f9; width: 100%; color: #333;">
-      
-      <!-- Optional Header -->
-      <div style="background-color: #0d9488; padding: 30px; text-align: center;">
-        <img src="${process.env.BASE_URL}/assets/aerthxLogo.png"  alt="AerthX Logo" style="width: 80px; height: auto;">
-        <h1 style="color: #ffffff; margin: 15px 0 0;">AerthX Registration OTP</h1>
-      </div>
+    <div style="font-family: Arial, sans-serif; padding: 0; margin: 0; background-color: #f9f9f9;">
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="width: 100%;">
+        <tr>
+          <td align="center" style="padding: 0;">
+            <div style="max-width: 600px; margin: 0 auto;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="width: 100%; background-color: #ffffff; table-layout: fixed;">
+                
+                <tr>
+                  <td style="background-color: #0d9488; padding: 30px; text-align: center;">
+                    <img src="${process.env.BASE_URL}/assets/aerthxLogo.png" alt="AerthX Logo" style="width: 80px; height: auto; display: block; margin: 0 auto;">
+                    <h1 style="color: #ffffff; margin: 15px 0 0; font-size: 28px; font-weight: bold;">AerthX Registration OTP</h1>
+                  </td>
+                </tr>
 
-      <!-- Main Body -->
-      <div style="padding: 30px;">
-        <p style="font-size: 16px; line-height: 1.6;">Hello,</p>
-        <p style="font-size: 16px; line-height: 1.6;">
-          Thank you for registering with <strong>AerthX</strong>.  
-          To complete your registration, please use the following verification code:
-        </p>
-        <div style="text-align: center; margin: 25px 0;">
-          <span style="display: inline-block; padding: 14px 30px; font-size: 32px; font-weight: bold; color: #ffffff; background-color: #004d40; border-radius: 8px;">
-            ${otp}
-          </span>
-        </div>
-        <p style="font-size: 16px; line-height: 1.6;">
-          This OTP is valid for <strong>5 minutes</strong>. For your security, please do not share this code with anyone.
-        </p>
-        <p style="font-size: 16px; line-height: 1.6;">
-          If you did not request this email, please ignore it. Your account remains secure.
-        </p>
-        <br>
-        <p style="font-size: 16px; line-height: 1.6;">Best regards,</p>
-        <p style="font-size: 16px; font-weight: bold; color: #004d40;">The AerthX Team</p>
-      </div>
+                <tr>
+                  <td style="padding: 30px; color: #333;">
+                    <p style="font-size: 16px; line-height: 1.6;">Hello,</p>
+                    <p style="font-size: 16px; line-height: 1.6;">
+                      Thank you for registering with <strong>AerthX</strong>.
+                      To complete your registration, please use the following verification code:
+                    </p>
+                    <div style="text-align: center; margin: 25px 0;">
+                      <span style="display: inline-block; padding: 14px 30px; font-size: 32px; font-weight: bold; color: #ffffff; background-color: #004d40; border-radius: 8px; user-select: all; -webkit-text-size-adjust: none; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                        ${otp}
+                      </span>
+                    </div>
+                    <p style="font-size: 16px; line-height: 1.6;">
+                      This OTP is valid for <strong>5 minutes</strong>. For your security, please do not share this code with anyone.
+                    </p>
+                    <p style="font-size: 16px; line-height: 1.6;">
+                      If you did not request this email, please ignore it. Your account remains secure.
+                    </p>
+                    <br>
+                    <p style="font-size: 16px; line-height: 1.6;">Best regards,</p>
+                    <p style="font-size: 16px; font-weight: bold; color: #004d40;">The AerthX Team</p>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td style="background-color: #e5e7eb; padding: 15px; text-align: center; font-size: 12px; color: #555;">
+                    &copy; ${new Date().getFullYear()} AerthX. All rights reserved.
+                  </td>
+                </tr>
 
-      <!-- Footer -->
-      <div style="background-color: #e5e7eb; padding: 15px; text-align: center; font-size: 12px; color: #555;">
-        &copy; ${new Date().getFullYear()} AerthX. All rights reserved.
-      </div>
-
+              </table>
+              </div>
+          </td>
+        </tr>
+      </table>
     </div>
   `,
 });
-
 
     res.status(200).json({ message: "OTP sent to your email." });
   } catch (error) {
@@ -221,17 +233,21 @@ The AerthX Team`,
 });
 
 
-    await Notification.create({
-      userId: newUser._id,
-      userType: registeredUserType,
-      title: "Welcome to AerthX!",
-      message: `Your ${registeredUserType.toLowerCase()} account was successfully created.`,
-    });
+  await Notification.create({
+  userId: newUser._id,
+  userType: registeredUserType,
+  title: `🎉 Welcome to AerthX, ${newUser.name || "there"}!`,
+  message: `Your ${registeredUserType.toLowerCase()} account has been successfully created. You’re now ready to explore, track, and make an impact with AerthX.`,
+  category: "Account",
+  priority: "Info",
+  read: false,
+  timestamp: new Date(),
+});
 
     const token = jwt.sign(
       { id: newUser._id, email: newUser.email, userType: registeredUserType },
       process.env.JWT_SECRET,
-      { expiresIn: "30d" }
+      { expiresIn: "14d" }
     );
 
     res.status(201).json({ 

@@ -81,14 +81,19 @@ await sendEmail({
 await Notification.create({
   userId: newOrg._id,
   userType: "Organization",
-  title: "Welcome to Aearthex!",
-  message: "Your organization account was successfully created.",
+  title: "🏢 Welcome to Aearthex!",
+  message: "Your organization account has been successfully created. You’re now ready to start tracking, managing, and offsetting your carbon footprint with Aearthex.",
+  category: "Account",
+  priority: "Info",
+  read: false,
+  timestamp: new Date(),
 });
+
 
 const token = jwt.sign(
   { id: newOrg._id, email: newOrg.email, userType: "Organization" },
   process.env.JWT_SECRET,
-  { expiresIn: "30d" }
+  { expiresIn: "14d" }
 );
 
 

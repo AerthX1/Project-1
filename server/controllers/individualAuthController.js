@@ -59,14 +59,19 @@ await sendEmail({
 await Notification.create({
   userId: newUser._id,
   userType: "Individual",
-  title: "Welcome to Aearthex!",
-  message: "Your individual account was successfully created.",
+  title: "🎉 Welcome to Aearthex!",
+  message: "Hi there! Your individual account has been successfully created. Start exploring our platform to make an impact today.",
+  category: "Account",
+  priority: "Info",
+  read: false,
+  timestamp: new Date(),
 });
+
 
 const token = jwt.sign(
   { id: newUser._id, email: newUser.email, userType: "Individual" }, 
   process.env.JWT_SECRET,
-  { expiresIn: "30d" }
+  { expiresIn: "14d" }
 );
 
     res.status(201).json({
@@ -105,7 +110,7 @@ const loginIndividual = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, email: user.email, userType: "Individual" },
       process.env.JWT_SECRET,
-      { expiresIn: "30d" }
+      { expiresIn: "14d" }
     );
 
     res.status(200).json({

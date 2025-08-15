@@ -21,3 +21,4 @@ install
 5. npm install lucide-react
 6. npm install jwt-decode
 7. npm install @heroicons/react
+8. npm install framer-motion

@@ -8,6 +8,9 @@ import SingleProject from '../pages/SingleProject';
 import PaymentPage from '../pages/PaymentPage';
 import Profile from '../pages/Profile';
 import VerifyOtp from '../pages/VerifyOtp';
+import ForgotPassword from '../pages/ForgotPassword';
+import NotificationPage from '../pages/NotificationPage';
+import HelpSupport from '../pages/HelpSupport';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +25,9 @@ const router = createBrowserRouter(
       <Route path="/register-choice" element={<RegisterChoice />} />
       <Route path="/verify-otp" element={<VerifyOtp />} />
       <Route path="/signin" element={<Login />} />
+         <Route path="/forgot-password" element={<ForgotPassword />} />
+           <Route path="/notification" element={<NotificationPage />} />
+           <Route path="/help" element={<HelpSupport />} />
       <Route path="/payment/:id" element={<PaymentPage />} />
     </>
   )

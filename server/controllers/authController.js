@@ -28,7 +28,7 @@ const loginOrganization = async (req, res) => {
     const token = jwt.sign(
       { id: org._id, email: org.email },
       process.env.JWT_SECRET,
-      { expiresIn: "30d" }
+      { expiresIn: "14d" }
     );
 
     res.status(200).json({
@@ -112,12 +112,24 @@ const resetPassword = async (req, res) => {
              <p>If this wasn't you, please contact our support immediately.</p>`,
     });
 
-    await Notification.create({
-      userId: user._id,
-      userType: userModel === Individual ? "Individual" : "Organization",
-      title: "Password Changed Successfully",
-    message: `Hi ${user.fullName}, your Aearthex account password was changed successfully. If this wasn't you, please contact support immediately.`,
-    });
+   await Notification.create({
+  userId: user._id,
+  userType: userModel === Individual ? "Individual" : "Organization",
+  title: "Password Changed",
+  message: `Hello ${user.fullName},
+
+Your password for the Aearthex account was successfully changed on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}.
+
+For your security, we're sending you this notification. If you did not make this change, please take the following steps immediately:
+
+1. Log in to your account and change your password again.
+2. Contact our support team to report this activity.
+
+We recommend using a strong, unique password for your account.
+
+Thank you,
+The Aearthex Team`
+});
 
     console.log("✅ Password change email sent to:", email);
 

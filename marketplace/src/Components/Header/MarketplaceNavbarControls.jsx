@@ -21,6 +21,43 @@ const token = useSelector((state) => state.auth.token);
 const userType = useSelector((state) => state.auth.userType);
 const dropdownRef = useRef(null);
 
+function decodeJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0'))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error("Failed to decode JWT:", e);
+    return null;
+  }
+}
+
+useEffect(() => {
+  if (!token) return;
+
+  try {
+    const decoded = decodeJwt(token);
+    if (!decoded) throw new Error("Invalid token");
+
+    if (decoded.exp * 1000 < Date.now()) {
+      console.log("Token expired, logging out");
+      dispatch(logout());
+      navigate("/signin");
+    }
+  } catch (error) {
+    console.error("Error decoding token:", error);
+    dispatch(logout());
+    navigate("/signin");
+  }
+}, [token, dispatch, navigate]);
+
+
 useEffect(() => {
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

@@ -25,7 +25,6 @@ const Profile = () => {
     const data =
       profileData.org || profileData.user || profileData; 
 
-    console.log("💡 Mapped profile data:", data);
     setForm({
       orgName: data.orgName || "",
       fullName: data.fullName || "",

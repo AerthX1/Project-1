@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyOtpAction, setUser, setToken, setUserType } from "../../../shared-redux/src/slices/authSlice";
+import { fetchProfile } from "../../../shared-redux/src/slices/profileSlice";
 import axios from "axios";
 import { XCircleIcon, CheckCircleIcon, InformationCircleIcon } from "@heroicons/react/20/solid";
 
@@ -100,24 +101,28 @@ const VerifyOtp = () => {
       verifyOtpAction({ email: form.email, otp: enteredOtp, form, userType })
     );
 
-    if (verifyOtpAction.fulfilled.match(resultAction)) {
-      const { token, user } = resultAction.payload;
+  if (verifyOtpAction.fulfilled.match(resultAction)) {
+  const { token, user } = resultAction.payload;
 
-   dispatch(setUser(user));
-dispatch(setToken(token));              
-dispatch(setUserType(userType));         
+  const normalizedUserType = userType.toLowerCase();
 
-localStorage.setItem("token", token);
-localStorage.setItem("user", JSON.stringify(user));
-localStorage.setItem("userType", userType);
+  dispatch(setUser(user));
+  dispatch(setToken(token));              
+  dispatch(setUserType(normalizedUserType));         
 
+  localStorage.setItem("token", token);
+  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem("userType", normalizedUserType);
 
-      setVerificationMessage({ type: "success", text: "OTP verified successfully! Redirecting..." });
+  await dispatch(fetchProfile({ token, userType: normalizedUserType }));
 
-      setTimeout(() => {  
-        navigate("/", { replace: true }); 
-      }, 1500);
-    } else {
+  setVerificationMessage({ type: "success", text: "OTP verified successfully! Redirecting..." });
+
+  setTimeout(() => {  
+    navigate("/", { replace: true }); 
+  }, 1500);
+}
+ else {
       setVerificationMessage({ type: "error", text: resultAction.payload || "OTP verification failed. Please try again." });
     }
   } catch (err) {
@@ -135,7 +140,7 @@ localStorage.setItem("userType", userType);
 
     try {
       const email = form?.email;
-      const res = await axios.post(`${API_URL}/auth/send-otp`, { email });
+      const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email });
       setVerificationMessage({ type: "success", text: res.data.message || "New OTP sent! Check your inbox." });
     } catch (err) {
       console.error("Resend OTP API error:", err);

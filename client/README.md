@@ -41,6 +41,7 @@ If you are developing a production application, we recommend using TypeScript wi
 11. npm install zxcvbn react-hot-toast @headlessui/react
 12. npm install jwt-decode
 13. npm install @heroicons/react
+14. npm install jwt-decode
 
 
 <<<<<<< HEAD
