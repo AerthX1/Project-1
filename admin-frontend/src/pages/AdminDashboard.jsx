@@ -18,7 +18,9 @@ import {
   FaCogs,
   FaPlusCircle,
   FaEdit,
+  FaClipboardList,
 } from "react-icons/fa";
+import AdminUserReports from "../components/Admin/AdminUserReports";
 
 const navItems = [
   { id: "overview", icon: <FaTachometerAlt />, label: "Overview" },
@@ -29,7 +31,8 @@ const navItems = [
   { id: "addcredit", icon: <FaPlusCircle />, label: "Add Credit" }, 
   { id: "managecredits", icon: <FaEdit />, label: "Manage Credits" },
   { id: "userdata", icon: <FaUsers />, label: "User Data" }, 
-  { id: "userdata", icon: <FaUsers />, label: "User Data" },
+{ id: "userreports", icon: <FaClipboardList />, label: "User Reports" },
+
 
 
 ];
@@ -59,6 +62,8 @@ const renderContent = () => {
         return <AdminAddCarbonCredit />;
         case "userdata":
   return <AdminUserData />;
+  case "userreports": 
+        return <AdminUserReports />;
       default:
         return <StatsOverview />;
     }

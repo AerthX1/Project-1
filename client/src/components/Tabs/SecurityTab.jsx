@@ -325,9 +325,9 @@ const SecurityTab = () => {
               )}
               {step === 3 && (
                 <div className="text-center space-y-6">
-                  <div className="text-green-600 text-6xl mx-auto mb-4">
-                    <FaCheckCircle />
-                  </div>
+                  <div className="flex justify-center items-center mb-4">
+  <FaCheckCircle className="text-green-600 text-6xl" />
+</div>
                   <h3 className="text-2xl font-bold text-gray-800">
                     Confirm Password Change
                   </h3>

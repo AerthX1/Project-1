@@ -11,6 +11,8 @@ const AdminUserData = () => {
   const [dropdownVisible, setDropdownVisible] = useState(null);
   const [viewUser, setViewUser] = useState(null);
 
+  const [searchQuery, setSearchQuery] = useState("");
+
   useEffect(() => {
     activeTab === "individual" ? fetchIndividuals() : fetchOrganizations();
   }, [activeTab]);
@@ -31,6 +33,17 @@ const AdminUserData = () => {
     } catch (err) {
       console.error("Failed to load organization users", err);
     }
+  };
+
+  const filterData = (data) => {
+    return data.filter((item) => {
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        item._id.toLowerCase().includes(searchLower) ||
+        (item.fullName && item.fullName.toLowerCase().includes(searchLower)) ||
+        (item.orgName && item.orgName.toLowerCase().includes(searchLower))
+      );
+    });
   };
 
   const handleDelete = async (id, type) => {
@@ -99,30 +112,47 @@ const AdminUserData = () => {
   );
 
   const currentData = activeTab === "individual" ? individuals : organizations;
+  const filteredData = filterData(currentData);
 
   return (
     <div>
-      <div className="flex gap-4 mb-6">
-        <button
-          className={`px-4 py-2 rounded ${
-            activeTab === "individual"
-              ? "bg-green-600 text-white"
-              : "bg-gray-200 text-gray-800"
-          }`}
-          onClick={() => setActiveTab("individual")}
-        >
-          Individual ({individuals.length})
-        </button>
-        <button
-          className={`px-4 py-2 rounded ${
-            activeTab === "organization"
-              ? "bg-green-600 text-white"
-              : "bg-gray-200 text-gray-800"
-          }`}
-          onClick={() => setActiveTab("organization")}
-        >
-          Organization ({organizations.length})
-        </button>
+      <div className="flex justify-between items-center mb-6">
+       <div className="flex gap-4">
+  <button
+    className={`px-4 py-2 rounded ${
+      activeTab === "individual"
+        ? "bg-green-600 text-white"
+        : "bg-gray-200 text-gray-800"
+    }`}
+    onClick={() => setActiveTab("individual")}
+  >
+    Individual ({filterData(individuals).length})
+  </button>
+  <button
+    className={`px-4 py-2 rounded ${
+      activeTab === "organization"
+        ? "bg-green-600 text-white"
+        : "bg-gray-200 text-gray-800"
+    }`}
+    onClick={() => setActiveTab("organization")}
+  >
+    Organization ({filterData(organizations).length})
+  </button>
+</div>
+
+        <div className="relative w-64">
+  <input
+    type="text"
+    placeholder="Search by ID, Name, or Org"
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+    className="w-full pl-10 pr-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-green-500"
+  />
+  <span className="absolute left-3 top-2.5 text-gray-400">
+    🔍
+  </span>
+</div>
+
       </div>
 
       <div className="grid grid-cols-4 font-semibold text-gray-700 mb-2 px-4">
@@ -133,7 +163,11 @@ const AdminUserData = () => {
       </div>
 
       <div className="space-y-2">
-        {currentData.map((item) => renderRow(item, activeTab))}
+        {filteredData.length > 0 ? (
+          filteredData.map((item) => renderRow(item, activeTab))
+        ) : (
+          <p className="text-center text-gray-500 py-6">No matching users found.</p>
+        )}
       </div>
 
       {viewUser && (

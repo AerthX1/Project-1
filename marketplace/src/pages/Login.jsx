@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginOrganization, loginIndividual, setUser } from "../../../shared-redux/src/slices/authSlice";
+import aerthxlogo from "../assets/aerthxlogo.png";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -79,21 +80,31 @@ const Login = () => {
       </div>
 
       <div className="flex flex-col md:flex-row w-full h-full bg-white bg-opacity-10 backdrop-blur-md overflow-hidden relative z-10 scale-100 transition-all duration-500 ease-in-out">
-        <div className="relative hidden md:flex md:w-1/2 items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-green-700 to-green-900 opacity-90 transition-opacity duration-500 hover:opacity-100"></div>
-          <img
-            src="https://images.unsplash.com/photo-1542435503-921c58376999?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Welcome to Aerthx"
-            className="w-full h-full object-cover mix-blend-overlay transition-transform duration-700 ease-out transform hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
-          <h1 className="absolute text-white text-6xl font-extrabold drop-shadow-lg animate-fade-in-up">
-            Aerthx
-          </h1>
-          <p className="absolute bottom-10 left-10 text-white text-lg font-light opacity-80 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-            Innovating for a Sustainable Future.
-          </p>
-        </div>
+       <div className="relative hidden md:flex md:w-1/2 items-center justify-center overflow-hidden">
+<div
+  className="absolute inset-0 opacity-90 transition-opacity duration-500 hover:opacity-100"
+  style={{
+    background: "radial-gradient(circle, #ffffff 0%, #ffffff 35%, #86efac 80%)",
+  }}
+></div>
+
+
+{/* 
+<div className="absolute inset-0 bg-gradient-to-br from-green-500 via-gray-100 to-green-500 opacity-90 transition-opacity duration-500 hover:opacity-100"></div> */}
+  <div className="flex justify-center mb-6">
+ <img 
+  src={aerthxlogo} 
+  alt="AerthX Logo" 
+  className="h-48 w-auto drop-shadow-[0_4px_10px_rgba(0,0,0,0.7)] object-contain" 
+/>
+
+  </div>
+
+  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+  <p className="absolute bottom-10 left-10 text-white text-lg font-light opacity-80 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+    Innovating for a Sustainable Future.
+  </p>
+</div>
 
         <div className="w-full md:w-1/2 p-12 flex flex-col justify-center bg-white bg-opacity-95 transition-all duration-500 hover:shadow-xl">
           <h2 className="text-5xl font-extrabold mb-10 text-center text-gray-900 animate-slide-in-down">

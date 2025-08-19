@@ -22,6 +22,7 @@ import AdminDashboard from "../../../admin-frontend/src/pages/AdminDashboard";
 import AdminRoute from "../../../admin-frontend/src/components/Admin/AdminRoute";
 import Services from '../pages/Services';
 import VerifyOtp from '../pages/VerifyOtp';
+import ContactUs from '../pages/ContactUs';
 
 
 const router = createBrowserRouter(
@@ -38,6 +39,7 @@ const router = createBrowserRouter(
  <Route path="/solutions/business" element={<BusinessSolutions/>}/>
   <Route path="/solutions/individuals" element={<IndividualSolutions/>}/>
     <Route path="/solutions/api" element={<APIIntegration/>}/>
+        <Route path="/contactus" element={<ContactUs/>}/>
 
     </Route>
   <Route path="/register-choice" element={<RegisterChoice  />} />

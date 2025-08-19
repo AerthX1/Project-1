@@ -42,14 +42,77 @@ useEffect(() => {
           <h1 className="text-white text-3xl md:text-5xl  font-bold mb-32 hover:text-emerald-300">
             Empowering Businesses to Go Carbon Neutral
           </h1>
-          <Link to="/marketplace" className="mt-20 inline-block bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-semibold py-3 px-14 rounded-full shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 border-2 border-green-700"
-          >
-           Buy Credits
-          </Link>
+       <Link
+  to="http://localhost:5174/"
+  className="mt-20 inline-flex items-center justify-center gap-2 
+             bg-gradient-to-r from-green-500 via-green-600 to-green-700 
+             hover:from-green-600 hover:via-green-700 hover:to-green-800 
+             text-white font-semibold text-lg tracking-wide
+             py-3 px-16 rounded-full shadow-md hover:shadow-xl 
+             transition-all duration-300 ease-in-out transform hover:-translate-y-1 
+             border border-green-600"
+>
+  <span className="drop-shadow-sm">Buy Credits</span>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M17 8l4 4m0 0l-4 4m4-4H3"
+    />
+  </svg>
+</Link>
+
           
         </div>
       </section>
 
+{/* Informational Section */}
+<div className="mt-16 px-6 sm:px-12 py-12 bg-green-50 rounded-xl shadow-lg">
+  <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6 text-center">
+    🌿 Why Buy Carbon Credits?
+  </h2>
+  <p className="text-gray-700 text-center mb-10 max-w-3xl mx-auto">
+    Purchasing carbon credits allows you to offset your carbon footprint, 
+    support sustainable projects worldwide, and contribute to a greener future. 
+    It’s not just about reducing emissions—it’s about making a tangible positive 
+    impact on communities, forests, and the environment.
+  </p>
+
+  <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+    <div className="p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
+      <span className="text-3xl mb-3 block">🌍</span>
+      <h3 className="font-semibold text-green-800 mb-2">Environmental Impact</h3>
+      <p className="text-gray-600 text-sm">
+        Reduce CO₂ emissions, plant trees, and protect ecosystems for a sustainable planet.
+      </p>
+    </div>
+
+    <div className="p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
+      <span className="text-3xl mb-3 block">💼</span>
+      <h3 className="font-semibold text-green-800 mb-2">Organizational Growth</h3>
+      <p className="text-gray-600 text-sm">
+        Improve ESG scores, attract eco-conscious clients, and lead in sustainability initiatives.
+      </p>
+    </div>
+
+    <div className="p-6 bg-white rounded-xl shadow hover:shadow-lg transition">
+      <span className="text-3xl mb-3 block">🌱</span>
+      <h3 className="font-semibold text-green-800 mb-2">Personal Responsibility</h3>
+      <p className="text-gray-600 text-sm">
+        Make a positive impact as an individual, contribute to global change, and secure a greener future.
+      </p>
+    </div>
+  </div>
+</div>
+
+                                                                                      
 
       <section className="py-12 bg-white">
         <h2 className="text-2xl md:text-3xl font-bold mb-10">Why Choose AerthX ?</h2>
@@ -147,7 +210,7 @@ useEffect(() => {
         <Link to="/pricing" className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
           View Pricing Plans
         </Link>
-        <Link className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
+        <Link to="/contactus" className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
           Contact Us
         </Link>
       </div>

@@ -16,11 +16,11 @@ useEffect(() => {
     try {
       const res = await axios.get(`${API}/carbon-credits`);
       const allProjects = res.data;
-
+      
       const filtered = allProjects
         .filter((p) => String(p.vintage).trim() === "2024")
         .sort((a, b) => b.vintage - a.vintage);
-
+      
       setProjects(filtered.slice(0, 5));
 
       const mostExpensive = allProjects.reduce(
@@ -203,6 +203,116 @@ useEffect(() => {
     </div>
   </div>
 )}
+<div className="mt-20 m-10 bg-green-50 rounded-xl shadow-2xl p-8 sm:p-12 text-center transform transition-transform duration-500 hover:scale-[1.02] relative overflow-hidden">
+  <div className="absolute inset-0 border-4 border-green-200 rounded-3xl animate-pulse" />
+  <div className="relative z-10">
+    <h2 className="text-3xl sm:text-4xl font-bold text-green-800 mb-6 tracking-tight drop-shadow-md">
+      Benefits of Buying Carbon Credits
+    </h2>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:divide-x md:divide-green-300">
+      <div className="flex flex-col items-center">
+        <div className="text-4xl text-green-600 mb-3">🌱</div>
+        <h3 className="text-xl font-semibold text-gray-800 mb-2">Reduce Emissions</h3>
+        <p className="text-sm text-gray-600 px-4">
+          Purchasing carbon credits directly funds projects that reduce greenhouse gases and combat climate change.
+        </p>
+      </div>
+      <div className="flex flex-col items-center">
+        <div className="text-4xl text-green-600 mb-3">⚡️</div>
+        <h3 className="text-xl font-semibold text-gray-800 mb-2">Support Clean Energy</h3>
+        <p className="text-sm text-gray-600 px-4">
+          Your investment enables the growth of renewable energy sources and other sustainable technologies.
+        </p>
+      </div>
+      <div className="flex flex-col items-center">
+        <div className="text-4xl text-green-600 mb-3">🤝</div>
+        <h3 className="text-xl font-semibold text-gray-800 mb-2">Empower Communities</h3>
+        <p className="text-sm text-gray-600 px-4">
+          Funds are used to support local communities through economic development and environmental education.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{projects.length > 0 && (
+  <div className="mt-16 px-6 sm:px-12">
+    <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">
+      🌍 Most Impactful Projects
+    </h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[...projects]
+        .sort((a, b) => (b.impactScore || 0) - (a.impactScore || 0))
+        .slice(0, 3)
+        .map((project) => (
+          <Link
+            to={`/project/${project._id}`}
+            key={project._id}
+            className="rounded-xl shadow-lg overflow-hidden group relative h-72"
+          >
+            <img
+              src={`http://localhost:5000${
+                project.backgroundImage || project.image
+              }`}
+              alt={project.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition" />
+            <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
+              <h3 className="text-lg font-semibold truncate">{project.title}</h3>
+              <p className="text-green-300 font-medium">
+                🌱 Impact Score: {project.impactScore || "N/A"}
+              </p>
+              <div className="flex flex-wrap mt-2 gap-2 text-xs">
+                {project.sdgs?.slice(0, 3).map((sdg, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-green-700/80 px-2 py-1 rounded-full"
+                  >
+                    {sdg.goal || sdg}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Link>
+        ))}
+    </div>
+  </div>
+)}
+
+<div className="mt-16 px-6 sm:px-12">
+  <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">
+    📊 Global Impact So Far
+  </h2>
+  <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+    <div className="bg-green-50 p-6 rounded-xl shadow-md">
+      <p className="text-3xl font-bold text-green-700">
+        {projects.reduce((sum, p) => sum + (p.impactMetrics?.co2Avoided || 0), 0)}
+      </p>
+      <p className="text-sm text-gray-600">Tons CO₂ Avoided</p>
+    </div>
+    <div className="bg-green-50 p-6 rounded-xl shadow-md">
+      <p className="text-3xl font-bold text-green-700">
+        {projects.reduce((sum, p) => sum + (p.impactMetrics?.treesPlanted || 0), 0)}
+      </p>
+      <p className="text-sm text-gray-600">Trees Planted</p>
+    </div>
+    <div className="bg-green-50 p-6 rounded-xl shadow-md">
+      <p className="text-3xl font-bold text-green-700">
+        {projects.reduce((sum, p) => sum + (p.impactMetrics?.communitiesBenefited || 0), 0)}
+      </p>
+      <p className="text-sm text-gray-600">Communities Benefited</p>
+    </div>
+    <div className="bg-green-50 p-6 rounded-xl shadow-md">
+      <p className="text-3xl font-bold text-green-700">
+        {projects.reduce((sum, p) => sum + (p.impactMetrics?.energyGenerated || 0), 0)}
+      </p>
+      <p className="text-sm text-gray-600">kWh Energy Generated</p>
+    </div>
+  </div>
+</div>
+
+
 {lowestPricedProjects.length > 0 && (
   <div className="mt-16 px-6 sm:px-12">
     <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">
@@ -234,7 +344,23 @@ useEffect(() => {
     </div>
   </div>
 )}
-
+<div className="mt-24 m-8 bg-gradient-to-r from-green-500 to-green-700 text-white py-20 px-6 sm:px-12 text-center shadow-2xl rounded-3xl transform -rotate-1 perspective-1000">
+  <div className="transform rotate-1">
+    <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 drop-shadow-lg">
+      Join the Movement for a Greener Planet 🌍
+    </h2>
+    <p className="text-lg sm:text-xl mb-8 max-w-3xl mx-auto opacity-90 drop-shadow-md">
+      Every carbon credit you purchase empowers sustainable initiatives and creates a lasting, positive global impact.
+      Explore our diverse projects and become a part of the solution.
+    </p>
+    <Link
+      to="/marketplace"
+      className="inline-block bg-white text-green-700 hover:bg-gray-100 py-4 px-12 rounded-full font-bold text-lg shadow-xl transform transition-transform duration-300 hover:scale-105"
+    >
+      Explore Projects Now
+    </Link>
+  </div>
+</div>
     </div>
   );
 };

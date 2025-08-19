@@ -6,7 +6,7 @@ import { fetchProfile } from "../../../../shared-redux/src/slices/profileSlice";
 import DefaultAvatar from "../Header/DefaultAvatar";
 import ProfileDropdown from "../Header/ProfileDropdown";
 
-const MarketplaceNavbarControls = () => {
+const MarketplaceNavbarControls = ({ onSearch }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,6 +20,11 @@ const profile = useSelector((state) => state.profile.data);
 const token = useSelector((state) => state.auth.token);
 const userType = useSelector((state) => state.auth.userType);
 const dropdownRef = useRef(null);
+  const [query, setQuery] = useState("");
+
+  const handleSearch = () => {
+    onSearch(query);
+  };
 
 function decodeJwt(token) {
   try {
@@ -96,19 +101,21 @@ useEffect(() => {
         </div>
 
         {isHomePage && (
-          <div className="flex items-center gap-2 w-full md:w-auto">
-            <input
-              type="text"
-              placeholder="Search carbon projects..."
-              className="w-full md:w-[280px] px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-            <select className="px-3 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none text-gray-600 text-sm">
-              <option value="">All Types</option>
-              <option value="forest">Reforestation</option>
-              <option value="energy">Renewable Energy</option>
-              <option value="waste">Waste Management</option>
-            </select>
-          </div>
+             <div className="flex items-center gap-2 w-full md:w-auto">
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search carbon projects..."
+        className="w-full md:w-[280px] px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+      />
+      <button
+        onClick={handleSearch}
+        className="px-4 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition-all"
+      >
+        Search
+      </button>
+    </div>
         )}
 
         <div className="relative">
@@ -155,3 +162,4 @@ useEffect(() => {
 };
 
 export default MarketplaceNavbarControls;
+  
