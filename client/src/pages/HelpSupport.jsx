@@ -355,11 +355,11 @@ const HelpSupport = ({ user }) => {
         },
         {
           category: "Certificates & Carbon Credits",
-          types: ["Certificate Error", "Certificate Download Issue", "Carbon Credit Not Reflected", "NFT/Token Metadata Issue"]
+          types: ["Certificate Error", "Certificate Download Issue", "Carbon Credit Not Reflected"]
         },
         {
           category: "Features & Subscriptions",
-          types: ["Feature Not Working", "Subscription Issue", "Marketplace Listing Problem", "Wallet/MetaMask Connection Issue", "API/Enterprise Dashboard Error"]
+          types: ["Feature Not Working", "Subscription Issue", "Marketplace Listing Problem", "API/Enterprise Dashboard Error"]
         },
         {
           category: "Account & Profile",

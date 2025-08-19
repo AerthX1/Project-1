@@ -216,7 +216,7 @@ const AdminUserReports = () => {
                     <FaEllipsisV />
                   </button>
                   {menuOpenId === report._id && (
-                    <div className="absolute right-0 mt-2 w-40 bg-white shadow-md rounded-lg border z-10">
+                    <div className="absolute right-0 mt-2 w-42 bg-white shadow-md rounded-lg border z-10">
                       <button
                         onClick={() =>
                           openEmailModal(report.userId, report.description)
