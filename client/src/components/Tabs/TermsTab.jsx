@@ -6,10 +6,10 @@ const TermsTab = () => {
       <h3 className="text-2xl font-semibold text-gray-800 mb-4">Terms & Conditions</h3>
       <div className="bg-white p-8 rounded-lg shadow-md w-full text-sm leading-relaxed text-gray-700 space-y-5">
         <p>
-          Welcome to <strong>Aerthx</strong>. By accessing or using our platform, you agree to comply with and be bound by the following terms and conditions.
+          Welcome to <strong>AerthX</strong>. By accessing or using our platform, you agree to comply with and be bound by the following terms and conditions.
         </p>
         <p>
-          <strong>1. Use of Platform:</strong> Aearthex provides services related to climate impact through carbon credit purchases and subscriptions. All actions must align with our mission of sustainability and transparency.
+          <strong>1. Use of Platform:</strong> AerthX provides services related to climate impact through carbon credit purchases and subscriptions. All actions must align with our mission of sustainability and transparency.
         </p>
         <p>
           <strong>2. Account & Security:</strong> You are responsible for maintaining the confidentiality of your account credentials. Report any unauthorized activity immediately.
@@ -35,7 +35,7 @@ const TermsTab = () => {
             href="mailto:legal@aearthex.com"
             className="text-green-600 hover:underline"
           >
-            legal@aearthex.com
+            legal@aerthx.com
           </a>{" "}
           for any legal queries.
         </p>

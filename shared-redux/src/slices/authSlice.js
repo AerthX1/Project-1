@@ -3,6 +3,13 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+const initialState = {
+  isLoggedIn: !!localStorage.getItem('token'),
+  isAuthModalOpen: false,
+};
+
+
+
 export const registerOrganization = createAsyncThunk(
   "auth/registerOrganization",
   async (formData, { rejectWithValue }) => {
@@ -125,10 +132,20 @@ const authSlice = createSlice({
     error: null,
   },
 reducers: {
+   login: (state) => {
+      state.isLoggedIn = true;
+    },
+    openAuthModal: (state) => {
+      state.isAuthModalOpen = true;
+    },
+    closeAuthModal: (state) => {
+      state.isAuthModalOpen = false;
+    },
   logout(state) {
     state.user = null;
     state.token = null;
     state.userType = null;
+    state.isLoggedIn = false;
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("userType");
@@ -230,5 +247,5 @@ reducers: {
   },
 });
 
-export const { logout, setUser, setToken, setUserType  } = authSlice.actions;
+export const { login, logout, openAuthModal, closeAuthModal, setUser, setToken, setUserType  } = authSlice.actions;
 export default authSlice.reducer;

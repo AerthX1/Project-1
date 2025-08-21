@@ -5,8 +5,8 @@ import Footer from "../components/Footer/Footer";
 const founders = [
   {
     name: "Founder 1",
-    role: "Founder & Full-Stack Developer",
-    bio: "Leads product strategy, user experience, and technical infrastructure.",
+   role: "Founder & Sustainability Expert",
+    bio: "Oversees project verification, environmental impact, and carbon standards.",
     image: "/path/to/founder1.jpg",
   },
   {
@@ -23,8 +23,8 @@ const founders = [
   },
   {
     name: "Founder 4",
-    role: "Co-Founder & Sustainability Expert",
-    bio: "Oversees project verification, environmental impact, and carbon standards.",
+     role: "Co-Founder & Full-Stack Developer",
+       bio: "Leads product strategy, user experience, and technical infrastructure.",
     image: "/path/to/founder4.jpg",
   },
   {

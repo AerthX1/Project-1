@@ -339,7 +339,7 @@ const HelpSupport = ({ user }) => {
       <FaBug className="text-red-600 text-5xl animate-bounce" /> Bug Report Form
     </h3>
     <p className="text-gray-700 text-center mb-10 max-w-4xl mx-auto text-lg">
-      Facing an issue on Aearthex? Select the category and type of problem below. Provide details and screenshots to help us fix it faster.
+      Facing an issue on AerthX? Select the category and type of problem below. Provide details to help us fix it faster.
     </p>
 
     <form onSubmit={handleSubmit} className="space-y-10">
@@ -351,7 +351,7 @@ const HelpSupport = ({ user }) => {
         },
         {
           category: "Payments & Transactions",
-          types: ["Payment Failure", "Refund Issue", "Transaction History Incorrect", "Invoice/Receipt Error"]
+          types: ["Payment Failure", "Refund Issue", "Transaction History Incorrect", "Invoice/Receipt Error", "Order pending/ not executed"]
         },
         {
           category: "Certificates & Carbon Credits",

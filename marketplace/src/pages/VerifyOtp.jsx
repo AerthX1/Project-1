@@ -6,7 +6,6 @@ import { fetchProfile } from "../../../shared-redux/src/slices/profileSlice";
 import axios from "axios";
 import { XCircleIcon, CheckCircleIcon, InformationCircleIcon } from "@heroicons/react/20/solid";
 
-
 const VerifyOtp = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -86,51 +85,49 @@ const VerifyOtp = () => {
     }
   };
 
- const handleVerify = async (e) => {
-  e.preventDefault();
-  setVerificationMessage({ type: "", text: "" });
+  const handleVerify = async (e) => {
+    e.preventDefault();
+    setVerificationMessage({ type: "", text: "" });
 
-  const enteredOtp = otp.join("");
-  if (enteredOtp.length !== 6) {
-    setVerificationMessage({ type: "error", text: "Please enter the complete 6-digit OTP." });
-    return;
-  }
-
-  try {
-    const resultAction = await dispatch(
-      verifyOtpAction({ email: form.email, otp: enteredOtp, form, userType })
-    );
-
-  if (verifyOtpAction.fulfilled.match(resultAction)) {
-  const { token, user } = resultAction.payload;
-
-  const normalizedUserType = userType.toLowerCase();
-
-  dispatch(setUser(user));
-  dispatch(setToken(token));              
-  dispatch(setUserType(normalizedUserType));         
-
-  localStorage.setItem("token", token);
-  localStorage.setItem("user", JSON.stringify(user));
-  localStorage.setItem("userType", normalizedUserType);
-
-  await dispatch(fetchProfile({ token, userType: normalizedUserType }));
-
-  setVerificationMessage({ type: "success", text: "OTP verified successfully! Redirecting..." });
-
-  setTimeout(() => {  
-    navigate("/", { replace: true }); 
-  }, 1500);
-}
- else {
-      setVerificationMessage({ type: "error", text: resultAction.payload || "OTP verification failed. Please try again." });
+    const enteredOtp = otp.join("");
+    if (enteredOtp.length !== 6) {
+      setVerificationMessage({ type: "error", text: "Please enter the complete 6-digit OTP." });
+      return;
     }
-  } catch (err) {
-    console.error("OTP verification error:", err);
-    setVerificationMessage({ type: "error", text: "An unexpected error occurred. Please try again later." });
-  }
-};
 
+    try {
+      const resultAction = await dispatch(
+        verifyOtpAction({ email: form.email, otp: enteredOtp, form, userType })
+      );
+
+      if (verifyOtpAction.fulfilled.match(resultAction)) {
+        const { token, user } = resultAction.payload;
+
+        const normalizedUserType = userType.toLowerCase();
+
+        dispatch(setUser(user));
+        dispatch(setToken(token));
+        dispatch(setUserType(normalizedUserType));
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("userType", normalizedUserType);
+
+        await dispatch(fetchProfile({ token, userType: normalizedUserType }));
+
+        setVerificationMessage({ type: "success", text: "OTP verified successfully! Redirecting..." });
+
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 1500);
+      } else {
+        setVerificationMessage({ type: "error", text: resultAction.payload || "OTP verification failed. Please try again." });
+      }
+    } catch (err) {
+      console.error("OTP verification error:", err);
+      setVerificationMessage({ type: "error", text: "An unexpected error occurred. Please try again later." });
+    }
+  };
 
   const handleResendOtp = async () => {
     setIsResending(true);
@@ -151,17 +148,6 @@ const VerifyOtp = () => {
     }
   };
 
-  if (!form || !userType) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="p-8 bg-white rounded-lg shadow-xl text-center">
-          <p className="text-xl font-semibold text-gray-700">Loading registration data...</p>
-          <p className="text-gray-500 mt-2">If you're not redirected, please return to the registration page.</p>
-        </div>
-      </div>
-    );
-  }
-
   const getMessageIcon = (type) => {
     switch (type) {
       case "success":
@@ -175,9 +161,155 @@ const VerifyOtp = () => {
     }
   };
 
+  if (!form || !userType) {
+    return (
+      <div className="leaf-container min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-lime-100 via-green-100 to-emerald-200">
+        <style>
+          {`
+            .leaf-container {
+                overflow: hidden;
+                position: relative;
+            }
+            .leaf {
+                position: absolute;
+                background-color: transparent;
+                border-radius: 50% 0;
+                pointer-events: none;
+                z-index: 0;
+                opacity: 0.8;
+                animation: fall linear infinite;
+            }
+            .leaf::before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                background-image: radial-gradient(circle at 70% 30%, transparent 10px, #ffffff33 11px, #ffffff00 12px),
+                                    linear-gradient(135deg, transparent 50%, #ffffff33 51%, #ffffff00 52%);
+                border-radius: 50% 0;
+                transform: scale(0.6);
+                opacity: 0.5;
+            }
+            .leaf::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 2px;
+                height: 150%;
+                background-color: #ffffff33;
+                transform: translate(-50%, -50%) rotate(45deg);
+                border-radius: 2px;
+            }
+            @keyframes fall {
+                0% {
+                    transform: translateY(-10vh) rotate(0deg) scale(1) perspective(100px);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(110vh) rotate(720deg) scale(0.8) perspective(100px);
+                    opacity: 0;
+                }
+            }
+          `}
+        </style>
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+          <div className="p-8 bg-white rounded-lg shadow-xl text-center">
+            <p className="text-xl font-semibold text-gray-700">Loading registration data...</p>
+            <p className="text-gray-500 mt-2">If you're not redirected, please return to the registration page.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const leaves = Array.from({ length: 40 }, (_, i) => {
+    const randomSize = 20 + Math.random() * 20;
+    const randomDuration = 10 + Math.random() * 8;
+    const randomDelay = -Math.random() * 10;
+    const randomHSL = `hsl(${Math.random() * 30 + 100}, 50%, ${40 + Math.random() * 30}%)`;
+    const randomRotate = Math.random() * 360;
+    const randomFlipX = Math.random() > 0.5 ? 1 : -1;
+    return (
+      <div
+        key={i}
+        className="leaf"
+        style={{
+          left: `${Math.random() * 100}vw`,
+          animationDuration: `${randomDuration}s`,
+          animationDelay: `${randomDelay}s`,
+          width: `${randomSize}px`,
+          height: `${randomSize}px`,
+          backgroundColor: randomHSL,
+          transform: `rotate(${randomRotate}deg) scaleX(${randomFlipX})`,
+        }}
+      ></div>
+    );
+  });
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+    <div className="leaf-container min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-lime-100 via-green-100 to-emerald-200">
+      <style>
+        {`
+          .leaf-container {
+              overflow: hidden;
+              position: relative;
+          }
+          .leaf {
+              position: absolute;
+              background-color: transparent;
+              border-radius: 50% 0;
+              pointer-events: none;
+              z-index: 0;
+              opacity: 0.8;
+              animation: fall linear infinite;
+          }
+          .leaf::before {
+              content: "";
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              background-image: radial-gradient(circle at 70% 30%, transparent 10px, #ffffff33 11px, #ffffff00 12px),
+                                  linear-gradient(135deg, transparent 50%, #ffffff33 51%, #ffffff00 52%);
+              border-radius: 50% 0;
+              transform: scale(0.6);
+              opacity: 0.5;
+          }
+          .leaf::after {
+              content: "";
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              width: 2px;
+              height: 150%;
+              background-color: #ffffff33;
+              transform: translate(-50%, -50%) rotate(45deg);
+              border-radius: 2px;
+          }
+          @keyframes fall {
+              0% {
+                  transform: translateY(-10vh) rotate(0deg) scale(1) perspective(100px);
+                  opacity: 0;
+              }
+              10% {
+                  opacity: 1;
+              }
+              100% {
+                  transform: translateY(110vh) rotate(720deg) scale(0.8) perspective(100px);
+                  opacity: 0;
+              }
+          }
+        `}
+      </style>
+      {leaves}
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-200 z-10">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Verify Your Email Address

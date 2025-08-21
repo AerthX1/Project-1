@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FaEnvelope, FaLock, FaKey, FaArrowLeft } from "react-icons/fa";
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
@@ -18,12 +19,10 @@ const ForgotPassword = () => {
   const sendOtp = async () => {
     setError("");
     setMessage("");
-
     if (!email) {
       setError("Please enter your email.");
       return;
     }
-
     setLoading(true);
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/send-otp`, { email });
@@ -40,12 +39,10 @@ const ForgotPassword = () => {
   const verifyOtp = () => {
     setError("");
     setMessage("");
-
     if (!otp) {
       setError("Please enter the OTP.");
       return;
     }
-
     if (otp === serverOtp) {
       setStep(3);
       setMessage("OTP verified. You can now reset your password.");
@@ -57,24 +54,20 @@ const ForgotPassword = () => {
   const resetPassword = async () => {
     setError("");
     setMessage("");
-
     if (!password || !confirmPassword) {
       setError("Please fill in all fields.");
       return;
     }
-
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
-
     setLoading(true);
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/auth/reset-password`, {
         email,
         password,
       });
-
       setMessage("Password reset successful. Redirecting to login...");
       setTimeout(() => navigate("/signin"), 2000);
     } catch (err) {
@@ -89,22 +82,22 @@ const ForgotPassword = () => {
       case 1:
         return (
           <>
-            <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-            />
+            <div className="relative mb-6">
+              <FaEnvelope className="absolute top-1/2 left-4 -translate-y-1/2 text-emerald-500" />
+              <input
+                type="email"
+                id="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-emerald-300 rounded-lg bg-white bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition duration-200"
+              />
+            </div>
             <button
               onClick={sendOtp}
               disabled={loading}
-              className={`w-full mt-6 py-3 rounded-lg text-white font-bold text-lg shadow-md transition duration-300 ${
-                loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full py-3 rounded-lg text-white font-bold text-lg shadow-md transition duration-300 ${
+                loading ? "bg-emerald-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               }`}
             >
               {loading ? "Sending OTP..." : "Send OTP"}
@@ -114,20 +107,20 @@ const ForgotPassword = () => {
       case 2:
         return (
           <>
-            <label htmlFor="otp" className="block text-sm font-semibold text-gray-700 mb-2">
-              Enter OTP
-            </label>
-            <input
-              type="text"
-              id="otp"
-              placeholder="Enter the OTP from your email"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-            />
+            <div className="relative mb-6">
+              <FaKey className="absolute top-1/2 left-4 -translate-y-1/2 text-emerald-500" />
+              <input
+                type="text"
+                id="otp"
+                placeholder="Enter the OTP from your email"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-emerald-300 rounded-lg bg-white bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition duration-200"
+              />
+            </div>
             <button
               onClick={verifyOtp}
-              className="w-full mt-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
               Verify OTP
             </button>
@@ -136,35 +129,33 @@ const ForgotPassword = () => {
       case 3:
         return (
           <>
-            <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
-              New Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter new password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-            />
-
-            <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-2">
-              Confirm New Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              placeholder="Confirm new password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-            />
-
+            <div className="relative mb-4">
+              <FaLock className="absolute top-1/2 left-4 -translate-y-1/2 text-emerald-500" />
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter new password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-emerald-300 rounded-lg bg-white bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition duration-200"
+              />
+            </div>
+            <div className="relative mb-6">
+              <FaLock className="absolute top-1/2 left-4 -translate-y-1/2 text-emerald-500" />
+              <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm new password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-emerald-300 rounded-lg bg-white bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition duration-200"
+              />
+            </div>
             <button
               onClick={resetPassword}
               disabled={loading}
-              className={`w-full mt-6 py-3 rounded-lg text-white font-bold text-lg shadow-md transition duration-300 ${
-                loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full py-3 rounded-lg text-white font-bold text-lg shadow-md transition duration-300 ${
+                loading ? "bg-emerald-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               }`}
             >
               {loading ? "Resetting Password..." : "Reset Password"}
@@ -176,34 +167,110 @@ const ForgotPassword = () => {
     }
   };
 
+  const leaves = Array.from({ length: 40 }, (_, i) => {
+    const randomSize = 20 + Math.random() * 20;
+    const randomDuration = 10 + Math.random() * 8;
+    const randomDelay = -Math.random() * 10;
+    const randomHSL = `hsl(${Math.random() * 30 + 100}, 50%, ${40 + Math.random() * 30}%)`;
+    const randomRotate = Math.random() * 360;
+    const randomFlipX = Math.random() > 0.5 ? 1 : -1;
+    return (
+      <div
+        key={i}
+        className="leaf"
+        style={{
+          left: `${Math.random() * 100}vw`,
+          animationDuration: `${randomDuration}s`,
+          animationDelay: `${randomDelay}s`,
+          width: `${randomSize}px`,
+          height: `${randomSize}px`,
+          backgroundColor: randomHSL,
+          transform: `rotate(${randomRotate}deg) scaleX(${randomFlipX})`,
+        }}
+      ></div>
+    );
+  });
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <div className="max-w-md w-full bg-white p-10 rounded-2xl shadow-xl border border-gray-200">
-        <div className="flex flex-col items-center mb-6">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-12 w-12 text-blue-600 mb-3"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-            />
-          </svg>
-          <h2 className="text-3xl font-bold text-gray-800 text-center">
+    <div className="leaf-container min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-lime-100 via-green-100 to-emerald-200">
+      <style>
+        {`
+        .leaf-container {
+            overflow: hidden;
+            position: relative;
+        }
+        .leaf {
+            position: absolute;
+            background-color: transparent;
+            border-radius: 50% 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+        .leaf::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: radial-gradient(circle at 70% 30%, transparent 10px, #ffffff33 11px, #ffffff00 12px),
+                               linear-gradient(135deg, transparent 50%, #ffffff33 51%, #ffffff00 52%);
+            border-radius: 50% 0;
+            transform: scale(0.6);
+            opacity: 0.5;
+        }
+        .leaf::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 150%;
+            background-color: #ffffff33;
+            transform: translate(-50%, -50%) rotate(45deg);
+            border-radius: 2px;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg) scale(1) perspective(100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg) scale(0.8) perspective(100px);
+                opacity: 0;
+            }
+        }
+        `}
+      </style>
+      {leaves}
+      <div className="max-w-md w-full bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg p-10 rounded-3xl shadow-2xl border-t-8 border-emerald-500 z-10">
+        <div className="relative flex flex-col items-center mb-8">
+          {step > 1 && (
+            <button
+              onClick={() => setStep(step - 1)}
+              className="absolute top-0 left-0 text-gray-600 hover:text-emerald-600 transition"
+              title="Go back"
+            >
+              <FaArrowLeft className="w-6 h-6" />
+            </button>
+          )}
+          <FaLock className="h-16 w-16 text-emerald-600 mb-4" />
+          <h2 className="text-4xl font-extrabold text-gray-800 text-center">
             Forgot Password?
           </h2>
-          <p className="text-sm text-gray-500 mt-2 text-center">
-            We'll send you a One-Time Password to reset it.
+          <p className="text-sm text-gray-600 mt-3 text-center">
+            {step === 1 && "Enter your email and we'll send a code to reset your password."}
+            {step === 2 && "Enter the OTP we sent to your email to verify your identity."}
+            {step === 3 && "Create a new, strong password for your account."}
           </p>
         </div>
-
         {message && (
-          <div className="bg-green-100 text-green-700 px-4 py-3 rounded-lg mb-6 text-center text-sm font-medium border border-green-200">
+          <div className="bg-emerald-100 text-emerald-700 px-4 py-3 rounded-lg mb-6 text-center text-sm font-medium border border-emerald-200">
             {message}
           </div>
         )}
@@ -212,11 +279,10 @@ const ForgotPassword = () => {
             {error}
           </div>
         )}
-
         {renderStep()}
       </div>
     </div>
   );
 };
 
-export default ForgotPassword; 
+export default ForgotPassword;

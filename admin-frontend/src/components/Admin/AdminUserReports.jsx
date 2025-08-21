@@ -9,6 +9,7 @@ import {
   FaCheckCircle,
   FaExclamationCircle,
   FaBell,
+  FaStar,
 } from "react-icons/fa";
 import axios from "axios";
 
@@ -22,21 +23,20 @@ const AdminUserReports = () => {
   const [menuOpenId, setMenuOpenId] = useState(null);
   const [emailLoading, setEmailLoading] = useState(false);
   const [notification, setNotification] = useState(null);
-
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [emailMessage, setEmailMessage] = useState("");
   const [emailUserId, setEmailUserId] = useState(null);
   const [emailSubject, setEmailSubject] = useState("");
   const [emailProblem, setEmailProblem] = useState("");
-
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [reportToDeleteId, setReportToDeleteId] = useState(null);
-
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [notificationUserId, setNotificationUserId] = useState(null);
   const [notificationTitle, setNotificationTitle] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationLoading, setNotificationLoading] = useState(false);
+  const [showReportDetailsModal, setShowReportDetailsModal] = useState(false);
+  const [reportDetails, setReportDetails] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -72,6 +72,12 @@ const AdminUserReports = () => {
     }
   };
 
+  const openReportDetailsModal = (report) => {
+    setReportDetails(report);
+    setShowReportDetailsModal(true);
+    handleMarkAsSeen(report._id);
+  };
+
   const openEmailModal = (userId, problem) => {
     setEmailUserId(userId);
     setEmailProblem(problem || "");
@@ -79,6 +85,7 @@ const AdminUserReports = () => {
     setEmailSubject("");
     setShowEmailModal(true);
     setMenuOpenId(null);
+    setShowReportDetailsModal(false);
   };
 
   const handleSendEmail = async () => {
@@ -94,9 +101,7 @@ const AdminUserReports = () => {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
       showNotification("Email sent successfully!", "success");
-
       setShowEmailModal(false);
       setEmailSubject("");
       setEmailProblem("");
@@ -114,17 +119,16 @@ const AdminUserReports = () => {
     setReportToDeleteId(reportId);
     setShowConfirmModal(true);
     setMenuOpenId(null);
+    setShowReportDetailsModal(false);
   };
 
   const handleDeleteReport = async () => {
     if (!reportToDeleteId) return;
-
     try {
       const token = localStorage.getItem("token");
       await axios.delete(`${API_URL}/admin/delete-report/${reportToDeleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       showNotification("Report deleted successfully!", "success");
       setReports((prev) => prev.filter((r) => r._id !== reportToDeleteId));
     } catch (err) {
@@ -142,6 +146,7 @@ const AdminUserReports = () => {
     setNotificationMessage("");
     setShowNotificationModal(true);
     setMenuOpenId(null);
+    setShowReportDetailsModal(false);
   };
 
   const handleSendNotification = async () => {
@@ -169,6 +174,44 @@ const AdminUserReports = () => {
     }
   };
 
+  const handlePrioritizeReport = async (reportId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.put(
+        `${API_URL}/admin/update-report-priority/${reportId}`, {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setReports((prevReports) =>
+        prevReports.map((r) => (r._id === reportId ? res.data : r))
+      );
+      if (res.data.priority) {
+        showNotification("Report prioritized!", "success");
+      } else {
+        showNotification("Prioritization canceled.", "success");
+      }
+    } catch (err) {
+      console.error(err);
+      showNotification("Failed to update priority.", "error");
+    }
+    setMenuOpenId(null);
+  };
+
+  const handleMarkAsSeen = async (reportId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.put(
+        `${API_URL}/admin/update-report-seen/${reportId}`, {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setReports((prevReports) =>
+        prevReports.map((r) => (r._id === reportId ? res.data : r))
+      );
+    } catch (err) {
+      console.error(err);
+      showNotification("Failed to mark as seen.", "error");
+    }
+  };
+
   const showNotification = (message, type) => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 3000);
@@ -193,47 +236,100 @@ const AdminUserReports = () => {
     if (reports.length === 0) {
       return <p>No reports found for this user.</p>;
     }
+    const sortedReports = [...reports].sort((a, b) => {
+      if (a.priority && !b.priority) {
+        return -1;
+      }
+      if (!a.priority && b.priority) {
+        return 1;
+      }
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {reports.map((report) => (
+        {sortedReports.map((report) => (
           <div
             key={report._id}
-            className="relative p-4 bg-white rounded-xl shadow border border-gray-200"
+            className={`relative p-4 bg-white rounded-xl shadow border border-gray-200 cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-blue-300 ${
+              report.priority ? "ring-2 ring-yellow-500" : ""
+            }`}
           >
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="font-semibold">{report.title}</h3>
-              <div className="flex items-center gap-2">
+            <div className="flex justify-between items-start mb-2">
+              <div className="flex-1 min-w-0" onClick={() => openReportDetailsModal(report)}>
+                <h3 className="font-semibold text-gray-900 truncate">
+                  {report.title}
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  {report.description.length > 50
+                    ? `${report.description.substring(0, 50)}...`
+                    : report.description}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                {report.priority && (
+                  <FaStar className="text-yellow-500 text-lg" title="Prioritized" />
+                )}
                 {!report.seen && (
                   <FaCircle className="text-green-500 text-xs" title="New" />
                 )}
                 <div className="relative">
                   <button
-                    onClick={() =>
-                      setMenuOpenId(menuOpenId === report._id ? null : report._id)
-                    }
-                    className="p-2 rounded-full hover:bg-gray-100"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMenuOpenId(menuOpenId === report._id ? null : report._id);
+                    }}
+                    className="p-2 rounded-full hover:bg-gray-100 transition"
                   >
                     <FaEllipsisV />
                   </button>
                   {menuOpenId === report._id && (
-                    <div className="absolute right-0 mt-2 w-42 bg-white shadow-md rounded-lg border z-10">
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg border z-10 py-1">
                       <button
-                        onClick={() =>
-                          openEmailModal(report.userId, report.description)
-                        }
-                        className="flex items-center gap-2 px-4 py-2 w-full text-sm hover:bg-gray-100"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePrioritizeReport(report._id);
+                        }}
+                        className="flex items-center gap-3 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 transition"
                       >
-                        <FaEnvelope /> Send Email
+                        <FaStar className="text-yellow-500" />
+                        {report.priority ? "Cancel Priority" : "Prioritize"}
                       </button>
                       <button
-                        onClick={() => openNotificationModal(report.userId)}
-                        className="flex items-center gap-2 px-4 py-2 w-full text-sm hover:bg-gray-100"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMarkAsSeen(report._id);
+                          setMenuOpenId(null);
+                        }}
+                        className="flex items-center gap-3 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 transition"
                       >
-                        <FaBell /> Send Notification
+                        <FaEye className="text-gray-500" /> Mark as Seen
                       </button>
                       <button
-                        onClick={() => openConfirmDeleteModal(report._id)}
-                        className="flex items-center gap-2 px-4 py-2 w-full text-sm hover:bg-gray-100 text-red-600"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEmailModal(report.userId, report.description);
+                        }}
+                        className="flex items-center gap-3 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 transition"
+                      >
+                        <FaEnvelope className="text-blue-500" /> Send Email
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openNotificationModal(report.userId);
+                        }}
+                        className="flex items-center gap-3 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 transition"
+                      >
+                        <FaBell className="text-indigo-500" /> Send Notification
+                      </button>
+                      <div className="my-1 border-t border-gray-100"></div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openConfirmDeleteModal(report._id);
+                        }}
+                        className="flex items-center gap-3 px-4 py-2 w-full text-sm text-red-600 hover:bg-red-50 transition"
                       >
                         <FaTrash /> Delete
                       </button>
@@ -242,7 +338,6 @@ const AdminUserReports = () => {
                 </div>
               </div>
             </div>
-            <p className="text-sm text-gray-500">{report.description}</p>
             <p className="text-xs text-gray-400 mt-2">
               Submitted: {new Date(report.createdAt).toLocaleString()}
             </p>
@@ -261,6 +356,7 @@ const AdminUserReports = () => {
             <tr>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">User ID</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Name</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Type</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Reports</th>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
             </tr>
@@ -268,7 +364,7 @@ const AdminUserReports = () => {
           <tbody>
             {usersWithReports.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-center py-4 text-gray-500">
+                <td colSpan={5} className="text-center py-4 text-gray-500">
                   No users with reports.
                 </td>
               </tr>
@@ -277,6 +373,7 @@ const AdminUserReports = () => {
                 <tr key={user.id} className="border-b last:border-b-0 hover:bg-gray-50">
                   <td className="px-6 py-4">{user.id}</td>
                   <td className="px-6 py-4">{user.name}</td>
+                  <td className="px-6 py-4">{user.isOrganization ? "Organization" : "Individual"}</td>
                   <td className="px-6 py-4 flex items-center gap-2">
                     {user.reportsCount}
                     {user.newReports > 0 && (
@@ -299,6 +396,53 @@ const AdminUserReports = () => {
       </div>
     );
   };
+
+  const renderReportDetailsModal = () => (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+      <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-bold">Report Details</h3>
+          <button onClick={() => setShowReportDetailsModal(false)}>
+            <FaTimes className="text-gray-600 hover:text-black" />
+          </button>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <p className="font-semibold text-gray-700">Title:</p>
+            <p className="text-gray-900">{reportDetails.title}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700">Description:</p>
+            <p className="text-gray-900">{reportDetails.description}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700">User ID:</p>
+            <p className="text-gray-900">{reportDetails.userId}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-700">Submitted On:</p>
+            <p className="text-gray-900">{new Date(reportDetails.createdAt).toLocaleString()}</p>
+          </div>
+          <div className="flex justify-end mt-4 gap-3">
+            <button
+              onClick={() => openEmailModal(reportDetails.userId, reportDetails.description)}
+              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+            >
+              <FaEnvelope className="inline mr-2" />
+              Send Email
+            </button>
+            <button
+              onClick={() => openConfirmDeleteModal(reportDetails._id)}
+              className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
+            >
+              <FaTrash className="inline mr-2" />
+              Delete Report
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   const renderEmailModal = () => (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
@@ -447,6 +591,7 @@ const AdminUserReports = () => {
         </>
       )}
 
+      {showReportDetailsModal && renderReportDetailsModal()}
       {showEmailModal && renderEmailModal()}
       {showConfirmModal && renderConfirmModal()}
       {showNotificationModal && renderNotificationModal()}

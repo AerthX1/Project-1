@@ -1,111 +1,121 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaGlobe, FaQuestionCircle } from "react-icons/fa";
+import {
+  FaGlobe,
+  FaQuestionCircle,
+  FaCreditCard,
+  FaCog,
+  FaStore,
+  FaBell,
+  FaUser,
+} from "react-icons/fa";
 import { useSelector } from "react-redux";
 import DefaultAvatar from "../Header/DefaultAvatar";
 
 const ProfileDropdown = ({ onClose, onLogout }) => {
   const user = useSelector((state) => state.auth.user);
-  if (!user) return null;
-const profile = useSelector((state) => state.profile.data);
+  const profile = useSelector((state) => state.profile.data);
+
+  if (!user) {
+    return null;
+  }
+
+  const navItems = [
+    {
+      label: "Profile",
+      to: "/profile",
+      icon: <FaUser className="text-gray-400" />,
+    },
+    {
+      label: "Marketplace",
+      to: "/marketplace",
+      icon: <FaStore className="text-gray-400" />,
+    },
+    {
+      label: "Subscription",
+      to: "/pricing",
+      icon: <FaCreditCard className="text-gray-400" />,
+    },
+    {
+      label: "Notification",
+      to: "/notification",
+      icon: <FaBell className="text-gray-400" />,
+    },
+    {
+      label: "Help & Support",
+      to: "/help",
+      icon: <FaQuestionCircle className="text-gray-400" />,
+    },
+    {
+      label: "Settings",
+      to: "/settings",
+      icon: <FaCog className="text-gray-400" />,
+    },
+  ];
+
+  const getAvatarUrl = () => {
+    if (profile?.user?.avatarUrl) {
+      return `${import.meta.env.VITE_API_URL.replace("/api", "")}${
+        profile.user.avatarUrl
+      }`;
+    }
+    if (profile?.org?.avatarUrl) {
+      return `${import.meta.env.VITE_API_URL.replace("/api", "")}${
+        profile.org.avatarUrl
+      }`;
+    }
+    if (user.avatarUrl) {
+      return `${import.meta.env.VITE_API_URL.replace("/api", "")}${
+        user.avatarUrl
+      }`;
+    }
+    return null;
+  };
+
   return (
-    <div className="absolute right-0 mt-3 w-80 bg-white rounded-lg shadow-lg z-50 p-6 border border-gray-200">
+    <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-lg z-50 p-6 border border-gray-200">
       <div className="flex items-center gap-4 mb-6">
         <DefaultAvatar
-  name={user.fullName || user.orgName || "User"}
-  size={40}
-  avatarUrl={
-    profile?.user?.avatarUrl
-      ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.user.avatarUrl}`
-      : profile?.org?.avatarUrl
-        ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.org.avatarUrl}`
-        : user.avatarUrl
-          ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.avatarUrl}`
-          : null
-  }
-/>
+          name={user.fullName || user.orgName || "User"}
+          size={48}
+          avatarUrl={getAvatarUrl()}
+        />
         <div>
           <p className="font-semibold text-gray-900 text-lg truncate max-w-[220px]">
             {user.fullName || user.orgName || "User"}
           </p>
-          <p className="text-sm text-gray-500 truncate max-w-[220px]">{user.email}</p>
+          <p className="text-sm text-gray-500 truncate max-w-[220px]">
+            {user.email}
+          </p>
         </div>
       </div>
 
-     <Link
-     to="/dashboard"
-  className="block w-full py-2 mb-5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition text-center"
->
-  Switch to Organization Dashboard
-</Link>
+      <Link
+        to="/dashboard"
+        className="block w-full py-2 mb-5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition text-center"
+        onClick={onClose}
+      >
+        Switch to Organization Dashboard
+      </Link>
 
-   <Link
-            to="/profile"
-            onClick={onClose}
-            className="block px-4 py-2 rounded-md hover:bg-indigo-50  font-medium transition"
-          >
-  Profile
-</Link>
-
-      <ul className="text-sm space-y-3">
-         <li>
-              <Link
-  to="/marketplace"
-            onClick={onClose}
-            className="block px-4 py-2 rounded-md hover:bg-indigo-50 font-medium transition"
-          >
-            MarketPlace
-          </Link>
-        </li>
-        <li>
-       <a
-  href="http://localhost:5173/pricing" 
-  onClick={onClose}
-  className="block px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
->
-  Subscription
-</a>
-
-        </li>
-        <li>
-           <a
-  href="notification" 
-           
-            onClick={onClose}
-            className="block px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
-          >
-            Notification
-            
-          </a>
-        </li>
-        <li>
-          <a
-  href="/help" 
-           
-            onClick={onClose}
-            className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
-          >
-            <FaQuestionCircle className="text-indigo-600" />
-            Help & Support
-          </a>
-        </li>
-        <li>
- 
-</li>
-        <li>
-              <a
-  href="http://localhost:5173/settings" 
-            onClick={onClose}
-            className="block px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
-          >
-            Settings
-          </a>
-        </li>
+      <ul className="text-sm space-y-1 border-b border-gray-200 pb-4 mb-4">
+        {navItems.map((item) => (
+          <li key={item.label}>
+            <Link
+              to={item.to}
+              onClick={onClose}
+              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-indigo-50 font-medium text-gray-700 transition"
+            >
+              {item.icon}
+              {item.label}
+            </Link>
+          </li>
+        ))}
       </ul>
 
-      <div className="flex justify-between items-center mt-6 text-sm text-gray-500 border-t border-gray-200 pt-4">
+      <div className="flex justify-between items-center text-sm text-gray-500">
         <span className="flex items-center gap-1 text-gray-600">
-          <FaGlobe />
+          <FaGlobe className="text-indigo-600" />
           English
         </span>
         <span>₹ INR</span>
@@ -115,7 +125,7 @@ const profile = useSelector((state) => state.profile.data);
         onClick={onLogout}
         className="w-full mt-5 py-2 bg-red-600 text-white rounded-md text-sm font-semibold hover:bg-red-700 transition"
       >
-       Sign out
+        Sign out
       </button>
     </div>
   );

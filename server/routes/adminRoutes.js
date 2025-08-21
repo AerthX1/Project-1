@@ -192,6 +192,36 @@ router.post("/send-notification/:userId", async (req, res) => {
   }
 });
 
+router.put('/update-report-seen/:reportId', async (req, res) => {
+  try {
+    const report = await BugReport.findByIdAndUpdate(
+      req.params.reportId,
+      { seen: true },
+      { new: true }
+    );
+    if (!report) return res.status(404).json({ message: "Report not found" });
+    res.status(200).json(report);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to update report seen status', error: err.message });
+  }
+});
+
+router.put('/update-report-priority/:reportId', async (req, res) => {
+  try {
+    const report = await BugReport.findById(req.params.reportId);
+    if (!report) return res.status(404).json({ message: "Report not found" });
+    
+    report.priority = !report.priority; 
+    await report.save();
+
+    res.status(200).json(report);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to update report priority', error: err.message });
+  }
+});
+
 
 
 module.exports = router;

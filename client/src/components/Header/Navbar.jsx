@@ -92,12 +92,14 @@ useEffect(() => {
   };
 
   return (
-    <nav className="bg-white shadow-md w-full px-4 py-3 lg:px-6 lg:py-4 relative z-50" ref={dropdownRef}>
-      <div className="flex justify-between items-center">
-       <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate("/")}>
-  <img src={aerthxlogo} alt="AerthX Logo" className="h-10 sm:h-12 ml-1   object-contain" />
-</div>
-
+  <nav className="bg-white shadow-md w-full px-4 lg:px-6 relative z-50 h-16 sm:h-20">
+  <div className="flex justify-between items-center h-full">
+    <div
+      className="flex items-center space-x-2 cursor-pointer h-full"
+      onClick={() => navigate("/")}
+    >
+     <img src={aerthxlogo} alt="AerthX Logo" className="h-16 sm:h-16 ml-5 object-contain" />
+    </div>
 
         <ul className="flex items-center gap-6 xl:gap-9 text-lg xl:text-xl font-bold text-gray-800">
           <li>

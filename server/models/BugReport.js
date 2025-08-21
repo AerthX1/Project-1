@@ -12,8 +12,16 @@ const bugReportSchema = new mongoose.Schema(
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", 
+      ref: "User",
       required: true,
+    },
+    seen: {
+      type: Boolean,
+      default: false,
+    },
+    priority: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
