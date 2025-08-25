@@ -93,7 +93,7 @@ const NotificationPage = () => {
               </div>
 
               <p className="text-gray-600 text-sm leading-relaxed">
-                {n.message || "No message provided."}
+                {n.description || n.message || "No message provided."}
               </p>
             </motion.div>
           ))}

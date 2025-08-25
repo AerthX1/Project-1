@@ -19,9 +19,19 @@ const bugReportSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    priority: {
+    star: {
       type: Boolean,
       default: false,
+    },
+     priority: {
+      type: String,
+      enum: ["low", "medium", "high", null],
+      default: null, 
+    },
+    assignedAdminId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
+      default: null,
     },
   },
   { timestamps: true }

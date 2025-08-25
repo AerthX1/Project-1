@@ -168,29 +168,32 @@ router.delete("/delete-report/:reportId", async (req, res) => {
 
 router.post("/send-notification/:userId", async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, userType } = req.body;
 
-    const user =
-      (await Individual.findById(req.params.userId)) ||
-      (await Organization.findById(req.params.userId));
+    let user;
+    if (userType === "Individual") {
+      user = await Individual.findById(req.params.userId);
+    } else if (userType === "Organization") {
+      user = await Organization.findById(req.params.userId);
+    }
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const newNotification = new Notification({
       userId: user._id,
-      userType: user.fullName ? "Individual" : "Organization",
+      userType,
       title,
-      description,
+      message: description,
       timestamp: new Date(),
     });
 
     await newNotification.save();
     res.status(200).json({ message: "Notification sent successfully" });
   } catch (err) {
-    console.error("Send Notification Error:", err);
     res.status(500).json({ message: "Failed to send notification", error: err.message });
   }
 });
+
 
 router.put('/update-report-seen/:reportId', async (req, res) => {
   try {
@@ -209,18 +212,127 @@ router.put('/update-report-seen/:reportId', async (req, res) => {
 
 router.put('/update-report-priority/:reportId', async (req, res) => {
   try {
+    const { priority } = req.body;
+    if (!["low", "medium", "high", null].includes(priority)) {
+      return res.status(400).json({ message: "Invalid priority value" });
+    }
+
+    const report = await BugReport.findByIdAndUpdate(
+      req.params.reportId,
+      { priority },
+      { new: true }
+    );
+
+    if (!report) return res.status(404).json({ message: "Report not found" });
+    res.status(200).json(report);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to update report priority", error: err.message });
+  }
+});
+
+router.put('/assign-report/:reportId', async (req, res) => {
+  try {
+    const { adminId } = req.body;
+    const report = await BugReport.findByIdAndUpdate(
+      req.params.reportId,
+      { assignedAdminId: adminId },
+      { new: true }
+    ).populate("assignedAdminId", "name");
+
+    if (!report) return res.status(404).json({ message: "Report not found" });
+
+    res.status(200).json({
+      ...report.toObject(),
+      assignedAdminName: report.assignedAdminId ? report.assignedAdminId.name : "Unassigned"
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to assign report", error: err.message });
+  }
+});
+
+router.put("/toggle-star/:reportId", async (req, res) => {
+  try {
     const report = await BugReport.findById(req.params.reportId);
     if (!report) return res.status(404).json({ message: "Report not found" });
-    
-    report.priority = !report.priority; 
+
+    report.star = !report.star;
     await report.save();
 
     res.status(200).json(report);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Failed to update report priority', error: err.message });
+    res.status(500).json({ message: "Failed to toggle star", error: err.message });
   }
 });
+
+
+router.post("/send-general-email/:userId", async (req, res) => {
+  try {
+    const { subject, message } = req.body;
+
+    const user =
+      (await Individual.findById(req.params.userId)) ||
+      (await Organization.findById(req.params.userId));
+
+    if (!user || !user.email) {
+      return res.status(404).json({ message: "User not found or has no email" });
+    }
+
+   const emailBody = `
+  <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f9f9; padding: 30px; color: #333;">
+    
+    <!-- Outer Container -->
+    <div style="max-width: 650px; margin: 0 auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden;">
+
+      <!-- Header -->
+      <div style="background: linear-gradient(90deg, #1b5e20, #43a047); padding: 30px; text-align: center; color: white;">
+        <img src="https://i.ibb.co/0XxJX5Y/aerthx-logo.png" alt="AerthX Logo" style="height: 60px; margin-bottom: 12px;" />
+        <h1 style="margin: 0; font-size: 24px; font-weight: 600;">AerthX Communication</h1>
+      </div>
+
+      <!-- Body -->
+      <div style="padding: 35px;">
+        <h2 style="color: #1b5e20; margin-top: 0; font-size: 20px;">Hello ${user.fullName || user.orgName},</h2>
+        
+        <p style="font-size: 15px; line-height: 1.8; margin: 15px 0; color: #444;">
+          ${message}
+        </p>
+
+        <p style="margin-top: 30px; font-size: 15px; color: #444;">
+          Warm regards,<br/>
+          <strong>The AerthX Team</strong>
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 13px; color: #777;">
+        <p style="margin: 5px 0;">© ${new Date().getFullYear()} AerthX. All rights reserved.</p>
+        <p style="margin: 5px 0;">
+          <a href="https://aerthx.com" style="color: #1b5e20; text-decoration: none; font-weight: 500;">Visit our website</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+`;
+
+    await transporter.sendMail({
+      from: `"AerthX Admin" <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: subject || "Message from AerthX Admin",
+      html: emailBody,
+    });
+
+    res.status(200).json({ message: "General email sent successfully" });
+  } catch (err) {
+    console.error("Error sending general email:", err);
+    res.status(500).json({ message: "Failed to send general email", error: err.message });
+  }
+});
+
+
 
 
 
