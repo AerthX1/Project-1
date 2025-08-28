@@ -73,7 +73,6 @@ useEffect(() => {
         </div>
       </section>
 
-{/* Informational Section */}
 <div className="mt-16 px-6 sm:px-12 py-12 bg-green-50 rounded-xl shadow-lg">
   <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6 text-center">
     🌿 Why Buy Carbon Credits?
