@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   FaEye,
   FaCircle,
@@ -12,6 +12,8 @@ import {
   FaStar,
 } from "react-icons/fa";
 import axios from "axios";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -37,9 +39,11 @@ const AdminUserReports = () => {
   const [notificationLoading, setNotificationLoading] = useState(false);
   const [showReportDetailsModal, setShowReportDetailsModal] = useState(false);
   const [reportDetails, setReportDetails] = useState(null);
+  const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
     fetchUsers();
+    fetchAdmins();
   }, []);
 
   const fetchUsers = async () => {
@@ -52,6 +56,18 @@ const AdminUserReports = () => {
     } catch (err) {
       console.error(err);
       showNotification("Failed to fetch users.", "error");
+    }
+  };
+
+  const fetchAdmins = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`${API_URL}/admin/admins`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setAdmins(res.data);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -140,6 +156,24 @@ const AdminUserReports = () => {
     }
   };
 
+  const handleToggleStar = async (reportId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.put(
+        `${API_URL}/admin/toggle-star/${reportId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setReports((prevReports) =>
+        prevReports.map((r) => (r._id === reportId ? res.data : r))
+      );
+      showNotification("Star updated!", "success");
+    } catch (err) {
+      console.error(err);
+      showNotification("Failed to update star.", "error");
+    }
+  };
+
   const openNotificationModal = (userId) => {
     setNotificationUserId(userId);
     setNotificationTitle("");
@@ -174,24 +208,40 @@ const AdminUserReports = () => {
     }
   };
 
-  const handlePrioritizeReport = async (reportId) => {
+  const handlePrioritizeReport = async (reportId, priority) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.put(
-        `${API_URL}/admin/update-report-priority/${reportId}`, {},
+        `${API_URL}/admin/update-report-priority/${reportId}`,
+        { priority },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setReports((prevReports) =>
         prevReports.map((r) => (r._id === reportId ? res.data : r))
       );
-      if (res.data.priority) {
-        showNotification("Report prioritized!", "success");
-      } else {
-        showNotification("Prioritization canceled.", "success");
-      }
+      showNotification("Report priority updated!", "success");
     } catch (err) {
       console.error(err);
       showNotification("Failed to update priority.", "error");
+    }
+    setMenuOpenId(null);
+  };
+
+  const handleAssignReport = async (reportId, adminId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.put(
+        `${API_URL}/admin/assign-report/${reportId}`,
+        { adminId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setReports((prevReports) =>
+        prevReports.map((r) => (r._id === reportId ? res.data : r))
+      );
+      showNotification("Report assigned!", "success");
+    } catch (err) {
+      console.error(err);
+      showNotification("Failed to assign report.", "error");
     }
     setMenuOpenId(null);
   };
@@ -200,7 +250,8 @@ const AdminUserReports = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.put(
-        `${API_URL}/admin/update-report-seen/${reportId}`, {},
+        `${API_URL}/admin/update-report-seen/${reportId}`,
+        {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setReports((prevReports) =>
@@ -210,6 +261,54 @@ const AdminUserReports = () => {
       console.error(err);
       showNotification("Failed to mark as seen.", "error");
     }
+  };
+
+  const handleExportCSV = () => {
+    const headers = ["Title", "Description", "User ID", "Priority", "Assigned Admin", "Created At"];
+    const rows = reports.map((r) => [
+      r.title,
+      r.description,
+      r.userId,
+      r.priority || "None",
+      r.assignedAdminName || "Unassigned",
+      new Date(r.createdAt).toLocaleString(),
+    ]);
+    let csvContent = headers.join(",") + "\n";
+    rows.forEach((row) => {
+      csvContent += row.join(",") + "\n";
+    });
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", "reports.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleExportPDF = () => {
+    const doc = new jsPDF();
+    doc.text("User Reports", 14, 20);
+    if (reports.length === 0) {
+      doc.text("No data to export.", 14, 30);
+      doc.save("reports.pdf");
+      return;
+    }
+    const headers = ["Title", "Description", "User ID", "Priority", "Assigned Admin", "Created At"];
+    const rows = reports.map((r) => [
+      r.title || "",
+      r.description || "",
+      r.userId || "",
+      r.priority || "None",
+      r.assignedAdminName || "Unassigned",
+      new Date(r.createdAt).toLocaleString(),
+    ]);
+    doc.autoTable({
+      startY: 25,
+      head: [headers],
+      body: rows,
+    });
+    doc.save("reports.pdf");
   };
 
   const showNotification = (message, type) => {
@@ -223,126 +322,170 @@ const AdminUserReports = () => {
   };
 
   const getNotificationIcon = (type) => {
-    if (type === "success") {
-      return <FaCheckCircle className="inline mr-2 text-green-700" />;
-    }
+    if (type === "success") return <FaCheckCircle className="inline mr-2 text-green-700" />;
     return <FaExclamationCircle className="inline mr-2 text-red-700" />;
   };
 
-  const renderReportsTable = () => {
-    if (loading) {
-      return <p>Loading...</p>;
-    }
-    if (reports.length === 0) {
-      return <p>No reports found for this user.</p>;
-    }
-    const sortedReports = [...reports].sort((a, b) => {
-      if (a.priority && !b.priority) {
-        return -1;
+  const sortedReports = useMemo(() => {
+    const priorityOrder = { high: 1, medium: 2, low: 3, None: 4 };
+    return [...reports].sort((a, b) => {
+      const priorityA = priorityOrder[a.priority] || 4;
+      const priorityB = priorityOrder[b.priority] || 4;
+
+      if (a.star && !b.star) return -1;
+      if (!a.star && b.star) return 1;
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
       }
-      if (!a.priority && b.priority) {
-        return 1;
-      }
+
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
+  }, [reports]);
 
+  const renderReportsTable = () => {
+    if (loading) return <p>Loading...</p>;
+    if (reports.length === 0) return <p>No reports found for this user.</p>;
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {sortedReports.map((report) => (
-          <div
-            key={report._id}
-            className={`relative p-4 bg-white rounded-xl shadow border border-gray-200 cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-blue-300 ${
-              report.priority ? "ring-2 ring-yellow-500" : ""
-            }`}
+      <div>
+        <div className="mb-4 flex gap-3">
+          <button
+            onClick={handleExportCSV}
+            className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
           >
-            <div className="flex justify-between items-start mb-2">
-              <div className="flex-1 min-w-0" onClick={() => openReportDetailsModal(report)}>
-                <h3 className="font-semibold text-gray-900 truncate">
-                  {report.title}
-                </h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  {report.description.length > 50
-                    ? `${report.description.substring(0, 50)}...`
-                    : report.description}
+            Export CSV
+          </button>
+          <button
+            onClick={handleExportPDF}
+            className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
+          >
+            Export PDF
+          </button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {sortedReports.map((report) => {
+            const assignedAdmin = admins.find(admin => admin.id === report.assignedAdminId);
+            return (
+              <div
+                key={report._id}
+                className={`relative p-4 bg-white rounded-xl shadow border border-gray-200 cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-blue-300 ${
+                  report.priority ? "ring-2 ring-yellow-500" : ""
+                }`}
+              >
+                <div
+                  className="flex justify-between items-start mb-2"
+                  onDoubleClick={() => openReportDetailsModal(report)}
+                >
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-gray-900 truncate">{report.title}</h3>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {report.description.length > 50
+                        ? `${report.description.substring(0, 50)}...`
+                        : report.description}
+                    </p>
+                    <p className="text-xs mt-1">
+                      Priority:{" "}
+                      <span className={`font-semibold ${report.priority === "high" ? "text-red-600" : report.priority === "medium" ? "text-yellow-600" : "text-green-600"}`}>
+                        {report.priority || "None"}
+                      </span>
+                    </p>
+                    <p className="text-xs mt-1">Assigned: {assignedAdmin ? assignedAdmin.name : "Unassigned"}</p>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleStar(report._id);
+                      }}
+                      className="p-1"
+                      title={report.star ? "Unstar" : "Star"}
+                    >
+                      <FaStar className={`text-lg ${report.star ? "text-yellow-500" : "text-gray-300"}`} />
+                    </button>
+                    {!report.seen && <FaCircle className="text-green-500 text-xs" title="New" />}
+                    <div className="relative">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setMenuOpenId(menuOpenId === report._id ? null : report._id);
+                        }}
+                        className="p-2 rounded-full hover:bg-gray-100 transition"
+                      >
+                        <FaEllipsisV />
+                      </button>
+                      {menuOpenId === report._id && (
+                        <div className="absolute right-0 top-full mt-2 w-56 bg-white shadow-lg rounded-lg border z-10 py-1">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleStar(report._id);
+                            }}
+                            className="flex items-center gap-3 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 transition"
+                          >
+                            <FaStar className={`${report.star ? 'text-yellow-500' : 'text-gray-400'}`} /> {report.star ? 'Unstar' : 'Star'}
+                          </button>
+                          <select
+                            className="w-full text-sm px-4 py-2 border-b border-gray-100"
+                            value={report.priority || ""}
+                            onChange={(e) => handlePrioritizeReport(report._id, e.target.value)}
+                          >
+                            <option value="">None</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                          </select>
+                          <select
+                            className="w-full text-sm px-4 py-2 border-b border-gray-100"
+                            value={report.assignedAdminId || ""}
+                            onChange={(e) => handleAssignReport(report._id, e.target.value)}
+                          >
+                            <option value="">Unassigned</option>
+                            {admins.map((admin) => (
+                              <option key={admin.id} value={admin.id}>
+                                {admin.name}
+                              </option>
+                            ))}
+                          </select>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openEmailModal(report.userId, report.description);
+                            }}
+                            className="flex items-center gap-3 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 transition"
+                          >
+                            <FaEnvelope className="text-blue-500" /> Send Email
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openNotificationModal(report.userId);
+                            }}
+                            className="flex items-center gap-3 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 transition"
+                          >
+                            <FaBell className="text-indigo-500" /> Send Notification
+                          </button>
+                          <div className="my-1 border-t border-gray-100"></div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openConfirmDeleteModal(report._id);
+                            }}
+                            className="flex items-center gap-3 px-4 py-2 w-full text-sm text-red-600 hover:bg-red-50 transition"
+                          >
+                            <FaTrash /> Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-400 mt-2">
+                  Submitted: {new Date(report.createdAt).toLocaleString()}
                 </p>
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0 ml-2">
-                {report.priority && (
-                  <FaStar className="text-yellow-500 text-lg" title="Prioritized" />
-                )}
-                {!report.seen && (
-                  <FaCircle className="text-green-500 text-xs" title="New" />
-                )}
-                <div className="relative">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setMenuOpenId(menuOpenId === report._id ? null : report._id);
-                    }}
-                    className="p-2 rounded-full hover:bg-gray-100 transition"
-                  >
-                    <FaEllipsisV />
-                  </button>
-                  {menuOpenId === report._id && (
-                    <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg border z-10 py-1">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handlePrioritizeReport(report._id);
-                        }}
-                        className="flex items-center gap-3 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 transition"
-                      >
-                        <FaStar className="text-yellow-500" />
-                        {report.priority ? "Cancel Priority" : "Prioritize"}
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleMarkAsSeen(report._id);
-                          setMenuOpenId(null);
-                        }}
-                        className="flex items-center gap-3 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 transition"
-                      >
-                        <FaEye className="text-gray-500" /> Mark as Seen
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openEmailModal(report.userId, report.description);
-                        }}
-                        className="flex items-center gap-3 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 transition"
-                      >
-                        <FaEnvelope className="text-blue-500" /> Send Email
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openNotificationModal(report.userId);
-                        }}
-                        className="flex items-center gap-3 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 transition"
-                      >
-                        <FaBell className="text-indigo-500" /> Send Notification
-                      </button>
-                      <div className="my-1 border-t border-gray-100"></div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openConfirmDeleteModal(report._id);
-                        }}
-                        className="flex items-center gap-3 px-4 py-2 w-full text-sm text-red-600 hover:bg-red-50 transition"
-                      >
-                        <FaTrash /> Delete
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <p className="text-xs text-gray-400 mt-2">
-              Submitted: {new Date(report.createdAt).toLocaleString()}
-            </p>
-          </div>
-        ))}
+            );
+          })}
+        </div>
       </div>
     );
   };
@@ -376,9 +519,7 @@ const AdminUserReports = () => {
                   <td className="px-6 py-4">{user.isOrganization ? "Organization" : "Individual"}</td>
                   <td className="px-6 py-4 flex items-center gap-2">
                     {user.reportsCount}
-                    {user.newReports > 0 && (
-                      <FaCircle className="text-green-500 text-xs" />
-                    )}
+                    {user.newReports > 0 && <FaCircle className="text-green-500 text-xs" />}
                   </td>
                   <td className="px-6 py-4">
                     <button
@@ -397,180 +538,184 @@ const AdminUserReports = () => {
     );
   };
 
-  const renderReportDetailsModal = () => (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-      <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-bold">Report Details</h3>
-          <button onClick={() => setShowReportDetailsModal(false)}>
-            <FaTimes className="text-gray-600 hover:text-black" />
-          </button>
+  const renderReportDetailsModal = () =>
+    reportDetails && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+        <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-bold">Report Details</h3>
+            <button onClick={() => setShowReportDetailsModal(false)}>
+              <FaTimes className="text-gray-600 hover:text-black" />
+            </button>
+          </div>
+          <div className="space-y-4">
+            <div>
+              <p className="font-semibold text-gray-700">Title:</p>
+              <p className="text-gray-900">{reportDetails.title}</p>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-700">Description:</p>
+              <p className="text-gray-900">{reportDetails.description}</p>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-700">Priority:</p>
+              <p className="text-gray-900">{reportDetails.priority || "None"}</p>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-700">Assigned Admin:</p>
+              <p className="text-gray-900">{reportDetails.assignedAdminName || "Unassigned"}</p>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-700">User ID:</p>
+              <p className="text-gray-900">{reportDetails.userId}</p>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-700">Submitted On:</p>
+              <p className="text-gray-900">{new Date(reportDetails.createdAt).toLocaleString()}</p>
+            </div>
+            <div className="flex justify-end mt-4 gap-3">
+              <button
+                onClick={() => openEmailModal(reportDetails.userId, reportDetails.description)}
+                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+              >
+                <FaEnvelope className="inline mr-2" /> Send Email
+              </button>
+              <button
+                onClick={() => openConfirmDeleteModal(reportDetails._id)}
+                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
+              >
+                <FaTrash className="inline mr-2" /> Delete Report
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="space-y-4">
-          <div>
-            <p className="font-semibold text-gray-700">Title:</p>
-            <p className="text-gray-900">{reportDetails.title}</p>
+      </div>
+    );
+
+  const renderEmailModal = () =>
+    showEmailModal && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+        <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
+          <h3 className="text-lg font-bold mb-4">Send Email to User</h3>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Subject</label>
+            <input
+              type="text"
+              value={emailSubject}
+              onChange={(e) => setEmailSubject(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
           </div>
-          <div>
-            <p className="font-semibold text-gray-700">Description:</p>
-            <p className="text-gray-900">{reportDetails.description}</p>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Message</label>
+            <textarea
+              rows="5"
+              value={emailMessage}
+              onChange={(e) => setEmailMessage(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
           </div>
-          <div>
-            <p className="font-semibold text-gray-700">User ID:</p>
-            <p className="text-gray-900">{reportDetails.userId}</p>
-          </div>
-          <div>
-            <p className="font-semibold text-gray-700">Submitted On:</p>
-            <p className="text-gray-900">{new Date(reportDetails.createdAt).toLocaleString()}</p>
-          </div>
-          <div className="flex justify-end mt-4 gap-3">
+          <div className="flex justify-end gap-3">
             <button
-              onClick={() => openEmailModal(reportDetails.userId, reportDetails.description)}
-              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+              onClick={() => setShowEmailModal(false)}
+              className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400"
             >
-              <FaEnvelope className="inline mr-2" />
-              Send Email
+              Cancel
             </button>
             <button
-              onClick={() => openConfirmDeleteModal(reportDetails._id)}
+              onClick={handleSendEmail}
+              disabled={emailLoading}
+              className={`bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition ${
+                emailLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              {emailLoading ? "Sending..." : "Send"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+
+  const renderConfirmModal = () =>
+    showConfirmModal && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+        <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm">
+          <h3 className="text-lg font-bold mb-4">Confirm Deletion</h3>
+          <p className="mb-4">Are you sure you want to delete this report? This action cannot be undone.</p>
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={() => setShowConfirmModal(false)}
+              className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleDeleteReport}
               className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
             >
-              <FaTrash className="inline mr-2" />
-              Delete Report
+              Delete
             </button>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
 
-  const renderEmailModal = () => (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-      <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-bold">Send Email</h3>
-          <button onClick={() => setShowEmailModal(false)}>
-            <FaTimes className="text-gray-600 hover:text-black" />
-          </button>
-        </div>
-        <input
-          type="text"
-          placeholder="Subject"
-          value={emailSubject}
-          onChange={(e) => setEmailSubject(e.target.value)}
-          className="w-full border rounded-lg p-3 text-sm mb-3"
-        />
-        <div className="border rounded-lg p-3 text-sm bg-gray-100 mb-3">
-          <strong>User's Problem:</strong>
-          <p className="mt-1 text-gray-700">{emailProblem}</p>
-        </div>
-        <textarea
-          value={emailMessage}
-          onChange={(e) => setEmailMessage(e.target.value)}
-          rows={6}
-          className="w-full border rounded-lg p-3 text-sm"
-          placeholder="Write your response/solution here..."
-        />
-        <div className="flex justify-end mt-4 gap-3">
-          <button
-            onClick={() => setShowEmailModal(false)}
-            className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSendEmail}
-            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 disabled:opacity-50"
-            disabled={emailLoading}
-          >
-            {emailLoading ? "Sending..." : "Send Email"}
-          </button>
+  const renderNotificationModal = () =>
+    showNotificationModal && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+        <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
+          <h3 className="text-lg font-bold mb-4">Send Push Notification</h3>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Title</label>
+            <input
+              type="text"
+              value={notificationTitle}
+              onChange={(e) => setNotificationTitle(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Message</label>
+            <textarea
+              rows="5"
+              value={notificationMessage}
+              onChange={(e) => setNotificationMessage(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={() => setShowNotificationModal(false)}
+              className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSendNotification}
+              disabled={notificationLoading}
+              className={`bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition ${
+                notificationLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            >
+              {notificationLoading ? "Sending..." : "Send"}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
-
-  const renderConfirmModal = () => (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-      <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm text-center">
-        <FaExclamationCircle className="text-red-500 text-5xl mx-auto mb-4" />
-        <h3 className="text-lg font-bold mb-2">Confirm Deletion</h3>
-        <p className="mb-4 text-gray-600">Are you sure you want to delete this report? This action cannot be undone.</p>
-        <div className="flex justify-center gap-3">
-          <button
-            onClick={() => setShowConfirmModal(false)}
-            className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleDeleteReport}
-            className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderNotificationModal = () => (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-      <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-bold">Send Notification</h3>
-          <button onClick={() => setShowNotificationModal(false)}>
-            <FaTimes className="text-gray-600 hover:text-black" />
-          </button>
-        </div>
-        <input
-          type="text"
-          placeholder="Notification Title"
-          value={notificationTitle}
-          onChange={(e) => setNotificationTitle(e.target.value)}
-          className="w-full border rounded-lg p-3 text-sm mb-3"
-        />
-        <textarea
-          value={notificationMessage}
-          onChange={(e) => setNotificationMessage(e.target.value)}
-          rows={6}
-          className="w-full border rounded-lg p-3 text-sm"
-          placeholder="Write your notification message here..."
-        />
-        <div className="flex justify-end mt-4 gap-3">
-          <button
-            onClick={() => setShowNotificationModal(false)}
-            className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSendNotification}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
-            disabled={notificationLoading}
-          >
-            {notificationLoading ? "Sending..." : "Send Notification"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 
   return (
     <div>
       {notification && (
         <div
           className={`mb-4 p-3 rounded-lg flex items-center ${
-            notification.type === "success"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
+            notification.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
           }`}
         >
           {getNotificationIcon(notification.type)}
           {notification.message}
         </div>
       )}
-
       {selectedUser ? (
         <>
           <button
@@ -579,9 +724,7 @@ const AdminUserReports = () => {
           >
             Back
           </button>
-          <h2 className="text-2xl font-bold mb-4">
-            Reports from User ID: {selectedUser}
-          </h2>
+          <h2 className="text-2xl font-bold mb-4">Reports from User ID: {selectedUser}</h2>
           {renderReportsTable()}
         </>
       ) : (
@@ -590,7 +733,6 @@ const AdminUserReports = () => {
           {renderUsersTable()}
         </>
       )}
-
       {showReportDetailsModal && renderReportDetailsModal()}
       {showEmailModal && renderEmailModal()}
       {showConfirmModal && renderConfirmModal()}

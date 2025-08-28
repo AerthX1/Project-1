@@ -11,16 +11,12 @@ const notificationSchema = new mongoose.Schema({
     enum: ["Individual", "Organization"],
     required: true,
   },
-  title: String,
-  message: String,
-  read: {
-    type: Boolean,
-    default: false,
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now,
-  },
+  title: { type: String, required: true },
+  message: { type: String, required: true },
+  read: { type: Boolean, default: false },
+  timestamp: { type: Date, default: Date.now },
 });
+
+notificationSchema.index({ userId: 1, timestamp: -1 });
 
 module.exports = mongoose.model("Notification", notificationSchema);

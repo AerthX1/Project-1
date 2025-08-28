@@ -23,6 +23,11 @@ import AdminRoute from "../../../admin-frontend/src/components/Admin/AdminRoute"
 import Services from '../pages/Services';
 import VerifyOtp from '../pages/VerifyOtp';
 import ContactUs from '../pages/ContactUs';
+import DashboardLayout from '../pages/DashboardLayout';
+import Overview from '../components/Dashboard/Overview';
+import Certificates from '../components/Dashboard/Certificates';
+import Transactions from '../components/Dashboard/Transactions';
+import Marketplace from '../components/Dashboard/Marketplace';
 
 
 const router = createBrowserRouter(
@@ -54,6 +59,12 @@ const router = createBrowserRouter(
     <Route path="/settings" element={<Settings />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} /> 
+      <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route path="overview" element={<Overview />} />
+          <Route path="certificates" element={<Certificates />} />
+          <Route path="transactions" element={<Transactions />} />
+          <Route path="marketplace" element={<Marketplace />} />
+        </Route>
      </>
   )
 );
