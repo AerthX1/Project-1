@@ -103,12 +103,12 @@ const resetPassword = async (req, res) => {
     await OtpToken.deleteMany({ email });
 
     await transporter.sendMail({
-      from: `"Aearthex" <${process.env.EMAIL_USER}>`,
+      from: `"AerthX" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: "Your Aearthex Password Was Changed",
+      subject: "Your AerthX Password Was Changed",
       html: `<h2>Password Changed</h2>
              <p>Hi ${user.fullName || "User"},</p>
-             <p>Your Aearthex account password has been successfully updated.</p>
+             <p>Your AerthX account password has been successfully updated.</p>
              <p>If this wasn't you, please contact our support immediately.</p>`,
     });
 

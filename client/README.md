@@ -44,7 +44,4 @@ If you are developing a production application, we recommend using TypeScript wi
 14. npm install jwt-decode
 
 
-<<<<<<< HEAD
-=======
 let started
->>>>>>> d7943c9d1763e46f62352e48b27c26171279fa7b

@@ -41,6 +41,11 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
       icon: <FaQuestionCircle className="text-gray-400" />,
     },
     {
+      label: "About Us",
+      to: "/about",
+      icon: <FaGlobe className="text-gray-400" />,
+    },
+    {
       label: "Settings",
       to: "/settings",
       icon: <FaCog className="text-gray-400" />,
