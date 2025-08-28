@@ -204,7 +204,7 @@ const HelpSupport = ({ user }) => {
               icon: <FaEnvelope className="text-indigo-600 text-3xl mb-3" />,
               title: "Email Us",
               desc: "support@aerthx.com",
-              href: "mailto:support@aearthex.com",
+              href: "mailto:support@aerthx.com",
             },
             {
               icon: <FaPhone className="text-indigo-600 text-3xl mb-3" />,
@@ -339,7 +339,7 @@ const HelpSupport = ({ user }) => {
       <FaBug className="text-red-600 text-5xl animate-bounce" /> Bug Report Form
     </h3>
     <p className="text-gray-700 text-center mb-10 max-w-4xl mx-auto text-lg">
-      Facing an issue on Aearthex? Select the category and type of problem below. Provide details and screenshots to help us fix it faster.
+      Facing an issue on Aerthx? Select the category and type of problem below. Provide details and screenshots to help us fix it faster.
     </p>
 
     <form onSubmit={handleSubmit} className="space-y-10">

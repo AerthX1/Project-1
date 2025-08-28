@@ -46,7 +46,7 @@ const Services = () => {
     },
     {
       title: "Carbon Offset Certificates",
-      description: "Receive branded, blockchain-backed carbon certificates and NFTs to demonstrate your sustainability commitment.",
+      description: "Receive branded and NFTs to demonstrate your sustainability commitment.",
       features: [
         "Branded certificate design",
         "Shareable digital NFTs",

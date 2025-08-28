@@ -74,7 +74,7 @@ useEffect(() => {
       </section>
 
 {/* Informational Section */}
-<div className="mt-16 px-6 sm:px-12 py-12 bg-green-50 rounded-xl shadow-lg">
+<div className="mt-5 px-6 sm:px-12 py-12 bg-green-50 rounded-xl shadow-lg">
   <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6 text-center">
     🌿 Why Buy Carbon Credits?
   </h2>
@@ -167,7 +167,7 @@ useEffect(() => {
         </div>
       </section>
 
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 bg-green-50">
         <h2 className="text-2xl md:text-3xl font-bold mb-10">Who We Help</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 md:px-20">
           <div className="bg-white  hover:bg-gray-100 p-4 rounded shadow">
@@ -196,7 +196,6 @@ useEffect(() => {
         <div className="flex justify-center items-center space-x-20">
           <img src={verra} alt="Verra" className="h-25" />
           <img src={goldstandard} alt="Gold Standard" className="h-25" />
-          <img src={comming} alt="Coming Soon" className="h-25 opacity-60" />
         </div>
       </section>
         <section className="bg-green-500 w-full text-white py-12 px-4 text-center">

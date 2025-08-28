@@ -230,7 +230,7 @@ const Profile = () => {
                   AerthX is committed to climate transparency and blockchain-backed carbon credits. Learn why we’re trusted by green leaders. (Upcoming)
                 </div>
               </div>
-              Why Organizations Trust Aerthx
+              Why Organizations Trust AerthX
             </h3>
             <ul className="list-disc list-inside text-sm space-y-1 text-green-100">
               <li>
