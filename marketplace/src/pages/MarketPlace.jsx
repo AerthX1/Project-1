@@ -31,6 +31,8 @@ const MarketPlace = () => {
   }, []);
 
   const filteredProjects = projects.filter(project => {
+    if (!project.isActive) return false;
+
     const matchesSearch =
       project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       project.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -45,7 +47,8 @@ const MarketPlace = () => {
     else if (priceRange === "high") matchesPrice = project.pricePerTon > 30;
 
     return matchesSearch && matchesCategory && matchesPlace && matchesVintage && matchesPrice;
-  });
+});
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4 flex justify-center">

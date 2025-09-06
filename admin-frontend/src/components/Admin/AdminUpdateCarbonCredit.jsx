@@ -107,7 +107,7 @@ try {
             {renderInput('methodology', 'Methodology')}
             {renderInput('projectDuration', 'Project Duration')}
             {renderInput('tons', 'Total Tons')}
-            {renderInput('pricePerTon', 'Price Per Ton (USD)')}
+            {renderInput('pricePerTon', 'Price Per Ton (RS)')}
           </div>
         </div>
 

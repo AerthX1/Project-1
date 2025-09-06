@@ -36,10 +36,13 @@ useEffect(() => {
         .sort((a, b) => b.vintage - a.vintage);
       setProjects(filtered.slice(0, 5));
 
-      const mostExpensive = allProjects.reduce(
-        (max, curr) => (curr.pricePerTon > (max?.pricePerTon || 0) ? curr : max),
-        null
-      );
+      const mostExpensive = allProjects.length
+        ? allProjects.reduce(
+            (max, curr) =>
+              curr.pricePerTon > (max?.pricePerTon || 0) ? curr : max,
+            null
+          )
+        : null;
       setHighestPricedProject(mostExpensive);
 
       const sortedByPrice = [...allProjects]
@@ -50,7 +53,12 @@ useEffect(() => {
       let daily = localStorage.getItem("dailySuggestions");
       let lastUpdated = localStorage.getItem("dailySuggestionsUpdated");
 
-      if (daily && lastUpdated && new Date().getTime() - parseInt(lastUpdated) < 24 * 60 * 60 * 1000) {
+      if (
+        daily &&
+        lastUpdated &&
+        new Date().getTime() - parseInt(lastUpdated) <
+          24 * 60 * 60 * 1000
+      ) {
         setDailySuggestions(JSON.parse(daily));
       } else {
         const shuffled = [...allProjects].sort(() => Math.random() - 0.5);
