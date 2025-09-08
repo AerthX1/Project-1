@@ -38,16 +38,16 @@ If you did not initiate this change, please contact our support team immediately
 
     await sendEmail({
       to: user.email,
-      subject: "🔒 Aearthex Password Change Confirmation",
+      subject: "🔒 AerthX Password Change Confirmation",
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0;">
           <h2 style="color: #2f855a;">Password Changed</h2>
           <p>Hi ${user.fullName || user.orgName},</p>
-          <p>This is to confirm that your Aearthex account password has been successfully changed.</p>
+          <p>This is to confirm that your AerthX account password has been successfully changed.</p>
           <p>If this was not you, please reset your password immediately or contact our support team.</p>
           <br/>
           <p>Stay secure,</p>
-          <p><strong>The Aearthex Team 🌱</strong></p>
+          <p><strong>The AerthX Team 🌱</strong></p>
         </div>
       `,
     });

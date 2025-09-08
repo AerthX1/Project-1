@@ -76,7 +76,7 @@ const renderContent = () => {
   return (
     <div className="flex min-h-screen bg-white text-gray-900">
       <aside className="w-64 bg-black text-white min-h-screen p-6 hidden md:block">
-        <div className="text-2xl font-bold mb-10 text-green-400">Aearthex Admin</div>
+        <div className="text-2xl font-bold mb-10 text-green-400">AerthX Admin</div>
         <nav className="space-y-4">
           {navItems.map((item) => (
             <button

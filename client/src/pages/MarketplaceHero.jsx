@@ -71,7 +71,7 @@ const MarketplaceHero = () => {
             clarity and trust.
           </p>
           <a
-            href={`http://localhost:5174?token=${localStorage.getItem(
+            href={`${import.meta.env.VITE_CLIENT_URL}?token=${localStorage.getItem(
               "token"
             )}&userType=${localStorage.getItem(
               "userType"

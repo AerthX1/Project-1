@@ -46,7 +46,7 @@ useEffect(() => {
             Empowering Businesses to Go Carbon Neutral
           </h1>
        <Link
-  to="http://localhost:5174/"
+  to={import.meta.env.VITE_CLIENT_URL}
   className="mt-20 inline-flex items-center justify-center gap-2 
              bg-gradient-to-r from-green-500 via-green-600 to-green-700 
              hover:from-green-600 hover:via-green-700 hover:to-green-800 

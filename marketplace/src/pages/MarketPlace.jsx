@@ -158,7 +158,7 @@ const MarketPlace = () => {
                 className="bg-white w-[300px] mx-auto rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-2xl hover:border-green-400 hover:scale-[1.03] transition-all duration-300 ease-in-out block"
               >
                 <img
-                  src={`http://localhost:5000${project.image}`}
+                 src={`${import.meta.env.VITE_FILE_URL}${project.image}`}
                   alt={project.title}
                   className="w-full h-40 object-cover"
                 />
