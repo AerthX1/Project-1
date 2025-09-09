@@ -33,4 +33,43 @@ router.get("/organization", verifyToken, async (req, res) => {
   }
 });
 
+router.post("/mark-read", verifyToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { userType } = req.body;
+
+    await Notification.updateMany(
+      { userId, userType, read: false },
+      { $set: { read: true } }
+    );
+
+    res.json({ message: "Notifications marked as read" });
+  } catch (error) {
+    console.error("Mark Notifications Read Error:", error);
+    res.status(500).json({ message: "Failed to mark notifications as read" });
+  }
+});
+
+
+router.post("/mark-one/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updated = await Notification.findByIdAndUpdate(
+      id,
+      { $set: { read: true } },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+
+    res.json({ message: "Notification marked as read", notification: updated });
+  } catch (error) {
+    console.error("Mark single notification error:", error);
+    res.status(500).json({ message: "Failed to mark notification as read" });
+  }
+});
+
 module.exports = router;

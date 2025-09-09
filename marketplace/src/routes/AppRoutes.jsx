@@ -11,6 +11,7 @@ import VerifyOtp from '../pages/VerifyOtp';
 import ForgotPassword from '../pages/ForgotPassword';
 import NotificationPage from '../pages/NotificationPage';
 import HelpSupport from '../pages/HelpSupport';
+import BugReport from '../pages/BugReport';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +29,7 @@ const router = createBrowserRouter(
          <Route path="/forgot-password" element={<ForgotPassword />} />
            <Route path="/notification" element={<NotificationPage />} />
            <Route path="/help" element={<HelpSupport />} />
+            <Route path="/report-bug" element={<BugReport />} />
       <Route path="/payment/:id" element={<PaymentPage />} />
     </>
   )

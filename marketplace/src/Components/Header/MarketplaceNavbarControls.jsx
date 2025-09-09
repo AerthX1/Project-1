@@ -96,59 +96,82 @@
       navigate("/");
     };
 
-    const toggleNotifications = async () => {
-  const newState = !notificationsOpen;
-  setNotificationsOpen(newState);
-  setDropdownOpen(false);
-
-  if (newState && unreadCount > 0) {
-    try {
-      await fetch(`${import.meta.env.VITE_API_URL}/user/notifications/mark-read`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userType }), 
-      });
-
-      const updated = notifications.map(n => ({ ...n, read: true }));
-      setNotifications(updated);
-      setUnreadCount(0);
-    } catch (error) {
-      console.error("Failed to mark notifications as read:", error);
-    }
-  }
-};
-
-
-   useEffect(() => {
-  const fetchNotifications = async () => {
-    if (!token || !userType) return;
-
-    try {
-      const endpoint =
-        userType?.toLowerCase() === "organization"
-          ? "organization"
-          : "individual";
-
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/user/notifications/${endpoint}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      const data = await res.json();
-      setNotifications(data.notifications || []);
-      setUnreadCount((data.notifications || []).filter(n => !n.read).length);
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
-    }
-  };
-
-  fetchNotifications();
-}, [token, userType]);
+ const toggleNotifications = async () => {
+   const newState = !notificationsOpen;
+   setNotificationsOpen(newState);
+   setDropdownOpen(false);
+ 
+   if (newState && unreadCount > 0) {
+     try {
+       await fetch(`${import.meta.env.VITE_API_URL}/user/notifications/mark-read`, {
+         method: "POST",
+         headers: {
+           Authorization: `Bearer ${token}`,
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify({ userType }),
+       });
+ 
+       const updated = notifications.map(n => ({ ...n, read: true }));
+       setNotifications(updated);
+       setUnreadCount(0);
+     } catch (error) {
+       console.error("Failed to mark notifications as read:", error);
+     }
+   }
+ };
+ 
+ const handleNotificationClick = async (id) => {
+   try {
+     await fetch(`${import.meta.env.VITE_API_URL}/user/notifications/mark-one/${id}`, {
+       method: "POST",
+       headers: {
+         Authorization: `Bearer ${token}`,
+         "Content-Type": "application/json",
+       },
+     });
+ 
+     const updated = notifications.map(n =>
+       n._id === id ? { ...n, read: true } : n
+     );
+     setNotifications(updated);
+ 
+     setUnreadCount(prev => Math.max(prev - 1, 0));
+   } catch (error) {
+     console.error("Error marking notification as read:", error);
+   }
+ };
+ 
+ 
+ 
+ useEffect(() => {
+   const fetchNotifications = async () => {
+     if (!token || !userType) return;
+ 
+     try {
+       const endpoint =
+         userType?.toLowerCase() === "organization"
+           ? "organization"
+           : "individual";
+ 
+       const res = await fetch(
+         `${import.meta.env.VITE_API_URL}/user/notifications/${endpoint}`,
+         {
+           headers: { Authorization: `Bearer ${token}` },
+         }
+       );
+ 
+       const data = await res.json();
+       setNotifications(data.notifications || []);
+       setUnreadCount((data.notifications || []).filter(n => !n.read).length);
+     } catch (error) {
+       console.error("Error fetching notifications:", error);
+     }
+   };
+ 
+   fetchNotifications();
+ }, [token, userType]);
+ 
 
     return (
       <nav className="bg-white shadow-lg w-full px-4 py-3 lg:px-8 fixed top-0 z-50">
@@ -238,7 +261,7 @@
   </div>
 )}
 
-                </div>
+         </div>
                 <div ref={dropdownRef}>
                   <button
                     onClick={() => {

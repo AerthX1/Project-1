@@ -111,6 +111,28 @@ const toggleNotifications = async () => {
   }
 };
 
+const handleNotificationClick = async (id) => {
+  try {
+    await fetch(`${import.meta.env.VITE_API_URL}/user/notifications/mark-one/${id}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const updated = notifications.map(n =>
+      n._id === id ? { ...n, read: true } : n
+    );
+    setNotifications(updated);
+
+    setUnreadCount(prev => Math.max(prev - 1, 0));
+  } catch (error) {
+    console.error("Error marking notification as read:", error);
+  }
+};
+
+
 
 useEffect(() => {
   const fetchNotifications = async () => {
@@ -255,21 +277,22 @@ useEffect(() => {
     <div className="max-h-80 overflow-y-auto divide-y divide-gray-100">
       {notifications.length > 0 ? (
         notifications.map((notification) => (
-          <div
-            key={notification._id}
-            className={`px-4 py-3 text-sm transition-colors duration-200 cursor-pointer hover:bg-gray-100 ${
-              !notification.read ? "bg-slate-50 border-l-4 border-indigo-500" : "bg-white"
-            }`}
-          >
-            <p className="font-medium text-gray-800">{notification.title}</p>
-            <p className="text-gray-600 text-xs mt-1 leading-snug truncate">
-              {notification.message}
-            </p>
-            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wide">
-              {new Date(notification.timestamp).toLocaleString()}
-            </p>
-          </div>
-        ))
+  <div
+    key={notification._id}
+    onClick={() => handleNotificationClick(notification._id)} 
+   className={`px-4 py-3 text-sm transition-colors duration-200 cursor-pointer hover:bg-gray-100 ${
+      !notification.read ? "bg-green-100" : "bg-white"
+    }`}
+  >
+    <p className="font-medium text-gray-800">{notification.title}</p>
+    <p className="text-gray-600 text-xs mt-1 leading-snug truncate">
+      {notification.message}
+    </p>
+    <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wide">
+      {new Date(notification.timestamp).toLocaleString()}
+    </p>
+  </div>
+))
       ) : (
         <div className="px-4 py-8 text-center text-gray-500 text-sm">
           <svg className="w-6 h-6 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>

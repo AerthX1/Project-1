@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   FaEnvelope,
   FaPhone,
@@ -81,38 +82,6 @@ const HelpSupport = ({ user }) => {
   const [formData, setFormData] = useState({ title: [], description: "" });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
-
-  const bugTypes = [
-  "UI Issue",
-  "Navigation/Link Issue",
-  "Performance/Slow",
-  "Mobile/Responsive Issue",
-  "Accessibility Issue",
-
-  "Payment Failure",
-  "Refund Issue",
-  "Transaction History Incorrect",
-  "Invoice/Receipt Error",
-
-  "Certificate Error",
-  "Certificate Download Issue",
-  "Carbon Credit Not Reflected",
-  "NFT/Token Metadata Issue",
-
-  "Feature Not Working",
-  "Subscription Issue",
-  "Marketplace Listing Problem",
-  "Wallet/MetaMask Connection Issue",
-  "API/Enterprise Dashboard Error",
-
-  "Profile Update Issue",
-  "Email Verification Problem",
-  "Password Reset Issue",
-
-  "Security/Hacking Concern",
-
-  "Other",
-];
 
 
   const handleChange = (e) => {
@@ -316,125 +285,15 @@ const HelpSupport = ({ user }) => {
   }}
   className="px-10 py-4 bg-red-600 text-white font-semibold rounded-full shadow-lg hover:bg-red-700 transition-all duration-300 hover:scale-105"
 >
-  Submit a Bug Report
+  <Link
+              to="/report-bug"
+                 >
+              Submit a Bug Report
+            </Link>
 </button>
 
     </div>
 
-    {isOpen && (
-   <div className="fixed inset-0 bg-gradient-to-br from-green-200 via-green-100 to-green-300 bg-opacity-50 backdrop-blur-sm flex justify-center items-start pt-20 z-50 p-4 overflow-y-auto">
-  <div className="relative w-full max-w-6xl bg-white bg-opacity-95 backdrop-blur-md rounded-3xl shadow-2xl p-12 animate-fade-in-up border border-green-200 overflow-hidden">
-    
-    <div className="absolute -top-32 -right-32 w-80 h-80 bg-green-300 rounded-full opacity-20 animate-pulse-slow"></div>
-    <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-green-400 rounded-full opacity-15 animate-pulse-slow"></div>
-
-    <button
-      onClick={() => setIsOpen(false)}
-      className="absolute top-6 right-6 text-gray-400 hover:text-gray-700 text-3xl font-bold transition-transform duration-200 hover:scale-110"
-    >
-      ×
-    </button>
-
-    <h3 className="text-4xl font-extrabold text-green-700 mb-4 flex justify-center items-center gap-3">
-      <FaBug className="text-red-600 text-5xl animate-bounce" /> Bug Report Form
-    </h3>
-    <p className="text-gray-700 text-center mb-10 max-w-4xl mx-auto text-lg">
-      Facing an issue on Aearthex? Select the category and type of problem below. Provide details and screenshots to help us fix it faster.
-    </p>
-
-    <form onSubmit={handleSubmit} className="space-y-10">
-      
-      {[
-        {
-          category: "UI / UX",
-          types: ["UI Issue", "Navigation/Link Issue", "Mobile/Responsive Issue", "Accessibility Issue", "Performance/Slow"]
-        },
-        {
-          category: "Payments & Transactions",
-          types: ["Payment Failure", "Refund Issue", "Transaction History Incorrect", "Invoice/Receipt Error"]
-        },
-        {
-          category: "Certificates & Carbon Credits",
-          types: ["Certificate Error", "Certificate Download Issue", "Carbon Credit Not Reflected", "NFT/Token Metadata Issue"]
-        },
-        {
-          category: "Features & Subscriptions",
-          types: ["Feature Not Working", "Subscription Issue", "Marketplace Listing Problem", "Wallet/MetaMask Connection Issue", "API/Enterprise Dashboard Error"]
-        },
-        {
-          category: "Account & Profile",
-          types: ["Profile Update Issue", "Email Verification Problem", "Password Reset Issue"]
-        },
-        {
-          category: "Other",
-          types: ["Other"]
-        }
-      ].map((group) => (
-        <div key={group.category}>
-          <p className="font-semibold text-gray-800 mb-3 text-lg">{group.category}:</p>
-          <div className="flex flex-wrap gap-3">
-            {group.types.map((type) => (
-              <button
-                key={type}
-                type="button"
-                onClick={() => handleCheckboxChange(type)}
-                className={`px-5 py-2 rounded-full border transition-all duration-300 font-medium shadow-sm ${
-                  formData.title.includes(type)
-                    ? "bg-red-600 text-white border-red-600 shadow-lg scale-105"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-red-50 hover:scale-105"
-                }`}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-        </div>
-      ))}
-
-      <div>
-        <label className="font-semibold text-gray-800 mb-2 block text-lg">Describe the issue in detail:</label>
-        <textarea
-          name="description"
-          placeholder="Provide a detailed description of the bug, steps to reproduce."
-          value={formData.description}
-          onChange={handleChange}
-          required
-          className="w-full p-5 border border-gray-300 rounded-3xl focus:ring-2 focus:ring-green-300 focus:outline-none h-44 resize-none text-gray-700 placeholder-gray-400 shadow-inner"
-        />
-      </div>
-
-      <div className="flex justify-end gap-4">
-        <button
-          type="button"
-          onClick={() => setIsOpen(false)}
-          className="px-6 py-3 border border-gray-300 rounded-full font-medium hover:bg-gray-100 transition-all duration-200 hover:scale-105"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-6 py-3 bg-red-600 text-white rounded-full font-semibold shadow-lg hover:bg-red-700 transition-all duration-300 hover:scale-105"
-        >
-          {loading ? "Submitting..." : "Submit"}
-        </button>
-      </div>
-
-      {success && (
-        <p
-          className={`text-center mt-4 font-medium text-lg ${
-            success.includes("Error") ? "text-red-600" : "text-green-600"
-          }`}
-        >
-          {success}
-        </p>
-      )}
-    </form>
-  </div>
-</div>
-
-
-    )}
   </div>
 </section>
 
