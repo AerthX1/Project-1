@@ -7,30 +7,24 @@ const bugReportSchema = new mongoose.Schema(
     reporterName: { type: String, required: true },
     userType: {
       type: String,
-      enum: ["Individual", "Organization"],
+      enum: ["Individual", "Organization"], 
       required: true,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      refPath: "userType", 
       required: true,
     },
-    seen: {
-      type: Boolean,
-      default: false,
-    },
-    star: {
-      type: Boolean,
-      default: false,
-    },
-     priority: {
+    seen: { type: Boolean, default: false },
+    star: { type: Boolean, default: false },
+    priority: {
       type: String,
       enum: ["low", "medium", "high", null],
-      default: null, 
+      default: null,
     },
     assignedAdminId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Admin",
+      ref: "Individual", 
       default: null,
     },
   },
