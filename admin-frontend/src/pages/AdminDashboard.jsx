@@ -8,6 +8,7 @@ import AdminAddCarbonCredit from "../components/Admin/AdminAddCarbonCredit";
 import AdminManageCarbonCredits from "../components/Admin/AdminManageCarbonCredits";
 import AdminUpdateCarbonCredit from "../components/Admin/AdminUpdateCarbonCredit"; 
 import AdminUserData from "../components/Admin/AdminUserData";
+import AdminFAQManager from "../components/Admin/AdminFAQManager";
 
 
 import {
@@ -31,6 +32,7 @@ const navItems = [
   { id: "managecredits", icon: <FaEdit />, label: "Manage Credits" },
   { id: "userdata", icon: <FaUsers />, label: "User Data" }, 
 { id: "userreports", icon: <FaClipboardList />, label: "User Reports" },
+{ id: "faqmanager", icon: <FaClipboardList />, label: "FAQ Manager" },
 
 
 
@@ -68,6 +70,8 @@ const renderContent = () => {
   return <AdminUserData />;
   case "userreports": 
         return <AdminUserReports />;
+        case "faqmanager":
+  return <AdminFAQManager />;
       default:
         return <StatsOverview />;
     }

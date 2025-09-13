@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 import axios from "axios";
 import {
   ShieldCheck,
@@ -18,189 +20,10 @@ import {
 } from "lucide-react";
 
 
-const ContactModal = ({ project, onClose }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    quantity: "",
-    timeline: "",
-    notes: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Contact form submitted:", formData);
-    alert("Your request has been sent! We'll be in touch shortly.");
-    onClose();
-  };
-
-  return (
-    <div className="fixed inset-0 flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="bg-white rounded-2xl p-6 sm:p-10 max-w-2xl w-full shadow-2xl relative border-t-8 border-green-500 transform transition-all duration-300 scale-95 hover:scale-100">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-7 w-7"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-
-        <div className="text-center mb-8">
-          <h3 className="text-3xl font-bold text-green-700">
-            High-Volume Credit Inquiry
-          </h3>
-          <p className="text-gray-600 mt-2">
-            Interested in a large purchase for **{project.title}**? Fill out this form and we'll contact you directly.
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Your Full Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 transition-all duration-200"
-              />
-            </div>
-            <div>
-              <label htmlFor="company" className="block text-sm font-medium text-gray-700">
-                Company/Organization (Optional)
-              </label>
-              <input
-                type="text"
-                name="company"
-                id="company"
-                value={formData.company}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 transition-all duration-200"
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 transition-all duration-200"
-              />
-            </div>
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                Phone Number (Optional)
-              </label>
-              <input
-                type="tel"
-                name="phone"
-                id="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 transition-all duration-200"
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
-                Desired Quantity (in tons)
-              </label>
-              <input
-                type="number"
-                name="quantity"
-                id="quantity"
-                value={formData.quantity}
-                onChange={handleChange}
-                required
-                min="1"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 transition-all duration-200"
-              />
-            </div>
-            <div>
-              <label htmlFor="timeline" className="block text-sm font-medium text-gray-700">
-                Purchase Timeline
-              </label>
-              <select
-                id="timeline"
-                name="timeline"
-                value={formData.timeline}
-                onChange={handleChange}
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2"
-              >
-                <option value="">Select a timeline</option>
-                <option value="1-3 months">1-3 Months</option>
-                <option value="3-6 months">3-6 Months</option>
-                <option value="6-12 months">6-12 Months</option>
-                <option value="more-than-12">More than 12 Months</option>
-                <option value="flexible">Flexible</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
-              Additional Notes
-            </label>
-            <textarea
-              name="notes"
-              id="notes"
-              value={formData.notes}
-              onChange={handleChange}
-              rows="4"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 transition-all duration-200"
-            ></textarea>
-          </div>
-          <div className="flex justify-center pt-4">
-            <button
-              type="submit"
-              className="px-8 py-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl"
-            >
-              Send Inquiry
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
-
 const SingleProject = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const API = import.meta.env.VITE_API_URL;
@@ -225,9 +48,12 @@ const SingleProject = () => {
     navigate(`/payment/${project._id}`);
   };
 
-  const handleContactClick = () => {
-    setShowModal(true);
-  };
+const loggedInUser = useSelector((state) => state.auth.user);
+const userType = loggedInUser?.type || "Individual";
+
+const handleContactClick = () => {
+  navigate("/contact-form", { state: { project, userType } });
+};
 
   if (loading) return <div className="text-center mt-10 text-gray-500">Loading project...</div>;
   if (!project) return <div className="text-center mt-10 text-red-500">Project not found.</div>;
@@ -415,7 +241,6 @@ const SingleProject = () => {
         </div>
       </section>
 
-      {showModal && <ContactModal project={project} onClose={() => setShowModal(false)} />}
     </div>
   );
 };

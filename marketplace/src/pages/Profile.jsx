@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile, updateProfile } from "../../../shared-redux/src/slices/profileSlice";
 import { FaEdit, FaInfoCircle } from "react-icons/fa";
-import DefaultAvatar from "../Components/Header/DefaultAvatar";
+import DefaultAvatar from "../components/Header/DefaultAvatar";
+import { setUser } from "../../../shared-redux/src/slices/authSlice";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -68,12 +69,20 @@ const Profile = () => {
       }
 
         try {
-        const res = await dispatch(updateProfile({ token, userType, formData }));
-        setSuccessMsg("Profile updated successfully!");
+       const res = await dispatch(updateProfile({ token, userType, formData }));
+if (res.payload?.avatarUrl) {
+  const fullAvatarUrl = `${import.meta.env.VITE_API_URL.replace("/api", "")}${res.payload.avatarUrl}`;
+  
 
-        if (res.payload?.avatarUrl) {
-          setAvatar(`${import.meta.env.VITE_API_URL.replace("/api", "")}${res.payload.avatarUrl}?t=${Date.now()}`);
-        }
+  const updatedUser = {
+    ...(userType === "organization" ? res.payload.org : res.payload.user),
+    avatarUrl: res.payload.avatarUrl, 
+  };
+
+  dispatch(setUser(updatedUser));
+  localStorage.setItem("user", JSON.stringify(updatedUser));
+}
+     
 
       } catch (error) {
         console.error("Error updating profile:", error);
@@ -125,8 +134,8 @@ const Profile = () => {
         ];
 
   return (
-    <div className="min-h-screen bg-gray-950 py-10 px-4 md:px-20 text-white">
-      <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-8 md:p-12 w-full max-w-5xl mx-auto">
+   <div className="min-h-screen bg-gradient-to-b from-green-50 via-white to-green-100 py-10 px-4 md:px-20">
+<div className="backdrop-blur-xl bg-white/80 border border-green-200 rounded-3xl shadow-xl p-8 md:p-12 w-full max-w-5xl mx-auto"> 
         <div className="flex flex-col items-center mb-10">
           <div className="relative">
             {previewAvatar ? (
@@ -146,10 +155,10 @@ const Profile = () => {
               <input type="file" className="hidden" onChange={handleAvatarChange} />
             </label>
           </div>
-          <h2 className="text-2xl font-bold text-white mt-4">
+          <h2 className="text-2xl font-bold text-black mt-4">
             {userType === "organization" ? form.orgName : form.fullName}
           </h2>
-          <p className="text-gray-300">{form.email}</p>
+          <p className="text-black-300">{form.email}</p>
         </div>
 
         {successMsg && (
@@ -160,22 +169,22 @@ const Profile = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 text-sm text-gray-200"
+          className="space-y-6 text-sm text-black-200"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {inputFields.map(([label, name]) => (
               <div key={name} className="flex flex-col gap-1 relative">
-                <label className="mb-2 text-gray-400 font-medium">{label}</label>
+                <label className="mb-2 text-black-400 font-medium">{label}</label>
                 <div className="relative">
                   <input
                     type="text"
                     name={name}
                     value={form[name]}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl pr-10 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all duration-150"
+                    className="w-full px-4 py-3 bg-white border border-green-300 rounded-xl focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-400 transition-all duration-150"
                   />
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2 group">
-                    <FaInfoCircle className="text-gray-500 hover:text-green-400 cursor-pointer" />
+                    <FaInfoCircle className="text-black-500 hover:text-green-400 cursor-pointer" />
                     <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-gray-900 text-xs text-gray-200 rounded-md px-3 py-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-64 z-50">
                       {inputDescriptions[name]}
                     </div>
@@ -193,7 +202,7 @@ const Profile = () => {
                 value={form.description}
                 onChange={handleChange}
                 rows="6"
-                className="custom-scroll px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl 
+                className="custom-scroll px-4 py-3 bg-green-50 border border-gray-700 rounded-xl 
                 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 
                 transition-all duration-150 resize-none overflow-y-auto max-h-40"
               />
@@ -206,7 +215,7 @@ const Profile = () => {
                 name="email"
                 value={form.email}
                 readOnly
-                className="px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl text-gray-500 cursor-not-allowed"
+               className="px-4 py-3 bg-green-50 border border-green-200 rounded-xl text-green-700 cursor-not-allowed"
               />
             </div>
           </div>
@@ -225,25 +234,25 @@ const Profile = () => {
           <div className="mt-10 bg-green-800/10 border border-green-600 text-green-200 px-6 py-5 rounded-xl max-w-5xl mx-auto relative">
             <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
               <div className="relative group">
-                <FaInfoCircle className="text-green-400 cursor-pointer" />
-                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-72 bg-green-950 text-green-100 text-sm p-3 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 border border-green-700">
-                  AerthX is committed to climate transparency and blockchain-backed carbon credits. Learn why we’re trusted by green leaders. (Upcoming)
-                </div>
+                <FaInfoCircle className="text-black cursor-pointer" />
+                {/* <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-72 bg-green-950 text-green-100 text-sm p-3 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 border border-green-700">
+                  Aerthx is committed to climate transparency and blockchain-backed carbon credits. Learn why we’re trusted by green leaders. (Upcoming)
+                </div> */}
               </div>
-              Why Organizations Trust Aerthx
+             <h1 className=" text-green-600">Why Organizations Trust Aerthx</h1> 
             </h3>
-            <ul className="list-disc list-inside text-sm space-y-1 text-green-100">
+            <ul className="list-disc list-inside text-sm space-y-1 text-green-600">
               <li>
-                <span className="font-medium text-green-300">Verified Projects:</span> We only sell carbon credits from Verra and Gold Standard certified projects.
+                <span className="font-medium text-black-300">Verified Projects:</span> We only sell carbon credits from Verra and Gold Standard certified projects.
               </li>
               <li>
-                <span className="font-medium text-green-300">On-Chain Proof:</span> Your certificates are recorded on blockchain, ensuring transparency.
+                <span className="font-medium text-black-300">On-Chain Proof:</span> Your certificates are recorded on blockchain, ensuring transparency.
               </li>
               <li>
-                <span className="font-medium text-green-300">Privacy & Security:</span> All data is securely stored and encrypted.
+                <span className="font-medium text-black-300">Privacy & Security:</span> All data is securely stored and encrypted.
               </li>
               <li>
-                <span className="font-medium text-green-300">Trusted by Green Businesses:</span> Join companies leading the carbon-neutral movement.
+                <span className="font-medium text-black-300">Trusted by Green Businesses:</span> Join companies leading the carbon-neutral movement.
               </li>
             </ul>
           </div>

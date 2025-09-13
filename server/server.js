@@ -14,6 +14,8 @@ const carbonCreditRoutes = require('./routes/carbonCredits');
 const adminRoutes = require('./routes/adminRoutes'); 
 const bugRoutes = require("./routes/bugRoutes.js");
 const contactRoutes = require("./routes/contactRoutes");
+const faqRoutes = require("./routes/faqRoutes");
+
 const path = require('path');
 const app = express();
 const allowedOrigins = [
@@ -27,7 +29,6 @@ app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} body:`, req.body);
   next();
 });
-
 
 app.use(cors({
   origin: allowedOrigins,
@@ -48,6 +49,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", bugRoutes);
 app.use("/api/user/notifications", notificationRoutes);
+app.use("/api/faqs", faqRoutes);
 app.use('/api/carbon-credits', carbonCreditRoutes);
 app.use('/api/admin', adminRoutes);
 

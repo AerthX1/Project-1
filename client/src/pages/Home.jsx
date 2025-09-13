@@ -7,11 +7,14 @@ import goldstandard from "../assets/gold-standard.png";
 import verra from "../assets/Verra-Logo.png";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
+
 
 export default function Home() {
 
   const [totalTons, setTotalTons] = useState(0);
   const [remainingTons, setRemainingTons] = useState(0);
+  const userType = useSelector((state) => state.auth.userType);
 
 
 useEffect(() => {
@@ -210,9 +213,19 @@ useEffect(() => {
         Join businesses making a difference. Start your climate-positive journey with AerthX today.
       </p>
       <div className="flex flex-col sm:flex-row justify-center gap-4">
-        <Link to="/pricing" className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
-          View Pricing Plans
-        </Link>
+       {userType ? (
+  <Link
+    to={userType === "Organization" ? "/pricing" : "/individual-pricing"}
+    className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition"
+  >
+    View Pricing Plans
+  </Link>
+) : (
+  <button className="border border-white font-semibold py-2 px-6 rounded-md opacity-50 cursor-not-allowed">
+    Loading...
+  </button>
+)}
+
         <Link to="/contactus" className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
           Contact Us
         </Link>

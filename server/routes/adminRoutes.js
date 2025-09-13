@@ -5,6 +5,24 @@ const Organization = require('../models/Organization');
 const BugReport = require('../models/BugReport');
 const nodemailer = require("nodemailer");
 const Notification = require("../models/Notification");
+const FAQ = require("../models/FAQ");
+
+router.get("/admins", async (req, res) => {
+  try {
+    const individuals = await Individual.find({ isAdmin: true }).select("_id fullName");
+    const organizations = await Organization.find({ isAdmin: true }).select("_id orgName");
+
+    const admins = [
+      ...individuals.map(i => ({ id: i._id, name: i.fullName, type: "Individual" })),
+      ...organizations.map(o => ({ id: o._id, name: o.orgName, type: "Organization" })),
+    ];
+
+    res.status(200).json(admins);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch admins", error: err.message });
+  }
+});
 
 
 router.get('/individuals', async (req, res) => {
@@ -333,7 +351,63 @@ router.post("/send-general-email/:userId", async (req, res) => {
 });
 
 
+router.get("/faqs/:category", async (req, res) => {
+  try {
+    const { category } = req.params;
+    const faqs = await FAQ.find({ category }).sort({ createdAt: -1 });
+    res.status(200).json(faqs);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch FAQs", error: err.message });
+  }
+});
 
+router.post("/faqs", async (req, res) => {
+  try {
+    const { question, answer, category } = req.body;
+    if (!["resource", "support"].includes(category)) {
+      return res.status(400).json({ message: "Invalid category" });
+    }
+
+    const newFAQ = new FAQ({ question, answer, category });
+    await newFAQ.save();
+    res.status(201).json(newFAQ);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to add FAQ", error: err.message });
+  }
+});
+
+
+router.delete("/faqs/:id", async (req, res) => {
+  try {
+    const deleted = await FAQ.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: "FAQ not found" });
+    res.status(200).json({ message: "FAQ deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete FAQ", error: err.message });
+  }
+});
+
+
+router.put("/faqs/:id", async (req, res) => {
+  try {
+    const { question, answer, category } = req.body;
+    if (!["resource", "support"].includes(category)) {
+      return res.status(400).json({ message: "Invalid category" });
+    }
+
+    const updatedFAQ = await FAQ.findByIdAndUpdate(
+      req.params.id,
+      { question, answer, category },
+      { new: true }
+    );
+
+    if (!updatedFAQ) return res.status(404).json({ message: "FAQ not found" });
+
+    res.status(200).json(updatedFAQ);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update FAQ", error: err.message });
+  }
+});
 
 
 module.exports = router;

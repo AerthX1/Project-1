@@ -12,6 +12,7 @@ import ForgotPassword from '../pages/ForgotPassword';
 import NotificationPage from '../pages/NotificationPage';
 import HelpSupport from '../pages/HelpSupport';
 import BugReport from '../pages/BugReport';
+import ContactFormPage from '../pages/ContactFormPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
            <Route path="/notification" element={<NotificationPage />} />
            <Route path="/help" element={<HelpSupport />} />
             <Route path="/report-bug" element={<BugReport />} />
+               <Route path="/contact-form" element={<ContactFormPage />} />
       <Route path="/payment/:id" element={<PaymentPage />} />
     </>
   )
