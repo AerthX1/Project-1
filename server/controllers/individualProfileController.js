@@ -2,9 +2,10 @@ const Individual = require("../models/Individual");
 
 const getIndividualProfile = async (req, res) => {
   try {
-   const user = await Individual.findById(req.user.id).select("-password");
+    const user = await Individual.findById(req.user.id).select("-password");
     if (!user) return res.status(404).json({ message: "Individual not found" });
-    res.json({ user });
+    
+    res.json({ user }); 
   } catch (err) {
     console.error("Error in getIndividualProfile:", err);
     res.status(500).json({ message: "Server error" });
@@ -13,12 +14,12 @@ const getIndividualProfile = async (req, res) => {
 
 const updateIndividualProfile = async (req, res) => {
   try {
-  const userId = req.user.id;
+    const userId = req.user.id;
 
     const updatedData = {};
     const allowedFields = [
       "fullName", "country", "state", "city", "phone", 
-      "designation", "description"
+      "designation", "about", "description"
     ];
 
     allowedFields.forEach((key) => {
@@ -41,13 +42,13 @@ const updateIndividualProfile = async (req, res) => {
       return res.status(404).json({ message: "Individual not found" });
     }
 
-    res.status(200).json({ user: updatedUser });
-
+    res.status(200).json({ user: updatedUser }); 
   } catch (err) {
     console.error("Error updating individual:", err);
     res.status(500).json({ message: "Server Error", error: err.message });
   }
 };
+
 
 module.exports = {
   getIndividualProfile,

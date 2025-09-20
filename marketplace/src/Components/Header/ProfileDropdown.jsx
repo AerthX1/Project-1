@@ -10,7 +10,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import DefaultAvatar from "../Header/DefaultAvatar";
+import DefaultAvatar from "./DefaultAvatar";
 
 const ProfileDropdown = ({ onClose, onLogout }) => {
   const user = useSelector((state) => state.auth.user);
@@ -31,11 +31,16 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
       to: "/marketplace",
       icon: <FaStore className="text-gray-400" />,
     },
-    {
-      label: "Subscription",
-      to: "/pricing",
-      icon: <FaCreditCard className="text-gray-400" />,
-    },
+{
+  label: user?.orgName ? "Subscription" : "Individual Subscription",
+  onClick: () => {
+    window.location.href = user?.orgName
+      ? `${import.meta.env.VITE_MAIN_URL}/pricing`
+      : `${import.meta.env.VITE_MAIN_URL}/individual-pricing`;
+  },
+  icon: <FaCreditCard className="text-gray-400" />,
+},
+
     {
       label: "Notification",
       to: "/notification",
@@ -101,14 +106,28 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
       <ul className="text-sm space-y-1 border-b border-gray-200 pb-4 mb-4">
         {navItems.map((item) => (
           <li key={item.label}>
-            <Link
-              to={item.to}
-              onClick={onClose}
-              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-indigo-50 font-medium text-gray-700 transition"
-            >
-              {item.icon}
-              {item.label}
-            </Link>
+            {item.to ? (
+  <Link
+    to={item.to}
+    onClick={onClose}
+    className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-indigo-50 font-medium text-gray-700 transition"
+  >
+    {item.icon}
+    {item.label}
+  </Link>
+) : (
+  <button
+    onClick={() => {
+      item.onClick();
+      onClose();
+    }}
+    className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-indigo-50 font-medium text-gray-700 transition w-full text-left"
+  >
+    {item.icon}
+    {item.label}
+  </button>
+)}
+
           </li>
         ))}
       </ul>

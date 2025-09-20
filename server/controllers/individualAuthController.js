@@ -6,7 +6,7 @@ const Notification = require("../models/Notification");
 
 const registerIndividual = async (req, res) => {
   try {
-   const { fullName, email, password, country, city, state, phone, designation, description } = req.body;
+   const { fullName, email, password, country, city, state, phone, designation, about, description  } = req.body;
 
 if (!fullName || !email || !password || !country || !city) {
   return res.status(400).json({ message: "All required fields must be filled." });
@@ -41,7 +41,8 @@ const newUser = new Individual({
   state: state || "",
   phone: phone || "",
   designation: designation || "",
-  description: description || "",
+        about: about || "",
+      description: description || "",
   avatarUrl: "", 
 });
 

@@ -3,26 +3,24 @@ const Organization = require("../models/Organization");
 const getProfile = async (req, res) => {
   try {
     const org = await Organization.findById(req.user.id).select("-password");
-    if (!org) return res.status(404).json({ error: "Organization not found" });
-    res.json({ org });
+    if (!org) return res.status(404).json({ message: "Organization not found" });
+
+    res.json({ org }); 
   } catch (err) {
     console.error("Error in getProfile:", err);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ message: "Server error" });
   }
 };
+
 
 const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    if (!req.body) {
-      return res.status(400).json({ message: "No form data received" });
-    }
-
     const updatedData = {};
     const allowedFields = [
       "orgName", "orgType", "industry", "website", "phone", "fullName", 
-      "country", "state", "city", "description","designation"
+      "country", "state", "city", "about", "description", "designation"
     ];
 
     allowedFields.forEach((key) => {
@@ -42,15 +40,15 @@ const updateProfile = async (req, res) => {
     );
 
     if (!updatedProfile) {
-      return res.status(404).json({ message: "No such organization to update" });
+      return res.status(404).json({ message: "Organization not found" });
     }
 
-res.status(200).json({ org: updatedProfile });
-
+    res.status(200).json(updatedProfile);
   } catch (error) {
     console.error("Error updating profile:", error);
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
+
 
 module.exports = { getProfile, updateProfile };

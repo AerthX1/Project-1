@@ -107,7 +107,7 @@ const BusinessSolutions = () => {
           <p className="mt-8 text-xl max-w-4xl mx-auto leading-relaxed drop-shadow-md">
             Our powerful platform is more than just a tool; it's your partner in achieving environmental and social goals. From seamless compliance to transparent reporting, we help you showcase your leadership to the world.
           </p>
-          {userType && userType.toLowerCase() === "individual" && (
+          {userType && userType.toLowerCase() === "organization" && (
             <motion.button
               onClick={handlePricingClick}
               whileHover={{ scale: 1.05, boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.3)" }}
@@ -238,7 +238,7 @@ const BusinessSolutions = () => {
         <p className="text-xl text-gray-700 max-w-3xl mx-auto">
           Join the leading businesses that are building a sustainable future. Discover a plan that fits your organization and start making a real impact today.
         </p>
-        {userType && userType.toLowerCase() === "individual" && (
+        {userType && userType.toLowerCase() === "organization" && (
           <motion.button
             onClick={handlePricingClick}
             whileHover={{ scale: 1.05 }}

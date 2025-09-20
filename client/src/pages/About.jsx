@@ -131,7 +131,7 @@ const About = () => {
   <div className="max-w-4xl mx-auto text-center">
     <h2 className="text-4xl font-bold mb-4">Ready to Make a Difference?</h2>
     <p className="text-lg mb-8">
-      Whether you're an individual, business, or organization — Aerthx makes climate action simple, credible, and impactful.
+      Whether you're an individual, business, or organization — AerthX makes climate action simple, credible, and impactful.
     </p>
     <div className="flex flex-col sm:flex-row justify-center gap-4">
      <a

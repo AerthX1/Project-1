@@ -227,14 +227,15 @@ useEffect(() => {
             </NavLink>
           </li>
   <li>
-  <NavLink
-    to={userType === "Organization" ? "/pricing" : "/individual-pricing"}
-    className={({ isActive }) =>
-      `flex items-center gap-1 ${isActive ? "text-emerald-400" : "text-black"}`
-    }
-  >
-    Pricing
-  </NavLink>
+ <NavLink
+  to={user?.orgName ? "/pricing" : "/individual-pricing"}
+  className={({ isActive }) =>
+    `flex items-center gap-1 ${isActive ? "text-emerald-400" : "text-black"}`
+  }
+>
+  Pricing
+</NavLink>
+
 </li>
 
           <li>

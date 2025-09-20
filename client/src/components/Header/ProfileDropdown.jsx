@@ -11,9 +11,11 @@ import {
 import { useSelector } from "react-redux";
 import DefaultAvatar from "./DefaultAvatar";
 
+ 
 const ProfileDropdown = ({ onClose, onLogout }) => {
   const user = useSelector((state) => state.auth.user);
   const profile = useSelector((state) => state.profile.data);
+ const userType = useSelector((state) => state.auth.userType);
 
   if (!user) {
     return null;
@@ -25,11 +27,13 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
       to: "/profile",
       icon: <FaUser className="text-gray-400" />,
     },
-    {
-      label: "Subscription",
-      to: "/pricing",
-      icon: <FaCreditCard className="text-gray-400" />,
-    },
+   {
+  label: user?.orgName ? "Subscription" : "Individual Subscription",
+  to: user?.orgName ? "/pricing" : "/individual-pricing",
+  icon: <FaCreditCard className="text-gray-400" />,
+},
+
+    
     {
       label: "Notification",
       to: "/notification",

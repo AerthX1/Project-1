@@ -5,13 +5,14 @@ import { Provider } from 'react-redux';
 import { store } from '../../shared-redux/src/store';
 import AppWrapper from "../../shared-redux/src/components/AppWrapper";
 import "./index.css";
-
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
      <Provider store={store}>
           <AppWrapper>
      <RouterProvider router={router} />
+              <ToastContainer position="bottom-right" autoClose={3000} />
      </AppWrapper>
     </Provider>
   )

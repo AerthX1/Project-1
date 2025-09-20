@@ -68,7 +68,7 @@ const IndividualSolutions = () => {
       <div className="text-center pt-8">
         <h3 className="text-2xl font-semibold text-green-700">Start Offsetting Today</h3>
 
-        {userType && userType.toLowerCase() === "organization" && (
+        {userType && userType.toLowerCase() === "individual" && (
           <button
             onClick={handlePricingClick}
             className="mt-4 inline-block px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"

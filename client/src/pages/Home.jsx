@@ -15,7 +15,7 @@ export default function Home() {
   const [totalTons, setTotalTons] = useState(0);
   const [remainingTons, setRemainingTons] = useState(0);
   const userType = useSelector((state) => state.auth.userType);
-
+  const { user } = useSelector((state) => state.auth);
 
 useEffect(() => {
   const fetchRemainingTons = async () => {
@@ -214,12 +214,13 @@ useEffect(() => {
       </p>
       <div className="flex flex-col sm:flex-row justify-center gap-4">
        {userType ? (
-  <Link
-    to={userType === "Organization" ? "/pricing" : "/individual-pricing"}
-    className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition"
-  >
-    View Pricing Plans
-  </Link>
+ <Link
+  to={user?.orgName ? "/pricing" : "/individual-pricing"}
+  className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition"
+>
+  View Pricing Plans
+</Link>
+
 ) : (
   <button className="border border-white font-semibold py-2 px-6 rounded-md opacity-50 cursor-not-allowed">
     Loading...
