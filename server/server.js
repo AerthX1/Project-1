@@ -14,8 +14,15 @@ const carbonCreditRoutes = require('./routes/carbonCredits');
 const adminRoutes = require('./routes/adminRoutes'); 
 const bugRoutes = require("./routes/bugRoutes.js");
 const contactRoutes = require("./routes/contactRoutes");
+const faqRoutes = require("./routes/faqRoutes");
+
 const path = require('path');
 const app = express();
+const allowedOrigins = [
+  process.env.VITE_MAIN_URL,
+  process.env.VITE_CLIENT_URL,
+  process.env.VITE_ADMIN_URL
+];
 dotenv.config();
 
 app.use((req, res, next) => {
@@ -23,9 +30,8 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use(cors({
-  origin:  ["http://localhost:5173", "http://localhost:5174" ,"http://localhost:5175"],
+  origin: allowedOrigins,
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
@@ -43,6 +49,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", bugRoutes);
 app.use("/api/user/notifications", notificationRoutes);
+app.use("/api/faqs", faqRoutes);
 app.use('/api/carbon-credits', carbonCreditRoutes);
 app.use('/api/admin', adminRoutes);
 

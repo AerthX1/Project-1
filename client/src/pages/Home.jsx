@@ -7,12 +7,15 @@ import goldstandard from "../assets/gold-standard.png";
 import verra from "../assets/Verra-Logo.png";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
+
 
 export default function Home() {
 
   const [totalTons, setTotalTons] = useState(0);
   const [remainingTons, setRemainingTons] = useState(0);
-
+  const userType = useSelector((state) => state.auth.userType);
+  const { user } = useSelector((state) => state.auth);
 
 useEffect(() => {
   const fetchRemainingTons = async () => {
@@ -46,7 +49,7 @@ useEffect(() => {
             Empowering Businesses to Go Carbon Neutral
           </h1>
        <Link
-  to="http://localhost:5174/"
+  to={import.meta.env.VITE_CLIENT_URL}
   className="mt-20 inline-flex items-center justify-center gap-2 
              bg-gradient-to-r from-green-500 via-green-600 to-green-700 
              hover:from-green-600 hover:via-green-700 hover:to-green-800 
@@ -209,9 +212,20 @@ useEffect(() => {
         Join businesses making a difference. Start your climate-positive journey with AerthX today.
       </p>
       <div className="flex flex-col sm:flex-row justify-center gap-4">
-        <Link to="/pricing" className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
-          View Pricing Plans
-        </Link>
+       {userType ? (
+ <Link
+  to={user?.orgName ? "/pricing" : "/individual-pricing"}
+  className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition"
+>
+  View Pricing Plans
+</Link>
+
+) : (
+  <button className="border border-white font-semibold py-2 px-6 rounded-md opacity-50 cursor-not-allowed">
+    Loading...
+  </button>
+)}
+
         <Link to="/contactus" className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition">
           Contact Us
         </Link>

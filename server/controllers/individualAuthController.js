@@ -6,7 +6,7 @@ const Notification = require("../models/Notification");
 
 const registerIndividual = async (req, res) => {
   try {
-   const { fullName, email, password, country, city, state, phone, designation, description } = req.body;
+   const { fullName, email, password, country, city, state, phone, designation, about, description  } = req.body;
 
 if (!fullName || !email || !password || !country || !city) {
   return res.status(400).json({ message: "All required fields must be filled." });
@@ -41,7 +41,8 @@ const newUser = new Individual({
   state: state || "",
   phone: phone || "",
   designation: designation || "",
-  description: description || "",
+        about: about || "",
+      description: description || "",
   avatarUrl: "", 
 });
 
@@ -50,8 +51,8 @@ await newUser.save()
 await sendEmail({
   to: email,
   subject: "Welcome to Aearthex 🌍",
-  text: `Hello ${fullName}, welcome to Aearthex! Your registration is successful.`,
-  html: `<h2>Welcome to Aearthex, ${fullName}!</h2>
+  text: `Hello ${fullName}, welcome to AerthX! Your registration is successful.`,
+  html: `<h2>Welcome to AerthX, ${fullName}!</h2>
          <p>Your account has been successfully created.</p>
          <p>Thank you for joining our mission toward a greener future. 🌿</p>`,
 });
@@ -59,7 +60,7 @@ await sendEmail({
 await Notification.create({
   userId: newUser._id,
   userType: "Individual",
-  title: "🎉 Welcome to Aearthex!",
+  title: "🎉 Welcome to AerthX!",
   message: "Hi there! Your individual account has been successfully created. Start exploring our platform to make an impact today.",
   category: "Account",
   priority: "Info",

@@ -5,7 +5,24 @@ const Organization = require('../models/Organization');
 const BugReport = require('../models/BugReport');
 const nodemailer = require("nodemailer");
 const Notification = require("../models/Notification");
-const CarbonCredit = require('../models/CarbonCredit');
+const FAQ = require("../models/FAQ");
+
+router.get("/admins", async (req, res) => {
+  try {
+    const individuals = await Individual.find({ isAdmin: true }).select("_id fullName");
+    const organizations = await Organization.find({ isAdmin: true }).select("_id orgName");
+
+    const admins = [
+      ...individuals.map(i => ({ id: i._id, name: i.fullName, type: "Individual" })),
+      ...organizations.map(o => ({ id: o._id, name: o.orgName, type: "Organization" })),
+    ];
+
+    res.status(200).json(admins);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch admins", error: err.message });
+  }
+});
 
 
 router.get('/individuals', async (req, res) => {
@@ -334,84 +351,63 @@ router.post("/send-general-email/:userId", async (req, res) => {
 });
 
 
-router.get("/", async (req, res) => {
+router.get("/faqs/:category", async (req, res) => {
   try {
-    const { page = 1, limit = 50, archived = "false", search = "" } = req.query;
-
-    const query = {
-      isArchived: archived === "true",
-      ...(search ? { name: { $regex: search, $options: "i" } } : {}),
-    };
-
-    const credits = await CarbonCredit.find(query)
-      .skip((page - 1) * Number(limit))
-      .limit(Number(limit))
-      .sort({ createdAt: -1 });
-
-    const total = await CarbonCredit.countDocuments(query);
-
-    res.json({
-      success: true,
-      data: credits,
-      total,
-      page: Number(page),
-      pages: Math.ceil(total / limit),
-    });
+    const { category } = req.params;
+    const faqs = await FAQ.find({ category }).sort({ createdAt: -1 });
+    res.status(200).json(faqs);
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ message: "Failed to fetch FAQs", error: err.message });
   }
 });
 
-router.put("/toggle-active/:id", async (req, res) => {
+router.post("/faqs", async (req, res) => {
   try {
-    const credit = await CarbonCredit.findById(req.params.id);
-    if (!credit) return res.status(404).json({ success: false, message: "Credit not found" });
-
-    credit.isActive = !credit.isActive;
-
-    if (credit.isActive) {
-      credit.remainingTons = credit.tons || 0;
+    const { question, answer, category } = req.body;
+    if (!["resource", "support"].includes(category)) {
+      return res.status(400).json({ message: "Invalid category" });
     }
 
-    await credit.save();
-
-    res.json({ success: true, message: "Status updated", credit });
+    const newFAQ = new FAQ({ question, answer, category });
+    await newFAQ.save();
+    res.status(201).json(newFAQ);
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ message: "Failed to add FAQ", error: err.message });
   }
 });
 
 
-router.put("/archive/:id", async (req, res) => {
+router.delete("/faqs/:id", async (req, res) => {
   try {
-    const credit = await CarbonCredit.findByIdAndUpdate(
+    const deleted = await FAQ.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: "FAQ not found" });
+    res.status(200).json({ message: "FAQ deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete FAQ", error: err.message });
+  }
+});
+
+
+router.put("/faqs/:id", async (req, res) => {
+  try {
+    const { question, answer, category } = req.body;
+    if (!["resource", "support"].includes(category)) {
+      return res.status(400).json({ message: "Invalid category" });
+    }
+
+    const updatedFAQ = await FAQ.findByIdAndUpdate(
       req.params.id,
-      { isArchived: true },
+      { question, answer, category },
       { new: true }
     );
 
-    if (!credit) return res.status(404).json({ success: false, message: "Credit not found" });
+    if (!updatedFAQ) return res.status(404).json({ message: "FAQ not found" });
 
-    res.json({ success: true, message: "Archived successfully", credit });
+    res.status(200).json(updatedFAQ);
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ message: "Failed to update FAQ", error: err.message });
   }
 });
-
-router.put("/unarchive/:id", async (req, res) => {
-  try {
-    const credit = await CarbonCredit.findByIdAndUpdate(
-      req.params.id,
-      { isArchived: false },
-      { new: true }
-    );
-    if (!credit) return res.status(404).json({ message: "Carbon credit not found" });
-    res.json(credit);
-  } catch (error) {
-    res.status(500).json({ message: "Error unarchiving carbon credit", error });
-  }
-});
-
 
 
 module.exports = router;

@@ -22,3 +22,5 @@ install
 6. npm install jwt-decode
 7. npm install @heroicons/react
 8. npm install framer-motion
+9. npm install react-toastify 
+10. npm install @stripe/react-stripe-js @stripe/stripe-js

@@ -10,6 +10,7 @@ const MarketplacePage = () => {
   const [dailySuggestions, setDailySuggestions] = useState([]);
   const [lowestPricedProjects, setLowestPricedProjects] = useState([]);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [creditsByType, setCreditsByType] = useState({});
   const navigate = useNavigate();
   const API = import.meta.env.VITE_API_URL;
 
@@ -28,8 +29,16 @@ const MarketplacePage = () => {
 useEffect(() => {
   const fetchData = async () => {
     try {
-      const res = await axios.get(`${API}/carbon-credits`);
+      const res = await axios.get(`${API}/carbon-credits/active`);
       const allProjects = res.data;
+
+const groupedByCategory = allProjects.reduce((acc, project) => {
+  if (!project.category) return acc;
+  acc[project.category] = (acc[project.category] || 0) + (project.remainingTons || project.tons || 0);
+  return acc;
+}, {});
+
+setCreditsByType(groupedByCategory);
 
       const filtered = allProjects
         .filter((p) => String(p.vintage).trim() === "2024")
@@ -92,7 +101,7 @@ useEffect(() => {
     <div className="w-full">
       <div className="relative w-full h-[900px] sm:h-[700px] overflow-hidden shadow-lg">
         <img
-          src={`http://localhost:5000${current.backgroundImage || current.image}`}
+         src={`${import.meta.env.VITE_FILE_URL}${current.backgroundImage || current.image}`}
           alt={current.title}
           className="w-full h-full object-cover absolute inset-0"
         />
@@ -160,7 +169,7 @@ useEffect(() => {
         <div className="mt-12 w-full bg-green-50 rounded-xl shadow-lg flex flex-col sm:flex-row overflow-hidden px-6 sm:px-12 py-6">
           <div className="sm:w-1/2 p-3">
             <img
-              src={`http://localhost:5000${
+           src={`${import.meta.env.VITE_FILE_URL}${
                 highestPricedProject.backgroundImage ||
                 highestPricedProject.image
               }`}
@@ -212,7 +221,7 @@ useEffect(() => {
                 onClick={() => handleButtonClick(project._id)}
               >
                 <img
-                  src={`http://localhost:5000${
+                  src={`${import.meta.env.VITE_FILE_URL}${
                     project.backgroundImage || project.image
                   }`}
                   alt={project.title}
@@ -281,7 +290,7 @@ useEffect(() => {
                   onClick={() => handleButtonClick(project._id)}
                 >
                   <img
-                    src={`http://localhost:5000${
+                    src={`${import.meta.env.VITE_FILE_URL}${
                       project.backgroundImage || project.image
                     }`}
                     alt={project.title}
@@ -309,6 +318,75 @@ useEffect(() => {
           </div>
         </div>
       )}
+
+{Object.keys(creditsByType).length > 0 && (
+  <div className="mt-16 px-6 sm:px-12">
+    <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">
+      🌐 Carbon Credits by Category
+    </h2>
+    <p className="text-gray-600 mb-8 max-w-2xl">
+      Categories group different project types together. Each category represents a major way to fight climate change.
+    </p>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {Object.entries(creditsByType).map(([category, tons]) => {
+        const lower = category.toLowerCase();
+        let icon = "🌱";
+        let desc = "Projects that remove or reduce carbon emissions.";
+        let tags = [];
+
+        if (lower.includes("renewable")) {
+          icon = "☀️";
+          desc = "Renewable energy projects replace fossil fuels with clean energy.";
+          tags = ["Solar", "Wind", "Hydro", "Geothermal"];
+        } else if (lower.includes("forest")) {
+          icon = "🌳";
+          desc = "Forestry projects capture CO₂ naturally and protect biodiversity.";
+          tags = ["Reforestation", "Mangroves", "Avoided Deforestation"];
+        } else if (lower.includes("agriculture")) {
+          icon = "🚜";
+          desc = "Agricultural projects improve soil carbon and reduce methane.";
+          tags = ["Sustainable Farming", "Rice Methane Reduction"];
+        } else if (lower.includes("industrial")) {
+          icon = "🏭";
+          desc = "Industrial projects improve efficiency and cut emissions.";
+          tags = ["Cement", "Steel", "Waste Management"];
+        } else if (lower.includes("community")) {
+          icon = "🤝";
+          desc = "Community projects improve energy access and reduce emissions.";
+          tags = ["Clean Cookstoves", "Biogas"];
+        }
+
+        return (
+          <div
+            key={category}
+            onClick={() => navigate(`/marketplace?filter=${category}`)}
+            className="bg-green-50 rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:scale-105 hover:bg-green-100 transition-all duration-300 cursor-pointer"
+          >
+            <div className="text-4xl mb-3">{icon}</div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-1">{category}</h3>
+            <p className="text-green-700 font-bold text-xl mb-2">
+              {tons.toLocaleString()} Tons
+            </p>
+            <p className="text-sm text-gray-600 mb-4">{desc}</p>
+
+            <div className="flex flex-wrap justify-center gap-2 mt-2">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2 py-1 bg-white border border-green-200 text-green-700 rounded-full text-xs"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
+
 
       <div className="mt-16 px-6 sm:px-12">
         <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">
@@ -355,7 +433,7 @@ useEffect(() => {
                 onClick={() => handleButtonClick(project._id)}
               >
                 <img
-                  src={`http://localhost:5000${
+                  src={`${import.meta.env.VITE_FILE_URL}${
                     project.backgroundImage || project.image
                   }`}
                   alt={project.title}

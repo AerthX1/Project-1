@@ -42,6 +42,8 @@ If you are developing a production application, we recommend using TypeScript wi
 12. npm install jwt-decode
 13. npm install @heroicons/react
 14. npm install jwt-decode
-
+15. npm install react-intersection-observer
+16. npm install react-countup
+17. npm install react-toastify framer-motion
 
 let started

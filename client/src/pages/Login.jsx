@@ -39,7 +39,7 @@ const Login = () => {
       dispatch(setUser(user));
 
       if (user.role === "admin") {
-        window.location.href = "http://localhost:5175/dashboard";
+       window.location.href = `${import.meta.env.VITE_ADMIN_URL}/dashboard`;
       } else {
         navigate("/");
       }

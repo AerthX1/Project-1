@@ -59,7 +59,7 @@ const profile = useSelector((state) => state.profile.data);
         </li>
         <li>
        <a
-  href="http://localhost:5173/pricing" 
+  href={`${import.meta.env.VITE_MAIN_URL}/pricing`}
   onClick={onClose}
   className="block px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
 >
@@ -80,7 +80,8 @@ const profile = useSelector((state) => state.profile.data);
         </li>
         <li>
           <a
-  href="http://localhost:5173/help" 
+ href={`${import.meta.env.VITE_MAIN_URL}/help`}
+
            
             onClick={onClose}
             className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
@@ -93,8 +94,8 @@ const profile = useSelector((state) => state.profile.data);
  
 </li>
         <li>
-              <a
-  href="http://localhost:5173/settings" 
+              <a 
+  href={`${import.meta.env.VITE_MAIN_URL}/settings`}
             onClick={onClose}
             className="block px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
           >

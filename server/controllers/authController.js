@@ -71,10 +71,10 @@ const sendOtp = async (req, res) => {
     await OtpToken.create({ email, otp });
 
     await transporter.sendMail({
-      from: `"Aearthex" <${process.env.EMAIL_USER}>`,
+      from: `"AerthX" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "OTP for Password Reset",
-      html: `<p>Your Aearthex OTP is <strong>${otp}</strong>. It expires in 5 minutes.</p>`,
+      html: `<p>Your AerthX OTP is <strong>${otp}</strong>. It expires in 5 minutes.</p>`,
     });
 
     res.status(200).json({ message: "OTP sent successfully", otp });
@@ -118,7 +118,7 @@ const resetPassword = async (req, res) => {
   title: "Password Changed",
   message: `Hello ${user.fullName},
 
-Your password for the Aearthex account was successfully changed on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}.
+Your password for the AerthX account was successfully changed on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}.
 
 For your security, we're sending you this notification. If you did not make this change, please take the following steps immediately:
 
@@ -128,7 +128,7 @@ For your security, we're sending you this notification. If you did not make this
 We recommend using a strong, unique password for your account.
 
 Thank you,
-The Aearthex Team`
+The AerthX Team`
 });
 
     console.log("✅ Password change email sent to:", email);

@@ -6,6 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const initialState = {
   isLoggedIn: !!localStorage.getItem('token'),
   isAuthModalOpen: false,
+  userType: localStorage.getItem("userType") || null,
 };
 
 

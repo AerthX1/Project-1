@@ -9,6 +9,7 @@ const individualSchema = new mongoose.Schema({
   state: { type: String },
   phone: { type: String },
   designation: { type: String },
+  about: { type: String, default: '' },
   description: { type: String },
   avatarUrl: { type: String },
 }, { timestamps: true });

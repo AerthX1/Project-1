@@ -40,6 +40,7 @@ const AdminUserReports = () => {
   const [showReportDetailsModal, setShowReportDetailsModal] = useState(false);
   const [reportDetails, setReportDetails] = useState(null);
   const [admins, setAdmins] = useState([]);
+  const [activeTab, setActiveTab] = useState("users");
 
   useEffect(() => {
     fetchUsers();
@@ -183,30 +184,33 @@ const AdminUserReports = () => {
     setShowReportDetailsModal(false);
   };
 
-  const handleSendNotification = async () => {
-    setNotificationLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(
-        `${API_URL}/admin/send-notification/${notificationUserId}`,
-        {
-          title: notificationTitle,
-          description: notificationMessage,
+ const handleSendNotification = async () => {
+  const token = localStorage.getItem("token"); 
+  try {
+    await axios.post(
+      `${API_URL}/admin/send-notification/${notificationUserId}`,
+      {
+        userType: activeTab === "individual" ? "Individual" : "Organization",
+        title: notificationTitle,
+        description: notificationMessage,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      showNotification("Notification sent successfully!", "success");
-      setShowNotificationModal(false);
-      setNotificationTitle("");
-      setNotificationMessage("");
-      setNotificationUserId(null);
-    } catch (err) {
-      console.error(err);
-      showNotification("Failed to send notification. Please try again.", "error");
-    } finally {
-      setNotificationLoading(false);
-    }
-  };
+      }
+    );
+
+    alert("Notification sent successfully");
+    setShowNotificationModal(false);
+    setNotificationTitle("");
+    setNotificationMessage("");
+  } catch (error) {
+    console.error("Error sending notification:", error);
+    alert("Failed to send notification");
+  }
+};
+
 
   const handlePrioritizeReport = async (reportId, priority) => {
     try {

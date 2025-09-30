@@ -71,9 +71,9 @@ await newOrg.save();
 
 await sendEmail({
   to: email,
-  subject: "Welcome to Aearthex 🌍",
-  text: `Hello ${fullName}, welcome to Aearthex! Your registration is successful.`,
-  html: `<h2>Welcome to Aearthex, ${fullName}!</h2>
+  subject: "Welcome to AerthX 🌍",
+  text: `Hello ${fullName}, welcome to AerthX! Your registration is successful.`,
+  html: `<h2>Welcome to AerthX, ${fullName}!</h2>
          <p>Your account has been successfully created.</p>
          <p>Thank you for joining our mission toward a greener future. 🌿</p>`,
 });
@@ -81,8 +81,8 @@ await sendEmail({
 await Notification.create({
   userId: newOrg._id,
   userType: "Organization",
-  title: "🏢 Welcome to Aearthex!",
-  message: "Your organization account has been successfully created. You’re now ready to start tracking, managing, and offsetting your carbon footprint with Aearthex.",
+  title: "🏢 Welcome to AerthX!",
+  message: "Your organization account has been successfully created. You’re now ready to start tracking, managing, and offsetting your carbon footprint with AerthX.",
   category: "Account",
   priority: "Info",
   read: false,

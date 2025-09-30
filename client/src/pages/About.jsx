@@ -134,12 +134,13 @@ const About = () => {
       Whether you're an individual, business, or organization — AerthX makes climate action simple, credible, and impactful.
     </p>
     <div className="flex flex-col sm:flex-row justify-center gap-4">
-      <a
-        href="http://localhost:5174/" 
-        className="px-6 py-3 rounded-lg bg-white text-green-700 font-semibold shadow hover:bg-gray-100 transition"
-      >
-        Explore Projects
-      </a>
+     <a
+  href={import.meta.env.VITE_CLIENT_URL}
+  className="px-6 py-3 rounded-lg bg-white text-green-700 font-semibold shadow hover:bg-gray-100 transition"
+>
+  Explore Projects
+</a>
+
       
     </div>
   </div>

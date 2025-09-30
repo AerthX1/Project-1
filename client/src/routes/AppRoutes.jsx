@@ -29,6 +29,7 @@ import Certificates from '../components/Dashboard/Certificates';
 import Transactions from '../components/Dashboard/Transactions';
 import Marketplace from '../components/Dashboard/Marketplace';
 import BugReport from '../pages/BugReport';
+import IndividualPricing from '../pages/IndividualPricing';
 
 
 const router = createBrowserRouter(
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
    <Route path='home' element={<Home/>}/>  
   <Route path="MarketplaceHero" element={<MarketplaceHero />} />
   <Route path="pricing" element={<Pricing/>}/>
+  <Route path="/individual-pricing" element={<IndividualPricing />} />
  <Route path="resources" element={<Resource />} />
  <Route path="solutions" element={<Solutions/>}/>
  <Route path="services" element={<Services/>}/>

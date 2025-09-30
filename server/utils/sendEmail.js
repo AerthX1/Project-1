@@ -11,7 +11,7 @@ const sendEmail = async ({ to, subject, text, html }) => {
     });
 
     const mailOptions = {
-      from: `"Aearthex 🌱" <${process.env.EMAIL_USER}>`,
+      from: `"AerthX 🌱" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       text,

@@ -79,6 +79,21 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/active', async (req, res) => {
+  try {
+    const credits = await CarbonCredit.find({
+      retired: { $ne: true },
+      isActive: true,
+      isArchived: false
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json(credits);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch active credits', error: err.message });
+  }
+});
+
+
 
 router.get('/total-tons', async (req, res) => {
   try {
