@@ -28,6 +28,7 @@ import Overview from '../components/Dashboard/Overview';
 import Certificates from '../components/Dashboard/Certificates';
 import Transactions from '../components/Dashboard/Transactions';
 import Marketplace from '../components/Dashboard/Marketplace';
+import BugReport from '../pages/BugReport';
 
 
 const router = createBrowserRouter(
@@ -54,6 +55,7 @@ const router = createBrowserRouter(
    <Route path="/signin" element={<Login />} />
     <Route path='/profile' element={<Profile/>}/>
     <Route path="/help" element={<HelpSupport />} />
+     <Route path="/report-bug" element={<BugReport />} />
     <Route path="/notification" element={<NotificationPage />} />
     <Route path="/about" element={<About />} />
     <Route path="/settings" element={<Settings />} />

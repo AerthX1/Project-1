@@ -11,19 +11,22 @@ import axios from "axios";
 export default function Home() {
 
   const [totalTons, setTotalTons] = useState(0);
+  const [remainingTons, setRemainingTons] = useState(0);
+
 
 useEffect(() => {
-  const fetchTotalTons = async () => {
+  const fetchRemainingTons = async () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/carbon-credits/total-tons`);
-      setTotalTons(res.data.totalTons || 0);
+      setRemainingTons(res.data.remainingTons || 0);
     } catch (error) {
-      console.error("Error fetching total tons:", error.message);
+      console.error("Error fetching remaining tons:", error.message);
     }
   };
 
-  fetchTotalTons();
+  fetchRemainingTons();
 }, []);
+
   return (
     <div className="flex flex-col items-center text-center w-full">
       <section className="relative w-full h-[120vh] flex items-center justify-center overflow-hidden">
@@ -73,8 +76,7 @@ useEffect(() => {
         </div>
       </section>
 
-{/* Informational Section */}
-<div className="mt-5 px-6 sm:px-12 py-12 bg-green-50 rounded-xl shadow-lg">
+<div className="mt-16 px-6 sm:px-12 py-12 bg-green-50 rounded-xl shadow-lg">
   <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6 text-center">
     🌿 Why Buy Carbon Credits?
   </h2>
@@ -134,10 +136,11 @@ useEffect(() => {
 
         <section className="py-32 bg-[#0a0d0f] text-white w-full text-center flex justify-evenly items-center px-4  md:px-20">
        <div className="flex flex-col items-center ">
-         <h2 className="text-4xl font-bold mb-4">Live Carbon Credits Available</h2>
-      <p className="text-4xl font-bold text-green-500">
-  {totalTons.toLocaleString()} <span className="text-white text-2xl">Tons CO2</span>
+        <h2 className="text-4xl font-bold mb-4">Live Carbon Credits Available</h2>
+<p className="text-4xl font-bold text-green-500">
+  {remainingTons.toLocaleString()} <span className="text-white text-2xl">Tons CO₂ Remaining</span>
 </p>
+
 
         <div className="mt-8 space-x-4">
           <Link to='/MarketplaceHero' className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded">Buy Credits</Link>

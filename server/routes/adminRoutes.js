@@ -5,6 +5,7 @@ const Organization = require('../models/Organization');
 const BugReport = require('../models/BugReport');
 const nodemailer = require("nodemailer");
 const Notification = require("../models/Notification");
+const CarbonCredit = require('../models/CarbonCredit');
 
 
 router.get('/individuals', async (req, res) => {
@@ -333,6 +334,83 @@ router.post("/send-general-email/:userId", async (req, res) => {
 });
 
 
+router.get("/", async (req, res) => {
+  try {
+    const { page = 1, limit = 50, archived = "false", search = "" } = req.query;
+
+    const query = {
+      isArchived: archived === "true",
+      ...(search ? { name: { $regex: search, $options: "i" } } : {}),
+    };
+
+    const credits = await CarbonCredit.find(query)
+      .skip((page - 1) * Number(limit))
+      .limit(Number(limit))
+      .sort({ createdAt: -1 });
+
+    const total = await CarbonCredit.countDocuments(query);
+
+    res.json({
+      success: true,
+      data: credits,
+      total,
+      page: Number(page),
+      pages: Math.ceil(total / limit),
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.put("/toggle-active/:id", async (req, res) => {
+  try {
+    const credit = await CarbonCredit.findById(req.params.id);
+    if (!credit) return res.status(404).json({ success: false, message: "Credit not found" });
+
+    credit.isActive = !credit.isActive;
+
+    if (credit.isActive) {
+      credit.remainingTons = credit.tons || 0;
+    }
+
+    await credit.save();
+
+    res.json({ success: true, message: "Status updated", credit });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+
+router.put("/archive/:id", async (req, res) => {
+  try {
+    const credit = await CarbonCredit.findByIdAndUpdate(
+      req.params.id,
+      { isArchived: true },
+      { new: true }
+    );
+
+    if (!credit) return res.status(404).json({ success: false, message: "Credit not found" });
+
+    res.json({ success: true, message: "Archived successfully", credit });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+router.put("/unarchive/:id", async (req, res) => {
+  try {
+    const credit = await CarbonCredit.findByIdAndUpdate(
+      req.params.id,
+      { isArchived: false },
+      { new: true }
+    );
+    if (!credit) return res.status(404).json({ message: "Carbon credit not found" });
+    res.json(credit);
+  } catch (error) {
+    res.status(500).json({ message: "Error unarchiving carbon credit", error });
+  }
+});
 
 
 

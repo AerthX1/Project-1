@@ -27,8 +27,7 @@ const navItems = [
   { id: "income", icon: <FaChartBar />, label: "Income Chart" },
   { id: "users", icon: <FaUsers />, label: "Live Users" },
   { id: "inventory", icon: <FaLeaf />, label: "Carbon Inventory" },
-  { id: "controls", icon: <FaCogs />, label: "Controls" },
-  { id: "addcredit", icon: <FaPlusCircle />, label: "Add Credit" }, 
+  { id: "controls", icon: <FaCogs />, label: "Controls" },  
   { id: "managecredits", icon: <FaEdit />, label: "Manage Credits" },
   { id: "userdata", icon: <FaUsers />, label: "User Data" }, 
 { id: "userreports", icon: <FaClipboardList />, label: "User Reports" },
@@ -56,8 +55,13 @@ const renderContent = () => {
         return <CarbonInventory />;
       case "controls":
         return <AdminControls />;
-  case "managecredits":
-      return <AdminManageCarbonCredits onEdit={(id) => setSelectedCreditId(id)} />;
+ case "managecredits":
+  return (
+    <AdminManageCarbonCredits 
+      onEdit={(id) => setSelectedCreditId(id)} 
+      onAdd={() => setSelected("addcredit")} 
+    />
+  );
       case "addcredit":
         return <AdminAddCarbonCredit />;
         case "userdata":

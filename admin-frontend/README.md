@@ -20,3 +20,5 @@ install package:-
 4. npm install react-icons
 5. npm install recharts
 6. npm install axios
+7.  npm install jspdf
+8. npm install jspdf-autotable

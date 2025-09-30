@@ -78,7 +78,7 @@ const MarketplaceHero = () => {
             )}&user=${encodeURIComponent(localStorage.getItem("user"))}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 bg-green-500 hover:bg-green-600 text-white text-lg font-semibold py-3 px-10 rounded-xl shadow-md transition duration-300"
+            className="mt-8 mb-10 bg-green-500 hover:bg-green-600 text-white text-lg font-semibold py-3 px-10 rounded-xl shadow-md transition duration-300"
           >
             🌍 Explore Marketplace
           </a>

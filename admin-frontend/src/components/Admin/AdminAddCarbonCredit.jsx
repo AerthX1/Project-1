@@ -89,7 +89,7 @@ const AdminAddCarbonCredit = () => {
             {renderInput('methodology', 'Methodology')}
             {renderInput('projectDuration', 'Project Duration')}
             {renderInput('tons', 'Total Tons')}
-            {renderInput('pricePerTon', 'Price Per Ton (USD)', 'e.g. 12.50')}
+            {renderInput('pricePerTon', 'Price Per Ton (RS)', 'e.g. 1250')}
           </div>
         </div>
 

@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const CarbonCreditSchema = new mongoose.Schema({
   image: { type: String },
   backgroundImage: { type: String },
-backgroundImage: { type: String },
   title: { type: String, required: true },
   name: { type: String, required: true },
   verifiedBy: { type: String },
@@ -26,6 +25,9 @@ backgroundImage: { type: String },
   sdgs: { type: [String] },
   registryLink: { type: String },
   additionalNotes: { type: String },
+  isActive: { type: Boolean, default: false },
+  isArchived: { type: Boolean, default: false },
+  remainingTons: { type: Number, default: function() { return this.tons || 0; } },
   createdAt: { type: Date, default: Date.now }
 });
 
