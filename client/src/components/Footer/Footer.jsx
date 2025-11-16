@@ -41,7 +41,7 @@ const Footer = () => {
                 <ul className="pl-4 mt-2 space-y-2 text-sm">
                   <li><Link to="/solutions/business" className="hover:text-white transition">Businesses</Link></li>
                   <li><Link to="/solutions/individuals" className="hover:text-white transition">Individuals</Link></li>
-                  <li><Link to="/solutions/api" className="hover:text-white transition">API & Integration</Link></li>
+                  {/* <li><Link to="/solutions/api" className="hover:text-white transition">API & Integration</Link></li> */}
                 </ul>
               )}
             </li>

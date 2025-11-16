@@ -45,5 +45,7 @@ If you are developing a production application, we recommend using TypeScript wi
 15. npm install react-intersection-observer
 16. npm install react-countup
 17. npm install react-toastify framer-motion
+18. npm install lucide-react
+
 
 let started

@@ -4,6 +4,7 @@ const Individual = require('../models/Individual');
 const Organization = require('../models/Organization');
 const BugReport = require('../models/BugReport');
 const nodemailer = require("nodemailer");
+const CarbonCredit = require("../models/CarbonCredit");
 const Notification = require("../models/Notification");
 const FAQ = require("../models/FAQ");
 
@@ -407,6 +408,52 @@ router.put("/faqs/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: "Failed to update FAQ", error: err.message });
   }
+});
+
+router.put("/toggle-active/:creditId", async (req, res) => {
+  try {
+    const { isActive } = req.body;
+    const credit = await CarbonCredit.findByIdAndUpdate(
+      req.params.creditId,
+      { isActive },
+      { new: true }
+    );
+    if (!credit) return res.status(404).json({ message: "Credit not found" });
+    res.status(200).json(credit);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to toggle active status", error: err.message });
+  }
+});
+
+router.put('/archive/:creditId', async (req, res) => {
+    try {
+        const credit = await CarbonCredit.findByIdAndUpdate(
+            req.params.creditId,
+            { isArchived: true, isActive: false }, 
+            { new: true }
+        );
+        if (!credit) return res.status(404).json({ message: "Credit not found" });
+        res.status(200).json(credit);
+    } catch (err) {
+        console.error("Failed to archive credit:", err);
+        res.status(500).json({ message: "Failed to archive credit", error: err.message });
+    }
+});
+
+router.put('/unarchive/:creditId', async (req, res) => {
+    try {
+        const credit = await CarbonCredit.findByIdAndUpdate(
+            req.params.creditId,
+            { isArchived: false, isActive: false }, 
+            { new: true }
+        );
+        if (!credit) return res.status(404).json({ message: "Credit not found" });
+        res.status(200).json(credit);
+    } catch (err) {
+        console.error("Failed to unarchive credit:", err);
+        res.status(500).json({ message: "Failed to unarchive credit", error: err.message });
+    }
 });
 
 

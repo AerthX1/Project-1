@@ -7,12 +7,13 @@ const AdminAddCarbonCredit = () => {
     projectDeveloper: '', methodology: '', projectDuration: '',
     tons: '', pricePerTon: '', info: '', country: '', state: '',
     city: '', placeName: '', vintage: '', vintageYear: '',
-    retired: false, sdgs: '', registryLink: '', additionalNotes: '', imageUrl: ''
+    retired: false, sdgs: '', registryLink: '', additionalNotes: '', imageUrl: '',
+    impactScore: '', // new
+    impactMetrics: { co2Avoided: '', treesPlanted: '', communitiesBenefited: '', energyGenerated: '' } // new
   });
-  const [backgroundFile, setBackgroundFile] = useState(null);
-
 
   const [file, setFile] = useState(null);
+  const [backgroundFile, setBackgroundFile] = useState(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -22,15 +23,36 @@ const AdminAddCarbonCredit = () => {
     }));
   };
 
+  const handleNestedChange = (e, parent) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [parent]: {
+        ...prev[parent],
+        [name]: value
+      }
+    }));
+  };
+
   const handleFileChange = (e) => setFile(e.target.files[0]);
+  const handleBackgroundFileChange = (e) => setBackgroundFile(e.target.files[0]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
 
-    for (let key in formData) data.append(key, formData[key]);
+    for (let key in formData) {
+      if (key === 'impactMetrics') {
+        for (let metric in formData.impactMetrics) {
+          data.append(`impactMetrics[${metric}]`, formData.impactMetrics[metric]);
+        }
+      } else {
+        data.append(key, formData[key]);
+      }
+    }
+
     if (file) data.append('image', file);
-      if (backgroundFile) data.append('backgroundImage', backgroundFile);
+    if (backgroundFile) data.append('backgroundImage', backgroundFile);
 
     try {
       const API = import.meta.env.VITE_API_URL;
@@ -43,10 +65,12 @@ const AdminAddCarbonCredit = () => {
         projectDeveloper: '', methodology: '', projectDuration: '',
         tons: '', pricePerTon: '', info: '', country: '', state: '',
         city: '', placeName: '', vintage: '', vintageYear: '',
-        retired: false, sdgs: '', registryLink: '', additionalNotes: '', imageUrl: ''
+        retired: false, sdgs: '', registryLink: '', additionalNotes: '', imageUrl: '',
+        impactScore: '',
+        impactMetrics: { co2Avoided: '', treesPlanted: '', communitiesBenefited: '', energyGenerated: '' }
       });
       setFile(null);
-        setBackgroundFile(null);
+      setBackgroundFile(null);
     } catch (err) {
       alert('❌ Failed to add credit');
       console.error(err);
@@ -69,6 +93,20 @@ const AdminAddCarbonCredit = () => {
     </div>
   );
 
+  const renderNestedInput = (parent, name, label, placeholder = '') => (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <input
+        type="text"
+        name={name}
+        placeholder={placeholder}
+        value={formData[parent][name]}
+        onChange={(e) => handleNestedChange(e, parent)}
+        className={inputClass}
+      />
+    </div>
+  );
+
   return (
     <div className="p-6 sm:p-10 max-w-5xl mx-auto bg-white rounded-2xl shadow-md">
       <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
@@ -77,6 +115,7 @@ const AdminAddCarbonCredit = () => {
 
       <form onSubmit={handleSubmit} className="space-y-10">
 
+        {/* Project Info */}
         <div className="border border-gray-300 rounded-xl p-6 bg-gray-50">
           <h3 className="text-xl font-semibold text-gray-700 mb-4">📋 Project Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -90,9 +129,11 @@ const AdminAddCarbonCredit = () => {
             {renderInput('projectDuration', 'Project Duration')}
             {renderInput('tons', 'Total Tons')}
             {renderInput('pricePerTon', 'Price Per Ton (RS)', 'e.g. 1250')}
+            {renderInput('impactScore', 'Impact Score', 'e.g. 85')} {/* New */}
           </div>
         </div>
 
+        {/* Location */}
         <div className="border border-gray-300 rounded-xl p-6 bg-gray-50">
           <h3 className="text-xl font-semibold text-gray-700 mb-4">📍 Location Details</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -103,6 +144,7 @@ const AdminAddCarbonCredit = () => {
           </div>
         </div>
 
+        {/* Vintage & Registry */}
         <div className="border border-gray-300 rounded-xl p-6 bg-gray-50">
           <h3 className="text-xl font-semibold text-gray-700 mb-4">🕰️ Vintage & Registry</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -112,6 +154,7 @@ const AdminAddCarbonCredit = () => {
           </div>
         </div>
 
+        {/* Details & Status */}
         <div className="border border-gray-300 rounded-xl p-6 bg-gray-50 space-y-6">
           <h3 className="text-xl font-semibold text-gray-700 mb-2">📄 Details & Status</h3>
           <div>
@@ -152,6 +195,18 @@ const AdminAddCarbonCredit = () => {
           </div>
         </div>
 
+        {/* Impact Metrics */}
+        <div className="border border-gray-300 rounded-xl p-6 bg-gray-50 space-y-6">
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">🌍 Impact Metrics</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {renderNestedInput('impactMetrics', 'co2Avoided', 'CO₂ Avoided (Tons)')}
+            {renderNestedInput('impactMetrics', 'treesPlanted', 'Trees Planted')}
+            {renderNestedInput('impactMetrics', 'communitiesBenefited', 'Communities Benefited')}
+            {renderNestedInput('impactMetrics', 'energyGenerated', 'Energy Generated (kWh)')}
+          </div>
+        </div>
+
+        {/* Media & Notes */}
         <div className="border border-gray-300 rounded-xl p-6 bg-gray-50 space-y-6">
           <h3 className="text-xl font-semibold text-gray-700 mb-2">🖼️ Media & Notes</h3>
           <div>
@@ -176,15 +231,16 @@ const AdminAddCarbonCredit = () => {
           </div>
 
           {renderInput('imageUrl', '🌐 Image URL (optional)', 'https://example.com/project.jpg')}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">🌄 Upload Background Image</label>
+            <input
+              type="file"
+              onChange={handleBackgroundFileChange}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
+            />
+          </div>
         </div>
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-1">🌄 Upload Background Image</label>
-  <input
-    type="file"
-    onChange={(e) => setBackgroundFile(e.target.files[0])}
-    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
-  />
-</div>
 
         <div className="text-center pt-4">
           <button

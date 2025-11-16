@@ -13,6 +13,11 @@ const MarketPlace = () => {
   const [selectedVintage, setSelectedVintage] = useState('');
   const [priceRange, setPriceRange] = useState('');
 
+  // For dynamic dropdown options
+  const [categories, setCategories] = useState([]);
+  const [places, setPlaces] = useState([]);
+  const [vintages, setVintages] = useState([]);
+
   const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -21,6 +26,16 @@ const MarketPlace = () => {
         const res = await axios.get(`${API}/carbon-credits`);
         const sorted = res.data.sort((a, b) => b.pricePerTon - a.pricePerTon);
         setProjects(sorted);
+
+        // Extract unique values for dynamic filters
+        const uniqueCategories = [...new Set(sorted.map(p => p.category).filter(Boolean))];
+        const uniquePlaces = [...new Set(sorted.map(p => p.country).filter(Boolean))];
+        const uniqueVintages = [...new Set(sorted.map(p => p.vintage).filter(Boolean))];
+
+        setCategories(uniqueCategories);
+        setPlaces(uniquePlaces);
+        setVintages(uniqueVintages);
+
       } catch (err) {
         console.error("❌ Error fetching projects:", err.message);
       } finally {
@@ -28,14 +43,14 @@ const MarketPlace = () => {
       }
     };
     fetchProjects();
-  }, []);
+  }, [API]);
 
   const filteredProjects = projects.filter(project => {
     if (!project.isActive) return false;
 
     const matchesSearch =
       project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.name.toLowerCase().includes(searchTerm.toLowerCase());
+      project.name?.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesCategory = selectedCategory ? project.category?.toLowerCase() === selectedCategory.toLowerCase() : true;
     const matchesPlace = selectedPlace ? project.country?.toLowerCase() === selectedPlace.toLowerCase() : true;
@@ -47,8 +62,7 @@ const MarketPlace = () => {
     else if (priceRange === "high") matchesPrice = project.pricePerTon > 30;
 
     return matchesSearch && matchesCategory && matchesPlace && matchesVintage && matchesPrice;
-});
-
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4 flex justify-center">
@@ -58,6 +72,7 @@ const MarketPlace = () => {
           <p className="text-sm text-gray-500">Support trusted carbon offset projects</p>
         </div>
 
+        {/* Search and Filter Toggle */}
         <div className="flex flex-col sm:flex-row items-center gap-4 justify-center mb-6">
           <input
             type="text"
@@ -74,9 +89,11 @@ const MarketPlace = () => {
           </button>
         </div>
 
+        {/* Filters Section */}
         {filterOpen && (
           <div className="bg-white rounded-xl shadow-md px-6 py-5 mb-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              {/* Category Filter */}
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Category</label>
                 <select
@@ -85,11 +102,13 @@ const MarketPlace = () => {
                   className="w-full bg-gray-100 px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">All Categories</option>
-                  <option value="energy">Energy</option>
-                  <option value="reforestation">Reforestation</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
                 </select>
               </div>
 
+              {/* Place Filter */}
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Place Name</label>
                 <select
@@ -98,12 +117,13 @@ const MarketPlace = () => {
                   className="w-full bg-gray-100 px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">All Places</option>
-                  <option value="mumbai">Mumbai</option>
-                  <option value="gujarat">Gujarat</option>
-                  <option value="amazon">Amazon Forest</option>
+                  {places.map((place) => (
+                    <option key={place} value={place}>{place}</option>
+                  ))}
                 </select>
               </div>
 
+              {/* Vintage Filter */}
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Vintage</label>
                 <select
@@ -112,11 +132,13 @@ const MarketPlace = () => {
                   className="w-full bg-gray-100 px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">Any Year</option>
-                  <option value="2022">2022</option>
-                  <option value="2023">2023</option>
+                  {vintages.map((v) => (
+                    <option key={v} value={v}>{v}</option>
+                  ))}
                 </select>
               </div>
 
+              {/* Price Filter */}
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Price Range</label>
                 <select
@@ -134,6 +156,7 @@ const MarketPlace = () => {
           </div>
         )}
 
+        {/* Filter Summary */}
         {(searchTerm || selectedCategory || selectedPlace || selectedVintage || priceRange) && (
           <div className="text-sm text-gray-600 mb-4">
             Showing results for:
@@ -145,6 +168,7 @@ const MarketPlace = () => {
           </div>
         )}
 
+        {/* Display Projects */}
         {loading ? (
           <div className="text-center text-gray-500">Loading projects...</div>
         ) : filteredProjects.length === 0 ? (
@@ -158,7 +182,7 @@ const MarketPlace = () => {
                 className="bg-white w-[300px] mx-auto rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-2xl hover:border-green-400 hover:scale-[1.03] transition-all duration-300 ease-in-out block"
               >
                 <img
-                 src={`${import.meta.env.VITE_FILE_URL}${project.image}`}
+                  src={`${import.meta.env.VITE_FILE_URL}${project.image}`}
                   alt={project.title}
                   className="w-full h-40 object-cover"
                 />
@@ -181,7 +205,7 @@ const MarketPlace = () => {
                     {project.sdgs?.length > 0 && (
                       <span className="bg-green-50 px-3 py-1 text-xs rounded-full text-green-700 border border-green-200">🌍 {project.sdgs.length} SDGs</span>
                     )}
-                  </div> 
+                  </div>
                 </div>
               </Link>
             ))}

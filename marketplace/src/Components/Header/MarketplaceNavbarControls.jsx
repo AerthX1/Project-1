@@ -178,23 +178,15 @@
         <div className="flex justify-between items-center gap-4 h-14">
           <img src={aerthxlogo} alt="AerthX Logo" className="h-16 sm:h-16 ml-3 object-contain" />
 
-          {isHomePage && (
-            <div className="relative flex items-center w-full max-w-md mx-4 md:mx-auto">
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search carbon projects..."
-                className="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-full shadow-inner focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all"
-              />
-              <button
-                onClick={handleSearch}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-green-500 transition-colors"
-              >
-                <CiSearch className="h-6 w-6" />
-              </button>
-            </div>
-          )}
+
+{isHomePage && (
+  <div className="relative flex items-center w-full max-w-md mx-4 md:mx-auto justify-center">
+  <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-green-700 tracking-wide text-center">
+  Marketplace
+</h1>
+  </div>
+)}
+
 
           <div className="relative flex items-center space-x-4">
             {isAuthenticated ? (

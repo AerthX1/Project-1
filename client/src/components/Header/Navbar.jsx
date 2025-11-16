@@ -211,9 +211,9 @@ useEffect(() => {
               <Link to="/solutions/individuals" className="block p-3 hover:text-green-600">
                 Individuals
               </Link>
-              <Link to="/solutions/api" className="block p-3 hover:text-green-600">
+              {/* <Link to="/solutions/api" className="block p-3 hover:text-green-600">
                 API & Integration
-              </Link>
+              </Link> */}
             </div>
           </li>
           <li>

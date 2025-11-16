@@ -25,6 +25,13 @@ const CarbonCreditSchema = new mongoose.Schema({
   sdgs: { type: [String] },
   registryLink: { type: String },
   additionalNotes: { type: String },
+   impactScore: { type: Number, default: 0 }, 
+  impactMetrics: { 
+    co2Avoided: { type: Number, default: 0 },
+    treesPlanted: { type: Number, default: 0 },
+    communitiesBenefited: { type: Number, default: 0 },
+    energyGenerated: { type: Number, default: 0 }
+  },
   isActive: { type: Boolean, default: false },
   isArchived: { type: Boolean, default: false },
   remainingTons: { type: Number, default: function() { return this.tons || 0; } },

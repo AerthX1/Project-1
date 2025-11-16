@@ -54,7 +54,14 @@ router.post('/', upload.fields([
       backgroundImage: backgroundImagePath,
       isActive: true,
       isArchived: false,
-      remainingTons: parseFloat(data.tons) || 0
+      remainingTons: parseFloat(data.tons) || 0,
+      impactScore: parseFloat(data.impactScore) || 0,
+      impactMetrics: {
+        co2Avoided: parseFloat(data['impactMetrics[co2Avoided]']) || 0,
+        treesPlanted: parseFloat(data['impactMetrics[treesPlanted]']) || 0,
+        communitiesBenefited: parseFloat(data['impactMetrics[communitiesBenefited]']) || 0,
+        energyGenerated: parseFloat(data['impactMetrics[energyGenerated]']) || 0,
+      }
     });
 
     await credit.save();
@@ -85,15 +92,13 @@ router.get('/active', async (req, res) => {
       retired: { $ne: true },
       isActive: true,
       isArchived: false
-    }).sort({ createdAt: -1 });
+    }).sort({ impactScore: -1, createdAt: -1 }); 
 
     res.status(200).json(credits);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch active credits', error: err.message });
   }
 });
-
-
 
 router.get('/total-tons', async (req, res) => {
   try {
@@ -172,7 +177,14 @@ router.put('/:id', upload.fields([
       image: imagePath,
       backgroundImage: backgroundImagePath,
       isActive: true,
-      isArchived: false
+      isArchived: false,
+      impactScore: parseFloat(data.impactScore) || 0,
+      impactMetrics: {
+        co2Avoided: parseFloat(data['impactMetrics[co2Avoided]']) || 0,
+        treesPlanted: parseFloat(data['impactMetrics[treesPlanted]']) || 0,
+        communitiesBenefited: parseFloat(data['impactMetrics[communitiesBenefited]']) || 0,
+        energyGenerated: parseFloat(data['impactMetrics[energyGenerated]']) || 0,
+      }
     };
 
     if (data.tons) {

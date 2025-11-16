@@ -17,7 +17,7 @@ const Solutions = () => {
           </p>
         </div>
 
-        <div className="-mx-4 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="-mx-4 grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
           <section className="group transform rounded-3xl bg-white p-8 shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="flex items-center space-x-4">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600">
@@ -53,7 +53,7 @@ const Solutions = () => {
               Discover More &rarr;
             </Link>
           </section>
-
+{/* 
           <section className="group transform rounded-3xl bg-white p-8 shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
             <div className="flex items-center space-x-4">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600">
@@ -70,7 +70,7 @@ const Solutions = () => {
             >
               Discover More &rarr;
             </Link>
-          </section>
+          </section> */}
         </div>
 
         <div className="mt-24 text-center">

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { FaCreditCard, FaPaypal, FaGooglePay, FaCheckCircle, FaLock, FaShieldAlt, FaLeaf, FaTicketAlt, FaPlus, FaMinus, FaChevronDown, FaRegSave, FaInfoCircle } from "react-icons/fa";
+import { FaCreditCard, FaPaypal, FaGooglePay, FaCheckCircle, FaLock, FaShieldAlt, FaLeaf, FaPlus, FaMinus, FaRegSave, FaUniversity } from "react-icons/fa";
 import { SiPhonepe } from "react-icons/si";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -21,12 +21,13 @@ const formatRupees = (amount) => {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(amount);
 };
 
 const PaymentForm = ({ totalPrice }) => {
   const [selectedMethod, setSelectedMethod] = useState("credit_card");
-  const [showPromo, setShowPromo] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -34,46 +35,52 @@ const PaymentForm = ({ totalPrice }) => {
     cardNumber: "",
     expiryDate: "",
     cvc: "",
-    promoCode: "",
+    netBankingBank: "",
   });
   const [saveCard, setSaveCard] = useState(false);
-  const [paymentDetails, setPaymentDetails] = useState({
-    platformFee: 0,
-    paymentGatewayFee: 0,
-    gst: 0,
-    grandTotal: 0,
-  });
-
+  
   const GST_PERCENTAGE = 0.18;
 
-  const paymentFees = {
+  const paymentFees = useMemo(() => ({
     credit_card: {
       platformFeePercentage: 0.05,
       gatewayFeePercentage: 0.02,
       gatewayFeeFixed: 25,
       label: "Card",
+      icon: FaCreditCard
     },
     paypal: {
       platformFeePercentage: 0.04,
       gatewayFeePercentage: 0.03,
       gatewayFeeFixed: 30,
       label: "PayPal",
+      icon: FaPaypal
     },
     google_pay: {
       platformFeePercentage: 0.03,
       gatewayFeePercentage: 0.01,
       gatewayFeeFixed: 20,
       label: "GPay",
+      icon: FaGooglePay
     },
     phonepe: {
       platformFeePercentage: 0.035,
       gatewayFeePercentage: 0.015,
       gatewayFeeFixed: 15,
       label: "PhonePe",
+      icon: SiPhonepe
     },
-  };
+    net_banking: {
+      platformFeePercentage: 0.02,
+      gatewayFeePercentage: 0.005,
+      gatewayFeeFixed: 10,
+      label: "Net Banking",
+      icon: FaUniversity
+    },
+  }), []);
 
-  useEffect(() => {
+
+  const paymentDetails = useMemo(() => {
     const { platformFeePercentage, gatewayFeePercentage, gatewayFeeFixed } = paymentFees[selectedMethod];
 
     const platformFee = totalPrice * platformFeePercentage;
@@ -82,9 +89,8 @@ const PaymentForm = ({ totalPrice }) => {
     const gst = baseForTax * GST_PERCENTAGE;
     const grandTotal = totalPrice + platformFee + paymentGatewayFee + gst;
 
-    setPaymentDetails({ platformFee, paymentGatewayFee, gst, grandTotal });
-
-  }, [selectedMethod, totalPrice]);
+    return { platformFee, paymentGatewayFee, gst, grandTotal };
+  }, [selectedMethod, totalPrice, paymentFees]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -93,21 +99,19 @@ const PaymentForm = ({ totalPrice }) => {
 
   const handlePaymentSubmit = (e) => {
     e.preventDefault();
+    
     if (selectedMethod === "credit_card" && (!formData.cardNumber || !formData.expiryDate || !formData.cvc)) {
       alert("Please fill in all card details.");
       return;
     }
+
+    if (selectedMethod === "net_banking" && !formData.netBankingBank) {
+      alert("Please select a bank for Net Banking.");
+      return;
+    }
     
     console.log("Submitting payment with data:", { ...formData, grandTotal: paymentDetails.grandTotal, selectedMethod, saveCard });
-    alert(`Processing payment of ${formatRupees(paymentDetails.grandTotal)}.`);
-  };
-
-  const applyPromoCode = () => {
-    if (formData.promoCode.toLowerCase() === "eco20") {
-      alert("Promo codes are currently disabled for this page.");
-    } else {
-      alert("Invalid promo code.");
-    }
+    alert(`Processing payment of ${formatRupees(paymentDetails.grandTotal)} via ${paymentFees[selectedMethod].label}.`);
   };
 
   const renderInput = (name, label, type = "text", required = false, pattern = null, inputMode = null) => (
@@ -145,38 +149,36 @@ const PaymentForm = ({ totalPrice }) => {
     >
       <h3 className="text-3xl font-bold text-gray-800 mb-8 text-center">Payment Details</h3>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-        {[
-          { id: "credit_card", icon: FaCreditCard, label: "Card" },
-          { id: "paypal", icon: FaPaypal, label: "PayPal" },
-          { id: "google_pay", icon: FaGooglePay, label: "GPay" },
-          { id: "phonepe", icon: SiPhonepe, label: "PhonePe" },
-        ].map((method) => (
-          <motion.button
-            key={method.id}
-            onClick={() => setSelectedMethod(method.id)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className={`flex flex-col items-center justify-center py-4 px-2 rounded-xl border-2 transition-all duration-300 relative focus:outline-none focus:ring-2 focus:ring-green-500
-            ${selectedMethod === method.id ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg" : "border-gray-300 text-gray-600 hover:border-green-400"}`}
-            aria-pressed={selectedMethod === method.id}
-          >
-            <method.icon size={28} className="mb-2" />
-            <span className="text-sm font-semibold">{method.label}</span>
-            <AnimatePresence>
-              {selectedMethod === method.id && (
-                <motion.div
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0, opacity: 0 }}
-                  className="absolute -top-2 -right-2 bg-white rounded-full p-1"
-                >
-                  <FaCheckCircle className="text-green-500" size={16} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
-        ))}
+      <div className="grid grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
+        {Object.keys(paymentFees).map((id) => {
+          const method = paymentFees[id];
+          return (
+            <motion.button
+              key={id}
+              onClick={() => setSelectedMethod(id)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`flex flex-col items-center justify-center py-4 px-2 rounded-xl border-2 transition-all duration-300 relative focus:outline-none focus:ring-2 focus:ring-green-500
+              ${selectedMethod === id ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg" : "border-gray-300 text-gray-600 hover:border-green-400"}`}
+              aria-pressed={selectedMethod === id}
+            >
+              <method.icon size={28} className="mb-2" />
+              <span className="text-sm font-semibold">{method.label}</span>
+              <AnimatePresence>
+                {selectedMethod === id && (
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    className="absolute -top-2 -right-2 bg-white rounded-full p-1"
+                  >
+                    <FaCheckCircle className="text-green-500" size={16} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          );
+        })}
       </div>
 
       <form onSubmit={handlePaymentSubmit}>
@@ -215,52 +217,38 @@ const PaymentForm = ({ totalPrice }) => {
               </div>
             </motion.div>
           )}
-        </AnimatePresence>
 
-        <div className="mb-6">
-          <button
-            type="button"
-            onClick={() => setShowPromo(!showPromo)}
-            className="flex items-center text-sm text-green-600 font-semibold hover:underline transition-colors focus:outline-none"
-            aria-expanded={showPromo}
-          >
-            <FaTicketAlt className="mr-2" />
-            Have a promo code?
+          {selectedMethod === "net_banking" && (
             <motion.div
-              animate={{ rotate: showPromo ? 180 : 0 }}
+              key="net-banking-fields"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
+              className="overflow-hidden mb-6"
             >
-              <FaChevronDown className="ml-2" />
-            </motion.div>
-          </button>
-          <AnimatePresence>
-            {showPromo && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden mt-2 flex space-x-2"
+              <label htmlFor="netBankingBank" className="block text-sm font-medium text-gray-700 mb-2">
+                Select Your Bank
+              </label>
+              <select
+                id="netBankingBank"
+                name="netBankingBank"
+                required
+                value={formData.netBankingBank}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors bg-white"
               >
-                <input
-                  type="text"
-                  name="promoCode"
-                  placeholder="Enter code"
-                  value={formData.promoCode}
-                  onChange={handleInputChange}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
-                />
-                <button
-                  type="button"
-                  onClick={applyPromoCode}
-                  className="py-3 px-6 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
-                >
-                  Apply
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+                <option value="" disabled>Choose a bank...</option>
+                <option value="HDFC">HDFC Bank</option>
+                <option value="ICICI">ICICI Bank</option>
+                <option value="SBI">State Bank of India (SBI)</option>
+                <option value="AXIS">Axis Bank</option>
+                <option value="KOTAK">Kotak Mahindra Bank</option>
+                <option value="OTHER">Other Banks (via Gateway)</option>
+              </select>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <motion.div
           key={totalPrice} 
@@ -399,45 +387,49 @@ const PaymentPage = () => {
                 Offset your footprint with a verified project and help create a sustainable future.
               </p>
 
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }} className="space-y-6">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.5 }} className="space-y-4">
                 <SummaryCard>
                   <span className="block text-sm font-semibold text-green-300">Project Title</span>
                   <span className="block text-2xl font-bold mt-1 text-black">{project ? project.title : "N/A"}</span>
                 </SummaryCard>
-                <SummaryCard>
-                  <span className="block text-sm font-semibold text-green-300">Price per Ton</span>
-                  <span className="block text-2xl font-bold mt-1 text-black">{project ? formatRupees(project.pricePerTon) : "N/A"}</span>
-                </SummaryCard>
-        <SummaryCard className="!bg-white !bg-opacity-100 !backdrop-blur-none !shadow-none">
-  <label htmlFor="tons-input" className="block text-sm font-semibold text-gray-700 mb-2">
-    Number of Tons
-  </label>
-  <div className="flex items-center space-x-3">
-    <button
-      onClick={() => handleTonsChange(tons - 1)}
-      className="p-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
-      aria-label="Decrease tons"
-    >
-      <FaMinus />
-    </button>
-    <input
-      id="tons-input"
-      type="number"
-      min="1"
-      value={tons}
-      onChange={(e) => handleTonsChange(parseInt(e.target.value) || 0)}
-      className="w-full p-2 text-gray-800 text-center border-b border-gray-300 focus:outline-none focus:border-green-500 text-lg font-bold"
-      aria-label="Number of tons"
-    />
-    <button
-      onClick={() => handleTonsChange(tons + 1)}
-      className="p-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
-      aria-label="Increase tons"
-    >
-      <FaPlus />
-    </button>
-  </div>
-</SummaryCard>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <SummaryCard>
+                    <span className="block text-sm font-semibold text-green-300">Price per Ton</span>
+                    <span className="block text-2xl font-bold mt-1 text-black">{project ? formatRupees(project.pricePerTon) : "N/A"}</span>
+                  </SummaryCard>
+                  
+                  <SummaryCard className="!bg-white !bg-opacity-100 !backdrop-blur-none !shadow-none !p-4">
+                    <label htmlFor="tons-input" className="block text-sm font-semibold text-gray-700 mb-2">
+                      Number of Tons
+                    </label>
+                    <div className="flex items-center space-x-3">
+                      <button
+                        onClick={() => handleTonsChange(tons - 1)}
+                        className="p-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                        aria-label="Decrease tons"
+                      >
+                        <FaMinus />
+                      </button>
+                      <input
+                        id="tons-input"
+                        type="number"
+                        min="1"
+                        value={tons}
+                        onChange={(e) => handleTonsChange(parseInt(e.target.value) || 0)}
+                        className="w-full p-2 text-gray-800 text-center border-b border-gray-300 focus:outline-none focus:border-green-500 text-lg font-bold"
+                        aria-label="Number of tons"
+                      />
+                      <button
+                        onClick={() => handleTonsChange(tons + 1)}
+                        className="p-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                        aria-label="Increase tons"
+                      >
+                        <FaPlus />
+                      </button>
+                    </div>
+                  </SummaryCard>
+                </div>
               </motion.div>
             </div>
 
