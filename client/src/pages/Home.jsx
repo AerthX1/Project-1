@@ -385,112 +385,71 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="py-24 bg-gray-50 w-full">
-                <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-20 text-center">
-                    Client <span className="text-emerald-600">Testimonials</span>
-                </h2>
-                <div className="max-w-4xl mx-auto px-4">
-                    <div className="bg-white p-8 sm:p-12 rounded-xl shadow-2xl border border-gray-100 relative min-h-[300px] flex flex-col justify-center overflow-hidden">
-                        
-                        {testimonials.map((testimonial, index) => (
-                            <div
-                                key={index}
-                                className={`absolute inset-0 p-8 sm:p-12 transition-opacity duration-700 ease-in-out 
-                                            ${index === currentTestimonialIndex ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none'}`
-                                        }
-                            >
-                                <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl opacity-50 z-0"></div>
+      <section className="py-12 bg-gray-50">
+        <h2 className="text-2xl md:text-3xl font-bold mb-10">Who We Help</h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 md:px-20">
+          <div className="bg-white  hover:bg-gray-100 p-4 rounded shadow">
+            <h3 className="font-semibold text-lg mb-2">Corporates & Enterprises</h3>
+            <p>Use your carbon actions to meet ESG goals and strengthen your brand image.</p>
+          </div>
+          <div className="bg-white  hover:bg-gray-100 p-4 rounded shadow">
+            <h3 className="font-semibold text-lg mb-2">E-Commerce & Startups</h3>
+            <p>Integrate carbon offsetting directly into your product delivery.</p>
+          </div>
+          <div className="bg-white  hover:bg-gray-100 p-4 rounded shadow">
+            <h3 className="font-semibold text-lg mb-2">Individuals & Freelancers</h3>
+            <p>Track and offset personal emissions such as flights, electricity, and more.</p>
+          </div>
+          <div className="bg-white  hover:bg-gray-100 p-4 rounded shadow">
+            <h3 className="font-semibold text-lg mb-2">Educational Institutions & NGOs</h3>
+            <p>Promote sustainability and educate communities with real environmental action.</p>
+          </div>
+        </div>
+      </section>
 
-                                <p className="text-xl italic font-serif text-gray-700 leading-relaxed mb-8 relative z-10">
-                                    "{testimonial.quote}"
-                                </p>
-                                <div className="flex items-center mt-6 relative z-10">
-                                    <img src={testimonial.avatar} alt={testimonial.name} className="w-14 h-14 rounded-full object-cover mr-4 ring-2 ring-emerald-400 shadow-md" />
-                                    <div>
-                                        <p className="font-bold text-lg text-emerald-700">{testimonial.name}</p>
-                                        <p className="text-sm text-gray-500">{testimonial.title}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                        
-                        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
-                            {testimonials.map((_, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setCurrentTestimonialIndex(index)}
-                                    className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${index === currentTestimonialIndex ? 'bg-emerald-600 scale-110 shadow-md' : 'bg-gray-300 hover:bg-gray-400'}`}
-                                    aria-label={`Go to testimonial ${index + 1}`}
-                                />
-                            ))}
-                        </div>
+      <section className="py-12 bg-white w-full text-center">
+        <p className="text-lg max-w-2xl mx-auto mb-6">
+          We source certified carbon credits from globally recognized registries ensuring environmental integrity and transparency.
+        </p>
+        <div className="flex justify-center items-center space-x-20">
+          <img src={verra} alt="Verra" className="h-25" />
+          <img src={goldstandard} alt="Gold Standard" className="h-25" />
+          <img src={comming} alt="Coming Soon" className="h-25 opacity-60" />
+        </div>
+      </section>
+   <section className="bg-green-500 w-full text-white py-12 px-4 text-center">
+  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+    Ready to Offset Your Carbon Footprint?
+  </h2>
 
-                    </div>
-                </div>
-            </section>
-            
-            <section className="py-20 bg-white w-full text-center">
-                <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-12">
-                    Certified <span className="text-emerald-600">Integrity</span>
-                </h2>
-                <p className="text-xl max-w-3xl mx-auto mb-16 text-gray-600 px-4 font-light">
-                    We source certified carbon credits from globally recognized registries, ensuring environmental integrity and transparency.
-                </p>
-                <div className="flex justify-center items-center flex-wrap gap-12 sm:gap-24 px-4 max-w-7xl mx-auto">
-                    
-                    <div className="w-60 h-32 sm:w-60 sm:h-40 flex items-center justify-center p-6 bg-white rounded-xl shadow-lg transition duration-500 ease-in-out hover:shadow-emerald-200 filter grayscale hover:grayscale-0 transform hover:scale-105">
-                        <img src={verra} alt="Verra" className="max-h-full max-w-full object-contain" />
-                    </div>
+  <p className="text-sm sm:text-base md:text-lg mb-6 max-w-2xl mx-auto">
+    Join businesses making a difference. Start your climate-positive journey with AerthX today.
+  </p>
 
-                    <div className="w-60 h-32 sm:w-60 sm:h-40 flex items-center justify-center p-6 bg-white rounded-xl shadow-lg transition duration-500 ease-in-out hover:shadow-emerald-200 filter grayscale hover:grayscale-0 transform hover:scale-105">
-                        <img src={goldstandard} alt="Gold Standard" className="max-h-full max-w-full object-contain" />
-                    </div>
-                </div>
-            </section>
+  <div className="flex flex-col sm:flex-row justify-center gap-4">
+    {userType ? (
+      <Link
+        to={user?.orgName ? "/pricing" : "/individual-pricing"}
+        className="border border-white font-semibold py-2 px-6 rounded-md hover:bg-white hover:text-green-600 transition"
+      >
+        View Pricing Plans
+      </Link>
+    ) : (
+      <button className="border border-white font-semibold py-2 px-6 rounded-md opacity-50 cursor-not-allowed">
+        Loading...
+      </button>
+    )}
 
-            <section 
-                className="w-full text-white py-24 px-4 text-center relative z-10"
-                style={{ 
-                    background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)', 
-                    boxShadow: '0 -5px 20px rgba(0,0,0,0.1)'
-                }}
-            >
-                <div className="max-w-4xl mx-auto">
-                    <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 tracking-tight drop-shadow-md">
-                        Ready to Begin Your <span className="text-white drop-shadow-lg">Net-Zero Journey</span>?
-                    </h2>
-                    <p className="text-xl sm:text-2xl mb-12 max-w-3xl mx-auto font-light text-green-100">
-                        Join thousands of businesses making a tangible difference. Start your climate-positive journey with AerthX today.
-                    </p>
-                    <div className="flex flex-col sm:flex-row justify-center gap-6">
-                        
-                        {userType ? (
-                            <Link
-                                to={user?.orgName ? "/pricing" : "/individual-pricing"}
-                                className="group inline-flex items-center justify-center border-2 border-white bg-white text-emerald-700 font-bold py-4 px-10 rounded-full transition-all duration-300 ease-in-out 
-                                            hover:bg-transparent hover:text-white hover:border-white shadow-xl shadow-black/30 text-lg transform hover:scale-105"
-                            >
-                                View Pricing Plans
-                            </Link>
-                        ) : (
-                            <button 
-                                className="inline-flex items-center justify-center border-2 border-white bg-white text-emerald-700 font-bold py-4 px-10 rounded-full transition-all duration-300 opacity-70 cursor-not-allowed text-lg"
-                                disabled
-                            >
-                                Loading...
-                            </button>
-                        )}
+    <Link
+      to="/contactus"
+      className="group inline-flex items-center justify-center border-2 border-white text-white font-bold py-4 px-10 rounded-full transition-all duration-300 ease-in-out 
+      hover:bg-white hover:text-emerald-700 shadow-xl shadow-black/30 text-lg transform hover:scale-105"
+    >
+      Contact Our Team
+    </Link>
+  </div>
+</section>
 
-                        <Link
-                            to="/contactus"
-                            className="group inline-flex items-center justify-center border-2 border-white text-white font-bold py-4 px-10 rounded-full transition-all duration-300 ease-in-out 
-                                        hover:bg-white hover:text-emerald-700 shadow-xl shadow-black/30 text-lg transform hover:scale-105"
-                        >
-                            Contact Our Team
-                        </Link>
-                    </div>
-                </div>
-            </section>
 
         </div>
     );
