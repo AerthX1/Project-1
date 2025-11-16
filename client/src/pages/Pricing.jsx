@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaCheckCircle, FaTimesCircle, FaInfoCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const featureGroups = [
   {
@@ -280,6 +281,7 @@ const MostPopularBadge = () => {
 const Pricing = () => {
   const [billing, setBilling] = useState("monthly");
   const [showContactSales, setShowContactSales] = useState(false);
+  const navigate = useNavigate();
 
   const calcSavings = (monthly, yearly) => {
     if (typeof monthly === "number" && typeof yearly === "number") {
@@ -328,7 +330,6 @@ const Pricing = () => {
               aria-pressed={billing === "yearly"}
             >
               Yearly{" "}
-            
             </button>
           </div>
         </div>
@@ -471,6 +472,8 @@ const Pricing = () => {
                   onClick={() => {
                     if (planName === "Enterprise") {
                       setShowContactSales(true);
+                    } else {
+                      navigate("/PricingGateway", { state: { planName } });
                     }
                   }}
                   className={`w-full mt-8 py-4 rounded-full font-bold text-lg shadow-lg transition-transform duration-300 ease-in-out focus:outline-none focus:ring-4
@@ -510,32 +513,6 @@ const Pricing = () => {
           </p>
         </div>
       </section>
-
-      {/* <section className="max-w-6xl mx-auto mt-24 px-6">
-        <h2 className="text-3xl font-extrabold text-green-800 mb-8 tracking-wide drop-shadow-md">
-          Minting Fee Structure
-        </h2>
-        <div className="bg-gradient-to-r from-green-50 to-white rounded-2xl p-10 shadow-2xl text-gray-700 space-y-6 border border-green-200 hover:shadow-3xl transition-shadow duration-300">
-          <p className="text-lg leading-relaxed">
-            <strong className="text-green-800">Project Onboarding Fee:</strong>{" "}
-            ₹5 per carbon credit
-          </p>
-          <p className="text-lg leading-relaxed">
-            <strong className="text-green-800">Blockchain Gas Fees:</strong>{" "}
-            Dynamically calculated based on network activity
-          </p>
-          <p className="text-lg leading-relaxed">
-            <strong className="text-green-800">
-              Smart Contract Deployment:
-            </strong>{" "}
-            One-time fee based on project complexity
-          </p>
-          <p className="text-lg leading-relaxed">
-            <strong className="text-green-800">Additional Services:</strong>{" "}
-            Third-party verifications, reports, consultancy
-          </p>
-        </div>
-      </section> */}
 
       <section className="max-w-6xl mx-auto mt-24 px-6 mb-20">
         <h2 className="text-3xl font-extrabold text-green-800 mb-8 tracking-wide drop-shadow-md">

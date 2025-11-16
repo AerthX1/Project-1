@@ -35,7 +35,6 @@ const AppWrapper = ({ children }) => {
       dispatch(fetchProfile({ token, userType }))
         .unwrap()
         .then((res) => {
-          console.log("Profile loaded:", res);
           const correctUser =
             userType === "organization"
               ? res?.org || res?.user

@@ -30,6 +30,7 @@ import Transactions from '../components/Dashboard/Transactions';
 import Marketplace from '../components/Dashboard/Marketplace';
 import BugReport from '../pages/BugReport';
 import IndividualPricing from '../pages/IndividualPricing';
+import PricingGateway from '../pages/PricingGateway';
 
 
 const router = createBrowserRouter(
@@ -40,6 +41,7 @@ const router = createBrowserRouter(
    <Route path='home' element={<Home/>}/>  
   <Route path="MarketplaceHero" element={<MarketplaceHero />} />
   <Route path="pricing" element={<Pricing/>}/>
+  <Route path="/PricingGateway" element={<PricingGateway />} />
   <Route path="/individual-pricing" element={<IndividualPricing />} />
  <Route path="resources" element={<Resource />} />
  <Route path="solutions" element={<Solutions/>}/>

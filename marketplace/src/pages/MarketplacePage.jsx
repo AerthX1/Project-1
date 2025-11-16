@@ -10,6 +10,7 @@ const MarketplacePage = () => {
   const [dailySuggestions, setDailySuggestions] = useState([]);
   const [lowestPricedProjects, setLowestPricedProjects] = useState([]);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [allProjects, setAllProjects] = useState([]);
   const [creditsByType, setCreditsByType] = useState({});
   const navigate = useNavigate();
   const API = import.meta.env.VITE_API_URL;
@@ -29,21 +30,33 @@ const MarketplacePage = () => {
 useEffect(() => {
   const fetchData = async () => {
     try {
-      const res = await axios.get(`${API}/carbon-credits/active`);
-      const allProjects = res.data;
+   const res = await axios.get(`${API}/carbon-credits/active`);
+const projectsFromAPI = res.data;
+setAllProjects(projectsFromAPI); // store all projects
+
 
 const groupedByCategory = allProjects.reduce((acc, project) => {
   if (!project.category) return acc;
-  acc[project.category] = (acc[project.category] || 0) + (project.remainingTons || project.tons || 0);
+  
+  if (!acc[project.category]) {
+    acc[project.category] = { totalTons: 0, projectCount: 0 };
+  }
+
+  acc[project.category].totalTons += project.remainingTons || project.tons || 0;
+  acc[project.category].projectCount += 1;
+
   return acc;
 }, {});
 
+
 setCreditsByType(groupedByCategory);
 
-      const filtered = allProjects
-        .filter((p) => String(p.vintage).trim() === "2024")
-        .sort((a, b) => b.vintage - a.vintage);
-      setProjects(filtered.slice(0, 5));
+      const filtered = projectsFromAPI
+  .filter((p) => String(p.vintage).trim() === "2024")
+  .sort((a, b) => b.vintage - a.vintage);
+
+setProjects(filtered);
+
 
       const mostExpensive = allProjects.length
         ? allProjects.reduce(
@@ -83,6 +96,11 @@ setCreditsByType(groupedByCategory);
 
   fetchData();
 }, [API]);
+
+const impactfulProjects = [...allProjects]
+  .filter(p => p.impactScore) 
+  .sort((a, b) => b.impactScore - a.impactScore)
+  .slice(0, 4);
 
 
   const prevSlide = () => {
@@ -274,50 +292,42 @@ setCreditsByType(groupedByCategory);
         </div>
       </div>
 
-      {projects.length > 0 && (
-        <div className="mt-16 px-6 sm:px-12">
-          <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">
-            🌍 Most Impactful Projects
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...projects]
-              .sort((a, b) => (b.impactScore || 0) - (a.impactScore || 0))
-              .slice(0, 3)
-              .map((project) => (
-                <div
-                  key={project._id}
-                  className="rounded-xl shadow-lg overflow-hidden group relative h-72 cursor-pointer"
-                  onClick={() => handleButtonClick(project._id)}
-                >
-                  <img
-                    src={`${import.meta.env.VITE_FILE_URL}${
-                      project.backgroundImage || project.image
-                    }`}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition" />
-                  <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
-                    <h3 className="text-lg font-semibold truncate">{project.title}</h3>
-                    <p className="text-green-300 font-medium">
-                      🌱 Impact Score: {project.impactScore || "N/A"}
-                    </p>
-                    <div className="flex flex-wrap mt-2 gap-2 text-xs">
-                      {project.sdgs?.slice(0, 3).map((sdg, idx) => (
-                        <span
-                          key={idx}
-                          className="bg-green-700/80 px-2 py-1 rounded-full"
-                        >
-                          {sdg.goal || sdg}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+    {impactfulProjects.length > 0 && (
+  <div className="mt-16 px-6 sm:px-12">
+    <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">
+      🌍 Most Impactful Projects
+    </h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {impactfulProjects.map((project) => (
+        <div
+          key={project._id}
+          className="rounded-xl shadow-lg overflow-hidden group relative h-72 cursor-pointer"
+          onClick={() => handleButtonClick(project._id)}
+        >
+          <img
+            src={`${import.meta.env.VITE_FILE_URL}${project.backgroundImage || project.image}`}
+            alt={project.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition" />
+          <div className="absolute bottom-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
+            <h3 className="text-lg font-semibold truncate">{project.title}</h3>
+            <p className="text-green-300 font-medium">
+              🌱 Impact Score: {project.impactScore || "N/A"}
+            </p>
+            <div className="flex flex-wrap mt-2 gap-2 text-xs">
+              {project.sdgs?.slice(0, 3).map((sdg, idx) => (
+                <span key={idx} className="bg-green-700/80 px-2 py-1 rounded-full">
+                  {sdg.goal || sdg}
+                </span>
               ))}
+            </div>
           </div>
         </div>
-      )}
+      ))}
+    </div>
+  </div>
+)}
 
 {Object.keys(creditsByType).length > 0 && (
   <div className="mt-16 px-6 sm:px-12">
@@ -327,65 +337,31 @@ setCreditsByType(groupedByCategory);
     <p className="text-gray-600 mb-8 max-w-2xl">
       Categories group different project types together. Each category represents a major way to fight climate change.
     </p>
-
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {Object.entries(creditsByType).map(([category, tons]) => {
-        const lower = category.toLowerCase();
-        let icon = "🌱";
-        let desc = "Projects that remove or reduce carbon emissions.";
-        let tags = [];
-
-        if (lower.includes("renewable")) {
-          icon = "☀️";
-          desc = "Renewable energy projects replace fossil fuels with clean energy.";
-          tags = ["Solar", "Wind", "Hydro", "Geothermal"];
-        } else if (lower.includes("forest")) {
-          icon = "🌳";
-          desc = "Forestry projects capture CO₂ naturally and protect biodiversity.";
-          tags = ["Reforestation", "Mangroves", "Avoided Deforestation"];
-        } else if (lower.includes("agriculture")) {
-          icon = "🚜";
-          desc = "Agricultural projects improve soil carbon and reduce methane.";
-          tags = ["Sustainable Farming", "Rice Methane Reduction"];
-        } else if (lower.includes("industrial")) {
-          icon = "🏭";
-          desc = "Industrial projects improve efficiency and cut emissions.";
-          tags = ["Cement", "Steel", "Waste Management"];
-        } else if (lower.includes("community")) {
-          icon = "🤝";
-          desc = "Community projects improve energy access and reduce emissions.";
-          tags = ["Clean Cookstoves", "Biogas"];
-        }
-
-        return (
-          <div
-            key={category}
-            onClick={() => navigate(`/marketplace?filter=${category}`)}
-            className="bg-green-50 rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:scale-105 hover:bg-green-100 transition-all duration-300 cursor-pointer"
-          >
-            <div className="text-4xl mb-3">{icon}</div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-1">{category}</h3>
-            <p className="text-green-700 font-bold text-xl mb-2">
-              {tons.toLocaleString()} Tons
-            </p>
-            <p className="text-sm text-gray-600 mb-4">{desc}</p>
-
-            <div className="flex flex-wrap justify-center gap-2 mt-2">
-              {tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-1 bg-white border border-green-200 text-green-700 rounded-full text-xs"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        );
-      })}
+<div className="flex gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-green-400 scrollbar-track-green-100">
+  {Object.entries(creditsByType).map(([category, data]) => (
+    <div
+      key={category}
+      onClick={() => navigate(`/marketplace?filter=${category}`)}
+      className="min-w-[240px] bg-green-50 rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:scale-105 hover:bg-green-100 transition-all duration-300 cursor-pointer"
+    >
+      <div className="text-4xl mb-3">🌱</div>
+      <h3 className="text-lg font-semibold text-gray-800 mb-1">{category}</h3>
+      <p className="text-green-700 font-bold text-xl mb-1">
+        {data.totalTons.toLocaleString()} Tons
+      </p>
+      <p className="text-sm text-gray-600 mb-2">
+        {data.projectCount} projects
+      </p>
+      <p className="text-sm text-gray-600">
+        Carbon credits available in this category
+      </p>
     </div>
+  ))}
+</div>
+  
   </div>
 )}
+
 
 
       <div className="mt-16 px-6 sm:px-12">

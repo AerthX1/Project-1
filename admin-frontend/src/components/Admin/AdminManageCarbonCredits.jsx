@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaEllipsisV } from "react-icons/fa";
+import { FaEllipsisV, FaGlobe, FaTag, FaMoneyBillWave, FaFilter } from "react-icons/fa";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { MdArchive, MdCheckCircle, MdCancel, MdDelete, MdEdit, MdUnarchive, MdAddCircle, MdClose } from "react-icons/md";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -19,6 +20,7 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
   });
   const [showArchived, setShowArchived] = useState(false);
   const [selectedCredit, setSelectedCredit] = useState(null);
+  const [projectTypes, setProjectTypes] = useState([]);
   const [openBulkMenu, setOpenBulkMenu] = useState(false);
   const [selectedCredits, setSelectedCredits] = useState([]);
   const [isBulkSelectMode, setIsBulkSelectMode] = useState(false);
@@ -32,16 +34,25 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
   }, [credits, filters, showArchived]);
 
   const fetchCredits = async () => {
-    try {
-      const res = await axios.get(`${API}/carbon-credits`);
-      const sorted = res.data.sort(
-        (a, b) => (b.pricePerTon || 0) - (a.pricePerTon || 0)
-      );
-      setCredits(sorted);
-    } catch (err) {
-      console.error("Failed to fetch carbon credits", err);
-    }
-  };
+  try {
+    const res = await axios.get(`${API}/carbon-credits`);
+    const sorted = res.data.sort(
+      (a, b) => (b.pricePerTon || 0) - (a.pricePerTon || 0)
+    );
+    setCredits(sorted);
+
+    const types = [
+      ...new Set(
+        sorted
+          .map((c) => c.projectType?.trim().toLowerCase())
+          .filter((t) => t && t.length > 0)
+      ),
+    ];
+    setProjectTypes(types);
+  } catch (err) {
+    console.error("Failed to fetch carbon credits", err);
+  }
+};
 
   const applyFilters = () => {
     let tempCredits = [...credits];
@@ -361,29 +372,43 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
     }
   };
 
+  const getImageUrl = (image) => {
+    if (!image) return null;
+    if (typeof image === 'string') return image;
+    if (image.url) return image.url;
+    return null;
+  };
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center mb-6 border-b pb-2">
-        <h2 className="text-3xl font-extrabold text-gray-900">
-          📦 Carbon Credit List
+      <div className="flex justify-between items-center mb-6 border-b-4 border-green-600 pb-3">
+        <h2 className="text-3xl font-extrabold text-gray-900 flex items-center space-x-2">
+          <MdCheckCircle className="text-green-600 text-4xl" />
+          <span>Carbon Credit Management</span>
         </h2>
         <button
           onClick={onAdd}
-          className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200"
+          className="bg-green-600 text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-1"
         >
-          ➕ Add Carbon Credit
+          <MdAddCircle className="text-xl" />
+          <span>Add Credit</span>
         </button>
       </div>
-      <div className="bg-white rounded-xl shadow-lg p-4 mb-6">
+
+      <div className="bg-white rounded-2xl shadow-2xl p-6 mb-8 border border-gray-100">
+        <h3 className="text-xl font-bold text-gray-700 mb-4 flex items-center space-x-2">
+          <FaFilter className="text-green-600" />
+          <span>Filter & Bulk Actions</span>
+        </h3>
         <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0 lg:space-x-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full">
             <input
               type="text"
               name="project"
               placeholder="Search by Project..."
               value={filters.project}
               onChange={handleFilterChange}
-              className="p-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-sm"
+              className="p-3 border-2 border-gray-200 rounded-xl focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-sm shadow-sm"
             />
             <input
               type="text"
@@ -391,7 +416,7 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
               placeholder="Search by Country..."
               value={filters.country}
               onChange={handleFilterChange}
-              className="p-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-sm"
+              className="p-3 border-2 border-gray-200 rounded-xl focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-sm shadow-sm"
             />
             <input
               type="number"
@@ -399,189 +424,226 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
               placeholder="Max Price (₹)"
               value={filters.price}
               onChange={handleFilterChange}
-              className="p-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-sm"
+              className="p-3 border-2 border-gray-200 rounded-xl focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-sm shadow-sm"
             />
-            <select
-              name="type"
-              value={filters.type}
-              onChange={handleFilterChange}
-              className="p-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-sm"
-            >
-              <option value="">All Types</option>
-              <option value="forestry">Forestry</option>
-              <option value="renewable energy">Renewable Energy</option>
-              <option value="agriculture">Agriculture</option>
-            </select>
-            <div className="relative">
-              <select
-                name="status"
-                value={filters.status}
-                onChange={handleFilterChange}
-                className="p-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-sm"
-              >
-                <option value="">All Statuses</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-                <option value="archived">Archived</option>
-              </select>
+           <select
+  name="type"
+  value={filters.type}
+  onChange={handleFilterChange}
+  className="p-3 border-2 border-gray-200 rounded-xl focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-sm shadow-sm bg-white"
+>
+  <option value="">All Types</option>
+  {projectTypes.map((type) => (
+    <option key={type} value={type}>
+      {type.charAt(0).toUpperCase() + type.slice(1)}
+    </option>
+  ))}
+</select>
 
+            <select
+              name="status"
+              value={filters.status}
+              onChange={handleFilterChange}
+              className="p-3 border-2 border-gray-200 rounded-xl focus:ring-green-500 focus:border-green-500 transition-all duration-200 text-sm shadow-sm bg-white"
+            >
+              <option value="">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="archived">Archived</option>
+            </select>
+
+            <div className="relative">
               <button
                 onClick={() => setOpenBulkMenu(!openBulkMenu)}
-                className="absolute right-0 top-0 mt-2 mr-2 text-gray-600 hover:text-gray-800 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                className="w-full bg-gray-100 text-gray-700 font-semibold py-3 px-4 rounded-xl shadow-sm hover:bg-gray-200 transition-all duration-200 flex items-center justify-center space-x-2"
               >
-                <FaEllipsisV />
+                <FaEllipsisV className="text-lg" />
+                <span>Bulk Actions</span>
               </button>
 
               {openBulkMenu && (
-                <div className="absolute right-0 mt-8 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10 animate-fade-in-down">
+                <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-2xl z-20 origin-top-right animate-scale-up-tr">
                   <button
                     onClick={handleBulkSelectAll}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-100 transition-colors rounded-t-lg"
+                    className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-green-50 transition-colors flex items-center space-x-2 rounded-t-xl"
                   >
-                    {selectedCredits.length === filteredCredits.length
-                      ? "Deselect All"
-                      : "Select All"}
+                    <MdCheckCircle className="text-lg" />
+                    <span>
+                      {selectedCredits.length === filteredCredits.length
+                        ? "Deselect All"
+                        : "Select All"}
+                    </span>
                   </button>
+                  <div className="border-t border-gray-100"></div>
                   <button
                     onClick={handleBulkActivateAll}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-100 transition-colors"
+                    className="w-full text-left px-4 py-3 text-sm text-green-600 hover:bg-green-50 transition-colors flex items-center space-x-2"
                   >
-                    Activate Selected
+                    <MdCheckCircle className="text-lg" />
+                    <span>Bulk Activate</span>
                   </button>
                   <button
                     onClick={handleBulkDeactivateAll}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-100 transition-colors"
+                    className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center space-x-2"
                   >
-                    Deactivate Selected
+                    <MdCancel className="text-lg" />
+                    <span>Bulk Deactivate</span>
                   </button>
                   <button
                     onClick={handleBulkArchiveAll}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-100 transition-colors"
+                    className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2"
                   >
-                    Archive Selected
+                    <MdArchive className="text-lg" />
+                    <span>Bulk Archive</span>
                   </button>
                   <button
                     onClick={handleBulkUnarchiveAll}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-100 transition-colors rounded-b-lg"
+                    className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2 rounded-b-xl"
                   >
-                    Unarchive Selected
+                    <MdUnarchive className="text-lg" />
+                    <span>Bulk Unarchive</span>
                   </button>
                 </div>
               )}
             </div>
           </div>
-          <div className="flex space-x-2 w-full lg:w-auto justify-end">
+          <div className="flex space-x-3 w-full lg:w-auto justify-end">
             <button
               onClick={handleExportCSV}
-              className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200 text-sm flex-grow lg:flex-grow-0"
+              className="bg-green-600 text-white font-semibold py-3 px-5 rounded-xl shadow-md hover:bg-green-700 transition-all duration-300 text-sm flex-grow lg:flex-grow-0 transform hover:scale-105"
             >
               Export CSV
             </button>
             <button
               onClick={handleExportPDF}
-              className="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-red-700 transition-colors duration-200 text-sm flex-grow lg:flex-grow-0"
+              className="bg-red-600 text-white font-semibold py-3 px-5 rounded-xl shadow-md hover:bg-red-700 transition-all duration-300 text-sm flex-grow lg:flex-grow-0 transform hover:scale-105"
             >
               Export PDF
             </button>
           </div>
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-6">
         {filteredCredits.length > 0 ? (
           filteredCredits.map((credit) => (
             <div
               key={credit._id}
-              className="flex justify-between items-center px-6 py-4 bg-white rounded-xl shadow-md border border-gray-200 transition-transform duration-200 hover:scale-[1.01]"
+              className="flex justify-between items-center px-6 py-5 bg-white rounded-2xl shadow-xl border border-gray-200 transition-transform duration-300 hover:shadow-2xl hover:border-green-300"
             >
               {isBulkSelectMode && (
                 <input
                   type="checkbox"
                   checked={selectedCredits.includes(credit._id)}
                   onChange={() => handleCheckboxChange(credit._id)}
-                  className="mr-4 w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500"
+                  className="mr-5 w-5 h-5 text-green-600 bg-gray-100 border-gray-300 rounded-md focus:ring-green-500 cursor-pointer"
                 />
               )}
               <div
                 onClick={() => handleViewDetails(credit)}
-                className="cursor-pointer"
+                className="cursor-pointer flex-1 min-w-0"
               >
-                <p className="font-semibold text-lg text-gray-800">
+                <p className="font-bold text-xl text-gray-800 truncate">
                   {credit.name}
                 </p>
-                <p className="text-sm text-gray-500">
-                  ₹{credit.pricePerTon} / ton
-                </p>
-                <p className="text-xs text-gray-400 mt-1">{credit.country}</p>
-                <p className="text-xs text-gray-400">
-                  Remaining: {credit.tons} tons
+                <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+                  <span className="flex items-center space-x-1">
+                    <FaMoneyBillWave className="text-green-500" />
+                    <span>₹{credit.pricePerTon} / ton</span>
+                  </span>
+                  <span className="flex items-center space-x-1">
+                    <FaTag className="text-blue-500" />
+                    <span>{credit.projectType || "N/A"}</span>
+                  </span>
+                  <span className="flex items-center space-x-1">
+                    <FaGlobe className="text-indigo-500" />
+                    <span>{credit.country}</span>
+                  </span>
+                </div>
+                <p className="text-xs text-gray-400 mt-2">
+                  Remaining:{" "}
+                  <span className="font-semibold">{credit.remainingTons || credit.tons} tons</span>
                 </p>
                 <span
-                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                  className={`inline-flex items-center px-3 py-1 mt-2 rounded-full text-xs font-bold shadow-sm ${
                     credit.isArchived
-                      ? "bg-gray-100 text-gray-800"
+                      ? "bg-gray-200 text-gray-800"
                       : credit.isActive
                       ? "bg-green-100 text-green-800"
                       : "bg-red-100 text-red-800"
                   }`}
                 >
                   {credit.isArchived
-                    ? "Archived"
+                    ? "ARCHIVED"
                     : credit.isActive
-                    ? "Active"
-                    : "Inactive"}
+                    ? "ACTIVE"
+                    : "INACTIVE"}
                 </span>
               </div>
-              <div className="relative">
+              <div className="relative flex-shrink-0">
                 <button
                   onClick={() =>
                     setOpenMenuId(openMenuId === credit._id ? null : credit._id)
                   }
-                  className="text-gray-600 hover:text-gray-800 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                  className="text-gray-500 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
-                  <FaEllipsisV />
+                  <FaEllipsisV className="text-lg" />
                 </button>
                 {openMenuId === credit._id && (
-                  <div className="absolute right-0 top-full mt-2 w-32 bg-white rounded-lg border border-gray-200 shadow-xl z-10 animate-fade-in-down">
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl border border-gray-200 shadow-2xl z-10 origin-top-right animate-scale-up-tr">
                     <button
                       onClick={() => handleViewDetails(credit)}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-100 rounded-t-lg transition-colors"
+                      className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-green-50 rounded-t-xl transition-colors flex items-center space-x-2"
                     >
-                      👁️ View
+                      <span className="text-lg">👁️</span>
+                      <span>View Details</span>
                     </button>
                     <button
                       onClick={() => handleUpdate(credit)}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-100 transition-colors"
+                      className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-green-50 transition-colors flex items-center space-x-2"
                     >
-                      ✏️ Update
+                      <MdEdit className="text-lg text-blue-500" />
+                      <span>Update Credit</span>
                     </button>
                     <button
                       onClick={() =>
                         handleToggleActive(credit._id, credit.isActive)
                       }
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      className={`w-full text-left px-4 py-3 text-sm transition-colors flex items-center space-x-2 ${
+                        credit.isActive
+                          ? "text-red-600 hover:bg-red-50"
+                          : "text-green-600 hover:bg-green-50"
+                      }`}
                     >
-                      {credit.isActive ? "Deactivate" : "Activate"}
+                      {credit.isActive ? (
+                        <MdCancel className="text-lg" />
+                      ) : (
+                        <MdCheckCircle className="text-lg" />
+                      )}
+                      <span>{credit.isActive ? "Deactivate" : "Activate"}</span>
                     </button>
                     {credit.isArchived ? (
                       <button
                         onClick={() => handleUnarchive(credit._id)}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2"
                       >
-                        Unarchive
+                        <MdUnarchive className="text-lg text-gray-600" />
+                        <span>Unarchive</span>
                       </button>
                     ) : (
                       <button
                         onClick={() => handleArchive(credit._id)}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2"
                       >
-                        Archive
+                        <MdArchive className="text-lg text-gray-600" />
+                        <span>Archive</span>
                       </button>
                     )}
                     <button
                       onClick={() => handleDelete(credit._id)}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100 rounded-b-lg transition-colors"
+                      className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 rounded-b-xl transition-colors flex items-center space-x-2"
                     >
-                      🗑️ Delete
+                      <MdDelete className="text-lg" />
+                      <span>Delete</span>
                     </button>
                   </div>
                 )}
@@ -589,151 +651,169 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
             </div>
           ))
         ) : (
-          <div className="text-center text-gray-500 py-10">
-            No carbon credits found matching the criteria.
+          <div className="text-center text-gray-500 py-20 bg-white rounded-xl shadow-lg border border-gray-200">
+            <p className="text-xl font-semibold">
+              No carbon credits found matching the criteria.
+            </p>
+            <p className="mt-2 text-sm">Adjust your filters or add a new credit.</p>
           </div>
         )}
       </div>
 
       {selectedCredit && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
-          <div className="relative p-8 w-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl animate-fade-in-up max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex justify-center items-start pt-10 pb-10">
+          <div className="relative p-8 w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl animate-fade-in-up max-h-[95vh] overflow-y-auto transform transition-all duration-300">
             <button
               onClick={() => setSelectedCredit(null)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl"
+              className="absolute top-5 right-5 text-gray-500 hover:text-red-600 text-2xl p-2 rounded-full hover:bg-gray-100 transition-colors"
             >
-              ✖️
+              <MdClose />
             </button>
-            <div className="flex flex-col items-center mb-6">
-              {selectedCredit.image ? (
+            <div className="flex flex-col items-center mb-8 border-b pb-4">
+              {getImageUrl(selectedCredit.image) ? (
                 <img
-                  src={selectedCredit.image}
+                  src={getImageUrl(selectedCredit.image)}
                   alt={selectedCredit.name}
-                  className="w-full max-w-md h-60 object-cover rounded-lg shadow-md mb-4"
+                  className="w-full max-w-lg h-64 object-cover rounded-xl shadow-lg mb-6 border-4 border-green-200"
                 />
               ) : (
-                <div className="w-full max-w-md h-60 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500 text-lg mb-4">
+                <div className="w-full max-w-lg h-64 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-lg mb-6 border-4 border-gray-300">
                   No Project Image Available
                 </div>
               )}
-              <h3 className="text-3xl font-bold text-gray-900 mb-1 text-center">
+              <h3 className="text-4xl font-extrabold text-gray-900 mb-2 text-center">
                 {selectedCredit.title}
               </h3>
-              <p className="text-md text-gray-600 text-center">
+              <p className="text-xl text-green-700 font-semibold text-center">
                 {selectedCredit.name}
               </p>
+              <span
+                className={`inline-flex items-center px-3 py-1 mt-3 rounded-full text-sm font-bold shadow-md ${
+                  selectedCredit.isArchived
+                    ? "bg-gray-300 text-gray-800"
+                    : selectedCredit.isActive
+                    ? "bg-green-500 text-white"
+                    : "bg-red-500 text-white"
+                }`}
+              >
+                {selectedCredit.isArchived
+                  ? "ARCHIVED"
+                  : selectedCredit.isActive
+                  ? "ACTIVE"
+                  : "INACTIVE"}
+              </span>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
-              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                <h4 className="font-bold text-lg text-gray-800 mb-2 border-b pb-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <div className="border-2 border-green-300 rounded-xl p-5 bg-green-50 shadow-inner">
+                <h4 className="font-bold text-xl text-green-800 mb-4 border-b border-green-300 pb-3">
                   Project Overview
                 </h4>
-                <div className="space-y-2 text-sm text-gray-700">
+                <div className="space-y-3 text-base text-gray-700">
                   <div>
-                    <span className="font-semibold">Description:</span>
-                    <p className="ml-2 mt-1">{selectedCredit.info || "N/A"}</p>
+                    <p className="font-bold text-green-700 mb-1">Description:</p>
+                    <p className="pl-3 border-l-2 border-green-500 italic">
+                      {selectedCredit.info || "N/A"}
+                    </p>
                   </div>
+                  <DetailItem
+                    label="Project Type"
+                    value={selectedCredit.projectType}
+                  />
+                  <DetailItem
+                    label="Vintage Year"
+                    value={selectedCredit.vintageYear}
+                  />
+                  <DetailItem
+                    label="Project Developer"
+                    value={selectedCredit.projectDeveloper}
+                  />
+                  <DetailItem
+                    label="Verified By"
+                    value={selectedCredit.verifiedBy}
+                  />
                   <div>
-                    <span className="font-semibold">Project Type:</span>{" "}
-                    {selectedCredit.projectType || "N/A"}
-                  </div>
-                  <div>
-                    <span className="font-semibold">Vintage Year:</span>{" "}
-                    {selectedCredit.vintageYear || "N/A"}
-                  </div>
-                  <div>
-                    <span className="font-semibold">Project Developer:</span>{" "}
-                    {selectedCredit.projectDeveloper || "N/A"}
-                  </div>
-                  <div>
-                    <span className="font-semibold">Verified By:</span>{" "}
-                    {selectedCredit.verifiedBy || "N/A"}
-                  </div>
-                  <div>
-                    <span className="font-semibold">Registry Link:</span>
+                    <span className="font-bold text-green-700">
+                      Registry Link:
+                    </span>
                     {selectedCredit.registryLink ? (
                       <a
                         href={selectedCredit.registryLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-green-600 hover:underline ml-2"
+                        className="text-blue-600 hover:underline ml-2 font-medium"
                       >
-                        View Registry
+                        View Registry 🔗
                       </a>
                     ) : (
-                      "N/A"
+                      <span className="ml-2">N/A</span>
                     )}
                   </div>
                 </div>
               </div>
 
-              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                <h4 className="font-bold text-lg text-gray-800 mb-2 border-b pb-2">
-                  Credit Details
+              <div className="border-2 border-green-300 rounded-xl p-5 bg-green-50 shadow-inner">
+                <h4 className="font-bold text-xl text-green-800 mb-4 border-b border-green-300 pb-3">
+                  Credit & Financial Details
                 </h4>
-                <div className="space-y-2 text-sm text-gray-700">
-                  <div>
-                    <span className="font-semibold">Total Tons:</span>{" "}
-                    {selectedCredit.tons || "0"} tons
-                  </div>
-                  <div>
-                    <span className="font-semibold">Remaining Tons:</span>{" "}
-                    {selectedCredit.remainingTons || "0"} tons
-                  </div>
-                  <div>
-                    <span className="font-semibold">Price per Ton:</span> ₹
-                    {selectedCredit.pricePerTon || "0.00"}
-                  </div>
-                  <div>
-                    <span className="font-semibold">Status:</span>
-                    <span
-                      className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
-                        selectedCredit.isArchived
-                          ? "bg-gray-100 text-gray-800"
-                          : selectedCredit.isActive
-                          ? "bg-green-100 text-green-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {selectedCredit.isArchived
+                <div className="space-y-3 text-base text-gray-700">
+                  <DetailItem
+                    label="Total Tons"
+                    value={`${selectedCredit.tons || "0"} tons`}
+                  />
+                  <DetailItem
+                    label="Remaining Tons"
+                    value={`${selectedCredit.remainingTons || "0"} tons`}
+                  />
+                  <DetailItem
+                    label="Price per Ton"
+                    value={`₹${selectedCredit.pricePerTon || "0.00"}`}
+                  />
+                  <DetailItem
+                    label="Retired"
+                    value={selectedCredit.retired ? "Yes" : "No"}
+                  />
+                  <DetailItem
+                    label="Status"
+                    value={
+                      selectedCredit.isArchived
                         ? "Archived"
                         : selectedCredit.isActive
                         ? "Active"
-                        : "Inactive"}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="font-semibold">Retired:</span>{" "}
-                    {selectedCredit.retired ? "Yes" : "No"}
-                  </div>
+                        : "Inactive"
+                    }
+                  />
                 </div>
               </div>
             </div>
 
-            <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 mb-6">
-              <h4 className="font-bold text-lg text-gray-800 mb-2 border-b pb-2">
-                  Location & Impact
+            <div className="border-2 border-green-300 rounded-xl p-5 bg-green-50 shadow-inner mb-8">
+              <h4 className="font-bold text-xl text-green-800 mb-4 border-b border-green-300 pb-3">
+                Location & Impact
               </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
-                <div>
-                  <span className="font-semibold">Country:</span>{" "}
-                  {selectedCredit.country || "N/A"}
-                </div>
-                <div>
-                  <span className="font-semibold">State:</span>{" "}
-                  {selectedCredit.state || "N/A"}
-                </div>
-                <div>
-                  <span className="font-semibold">City:</span>{" "}
-                  {selectedCredit.city || "N/A"}
-                </div>
-                <div>
-                  <span className="font-semibold">SDG Alignment:</span>
-                  <ul className="list-disc list-inside ml-4 mt-1">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-base text-gray-700">
+                <DetailItem
+                  label="Country"
+                  value={selectedCredit.country}
+                />
+                <DetailItem
+                  label="State"
+                  value={selectedCredit.state}
+                />
+                <DetailItem
+                  label="City"
+                  value={selectedCredit.city}
+                />
+                <div className="col-span-1 md:col-span-3">
+                  <p className="font-bold text-green-700 mb-1">
+                    SDG Alignment:
+                  </p>
+                  <ul className="list-disc list-inside ml-4 mt-1 space-y-1">
                     {selectedCredit.sdgs && selectedCredit.sdgs.length > 0 ? (
                       selectedCredit.sdgs.map((sdg) => (
-                        <li key={sdg}>{sdg}</li>
+                        <li key={sdg} className="text-sm">
+                          {sdg}
+                        </li>
                       ))
                     ) : (
                       <li>N/A</li>
@@ -744,11 +824,11 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
             </div>
 
             {selectedCredit.additionalNotes && (
-              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                <h4 className="font-bold text-lg text-gray-800 mb-2 border-b pb-2">
+              <div className="border-2 border-gray-300 rounded-xl p-5 bg-gray-50 shadow-inner">
+                <h4 className="font-bold text-xl text-gray-700 mb-4 border-b border-gray-300 pb-3">
                   Additional Notes
                 </h4>
-                <p className="text-sm text-gray-700">
+                <p className="text-base text-gray-700 italic">
                   {selectedCredit.additionalNotes}
                 </p>
               </div>
@@ -759,5 +839,12 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
     </div>
   );
 };
+
+const DetailItem = ({ label, value }) => (
+  <div className="flex justify-between">
+    <span className="font-bold text-green-700">{label}:</span>
+    <span className="ml-4">{value || "N/A"}</span>
+  </div>
+);
 
 export default AdminManageCarbonCredits;

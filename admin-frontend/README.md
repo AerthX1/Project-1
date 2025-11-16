@@ -22,3 +22,5 @@ install package:-
 6. npm install axios
 7.  npm install jspdf
 8. npm install jspdf-autotable
+9. npm i framer-motion
+cd client

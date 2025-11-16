@@ -162,30 +162,31 @@ const Services = () => {
   ];
 
   const whyChooseUsPoints = [
-    {
-      icon: <FaLock className="text-white text-3xl" />,
-      title: "Unwavering Transparency",
-      description:
-        "Our blockchain-powered platform ensures every carbon credit is verifiable, transparent, and securely retired.",
-    },
-    {
-      icon: <FaRegLightbulb className="text-white text-3xl" />,
-      title: "Expert Guidance",
-      description:
-        "Leverage insights from our sustainability experts to craft and execute an impactful climate strategy.",
-    },
-    {
-      icon: <FaHandshake className="text-white text-3xl" />,
-      title: "Global Verified Projects",
-      description:
-        "Access a diverse portfolio of high-quality, internationally verified carbon offset projects.",
-    },
-    {
-      icon: <FaUsers className="text-white text-3xl" />,
-      title: "Community & Impact",
-      description:
-        "Join a growing community committed to environmental stewardship and collective climate action.",
-    },
+   {
+  icon: <FaLock className="text-white text-3xl" />,
+  title: "Trusted Transparency",
+  description:
+    "Every carbon credit on our platform is traceable, verified, and securely retired for complete trust.",
+},
+{
+  icon: <FaRegLightbulb className="text-white text-3xl" />,
+  title: "Expert Guidance",
+  description:
+    "Work with our sustainability experts to design and implement a climate strategy that delivers real results.",
+},
+{
+  icon: <FaHandshake className="text-white text-3xl" />,
+  title: "Global Verified Projects",
+  description:
+    "Explore a diverse portfolio of internationally certified carbon offset projects you can support with confidence.",
+},
+{
+  icon: <FaUsers className="text-white text-3xl" />,
+  title: "Community & Impact",
+  description:
+    "Be part of a growing community committed to environmental stewardship and meaningful climate action.",
+},
+
   ];
 
   return (
@@ -301,7 +302,7 @@ const Services = () => {
             transition={{ duration: 0.8, delay: 0.7 }}
           >
             <GlowingButton className="text-lg">
-              Get Started Free <FiArrowRight className="inline-block ml-2" />
+              Get Started <FiArrowRight className="inline-block ml-2" />
             </GlowingButton>
             <motion.button
               whileHover={{ scale: 1.05 }}
