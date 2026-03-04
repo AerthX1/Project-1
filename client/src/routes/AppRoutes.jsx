@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route, Navigate } from 'react-router-dom';
 import Root from '../layout/Root';
 import Home from '../pages/Home';
 import MarketplaceHero from '../pages/MarketplaceHero'
@@ -31,6 +31,15 @@ import Marketplace from '../components/Dashboard/Marketplace';
 import BugReport from '../pages/BugReport';
 import IndividualPricing from '../pages/IndividualPricing';
 import PricingGateway from '../pages/PricingGateway';
+import ProjectDetails from '../components/Dashboard/ProjectDetails';
+import ImpactGoals from '../components/Dashboard/ImpactGoals';
+import OrganizationOverview from '../components/Dashboard/OrganizationOverview';
+import TeamMembers from '../components/Dashboard/TeamMembers';
+import ESGReports from '../components/Dashboard/ESGReports';
+import APIAccess from '../components/Dashboard/APIAccess';
+import RequireAuth from '../components/RequireAuth'; 
+import ErrorPage from '../pages/ErrorPage';
+import DashboardRedirect from "../components/DashboardRedirect";
 
 
 const router = createBrowserRouter(
@@ -38,41 +47,58 @@ const router = createBrowserRouter(
     <>
     <Route path="/" element={<Root />}>
    <Route index element={<Home />} />
-   <Route path='home' element={<Home/>}/>  
-  <Route path="MarketplaceHero" element={<MarketplaceHero />} />
-  <Route path="pricing" element={<Pricing/>}/>
-  <Route path="/PricingGateway" element={<PricingGateway />} />
-  <Route path="/individual-pricing" element={<IndividualPricing />} />
- <Route path="resources" element={<Resource />} />
- <Route path="solutions" element={<Solutions/>}/>
- <Route path="services" element={<Services/>}/>
- <Route path="/solutions/business" element={<BusinessSolutions/>}/>
-  <Route path="/solutions/individuals" element={<IndividualSolutions/>}/>
-    <Route path="/solutions/api" element={<APIIntegration/>}/>
-        <Route path="/contactus" element={<ContactUs/>}/>
+   <Route path='home' element={<Home/>}/> 	
+ <Route path="MarketplaceHero" element={<MarketplaceHero />} />
+ <Route path="pricing" element={<Pricing/>}/>
+ <Route path="/PricingGateway" element={<PricingGateway />} />
+ <Route path="/individual-pricing" element={<IndividualPricing />} />
+<Route path="resources" element={<Resource />} />
+<Route path="solutions" element={<Solutions/>}/>
+<Route path="services" element={<Services/>}/>
+<Route path="/solutions/business" element={<BusinessSolutions/>}/>
+ <Route path="/solutions/individuals" element={<IndividualSolutions/>}/>
+ 	 <Route path="/solutions/api" element={<APIIntegration/>}/>
+ 	 	 <Route path="/contactus" element={<ContactUs/>}/>
 
-    </Route>
-  <Route path="/register-choice" element={<RegisterChoice  />} />
-  <Route path="/register" element={<Register/>}/>
-  <Route path="/register-individual" element={<RegisterIndividual />} />
-  <Route path="/verify-otp" element={<VerifyOtp />} />
-   <Route path="/signin" element={<Login />} />
-    <Route path='/profile' element={<Profile/>}/>
-    <Route path="/help" element={<HelpSupport />} />
-     <Route path="/report-bug" element={<BugReport />} />
-    <Route path="/notification" element={<NotificationPage />} />
-    <Route path="/about" element={<About />} />
-    <Route path="/settings" element={<Settings />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} /> 
-      <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route path="overview" element={<Overview />} />
-          <Route path="certificates" element={<Certificates />} />
-          <Route path="transactions" element={<Transactions />} />
-          <Route path="marketplace" element={<Marketplace />} />
-        </Route>
-     </>
-  )
+ 	 </Route>
+ <Route path="/register-choice" element={<RegisterChoice 	/>} />
+ <Route path="/register" element={<Register/>}/>
+ <Route path="/register-individual" element={<RegisterIndividual />} />
+ <Route path="/verify-otp" element={<VerifyOtp />} />
+ 	<Route path="/signin" element={<Login />} />
+ 	 <Route path='/profile' element={<Profile/>}/>
+ 	 <Route path="/help" element={<HelpSupport />} />
+ 	 	<Route path="/report-bug" element={<BugReport />} />
+ 	 <Route path="/notification" element={<NotificationPage />} />
+ 	 <Route path="/about" element={<About />} />
+ 	 <Route path="/settings" element={<Settings />} />
+ 	 	 <Route path="/forgot-password" element={<ForgotPassword />} />
+ 	 	 <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} /> 
+ 	 	 	     <Route 
+  path="dashboard" 
+  element={<RequireAuth><DashboardLayout /></RequireAuth>} 
+  errorElement={<ErrorPage />}
+>
+  {/* Redirect to correct dashboard page based on role */}
+  <Route index element={<DashboardRedirect />} />
+
+  {/* Individual user routes */}
+  <Route path="overview" element={<Overview />} />
+  <Route path="certificates" element={<Certificates />} />
+  <Route path="transactions" element={<Transactions />} />
+  <Route path="marketplace" element={<Marketplace />} />
+  <Route path="project/:id" element={<ProjectDetails />} />
+  <Route path="goals" element={<ImpactGoals allowedRoles={["individual"]} />} />
+
+  {/* Business user routes */}
+  <Route path="org-overview" element={<OrganizationOverview allowedRoles={["business"]} />} />
+  <Route path="team" element={<TeamMembers allowedRoles={["business"]} />} />
+  <Route path="esg-reports" element={<ESGReports allowedRoles={["business"]} />} />
+  <Route path="api-access" element={<APIAccess allowedRoles={["business"]} />} />
+</Route>
+
+ 	 	 	    </>
+  )  
 );
 
 export default router;

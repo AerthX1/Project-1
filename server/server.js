@@ -25,11 +25,6 @@ const allowedOrigins = [
 ];
 dotenv.config();
 
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} body:`, req.body);
-  next();
-});
-
 app.use(cors({
   origin: allowedOrigins,
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -38,6 +33,11 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} body:`, req.body);
+  next();
+});
 app.use("/uploads", express.static("uploads"));
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 

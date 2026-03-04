@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 const CarbonCredit = require("../models/CarbonCredit");
 const Notification = require("../models/Notification");
 const FAQ = require("../models/FAQ");
+const PricingConfig = require('../models/PricingConfig');
 
 router.get("/admins", async (req, res) => {
   try {
@@ -24,6 +25,21 @@ router.get("/admins", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch admins", error: err.message });
   }
 });
+
+const isAdmin = async (req, res, next) => {
+  try {
+    const user = req.user; 
+
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied. Admin only." });
+    }
+
+    next();
+  } catch (err) {
+    res.status(500).json({ message: "Server error in admin check" });
+  }
+};
+
 
 
 router.get('/individuals', async (req, res) => {
@@ -172,6 +188,8 @@ const emailBody = `
     res.status(500).json({ message: "Failed to send email", error: err.message });
   }
 });
+
+
 
 
 router.delete("/delete-report/:reportId", async (req, res) => {
@@ -442,19 +460,56 @@ router.put('/archive/:creditId', async (req, res) => {
 });
 
 router.put('/unarchive/:creditId', async (req, res) => {
-    try {
-        const credit = await CarbonCredit.findByIdAndUpdate(
-            req.params.creditId,
-            { isArchived: false, isActive: false }, 
-            { new: true }
-        );
-        if (!credit) return res.status(404).json({ message: "Credit not found" });
-        res.status(200).json(credit);
-    } catch (err) {
-        console.error("Failed to unarchive credit:", err);
-        res.status(500).json({ message: "Failed to unarchive credit", error: err.message });
-    }
+  try {
+    const credit = await CarbonCredit.findByIdAndUpdate(
+      req.params.creditId,
+      { isArchived: false, isActive: true }, 
+      { new: true }
+    );
+
+    if (!credit) return res.status(404).json({ message: "Credit not found" });
+
+    res.status(200).json(credit);
+  } catch (err) {
+    console.error("Failed to unarchive credit:", err);
+    res.status(500).json({ message: "Failed to unarchive credit", error: err.message });
+  }
+});
+
+router.get("/pricing", async (req, res) => {
+  try {
+    const config = await PricingConfig.findOne({ configId: 'pricing_master' });
+    if (!config) return res.status(404).json({ message: "No pricing configuration found" });
+    res.status(200).json(config);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch pricing configuration", error: err.message });
+  }
 });
 
 
+router.post("/pricing", async (req, res) => {
+  try {
+    const { plans, featureGroups } = req.body;
+
+    if (!plans || Object.keys(plans).length === 0) {
+      return res.status(400).json({ message: "Plans data is required" });
+    }
+
+    const updatedConfig = await PricingConfig.findOneAndUpdate(
+      { configId: 'pricing_master' },
+      { plans, featureGroups },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+
+    res.status(200).json({ message: "Pricing configuration saved successfully", data: updatedConfig });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to save pricing configuration", error: err.message });
+  }
+});
+
+
+
 module.exports = router;
+
