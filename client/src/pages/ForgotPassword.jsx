@@ -67,6 +67,7 @@ const ForgotPassword = () => {
       await axios.post(`${import.meta.env.VITE_API_URL}/auth/reset-password`, {
         email,
         password,
+         otp,
       });
       setMessage("Password reset successful. Redirecting to login...");
       setTimeout(() => navigate("/signin"), 2000);

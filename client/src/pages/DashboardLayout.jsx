@@ -1,23 +1,47 @@
 import React, { useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { FaHome, FaCertificate, FaExchangeAlt, FaStore } from "react-icons/fa";
+import { FaHome, FaCertificate, FaExchangeAlt, FaStore, FaUsers, FaChartBar, FaKey } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const DashboardLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, userType } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (location.pathname === "/dashboard") {
-      navigate("/dashboard/overview", { replace: true });
-    }
-  }, [location, navigate]);
+    if (!userType) return;
 
-  const navItems = [
+    // Redirect from /dashboard to proper page based on userType
+    if (location.pathname === "/dashboard") {
+      navigate(
+        userType === "organization" ? "/dashboard/org-overview" : "/dashboard/overview",
+        { replace: true }
+      );
+    }
+  }, [location, navigate, userType]);
+
+  if (!userType) return <div>Loading...</div>; // wait until userType loads
+
+  // Role-based nav items
+  const consumerNav = [
     { label: "Overview", to: "/dashboard/overview", icon: <FaHome /> },
     { label: "Certificates", to: "/dashboard/certificates", icon: <FaCertificate /> },
     { label: "Transactions", to: "/dashboard/transactions", icon: <FaExchangeAlt /> },
     { label: "Marketplace", to: "/dashboard/marketplace", icon: <FaStore /> },
+    { label: "Impact Goals", to: "/dashboard/goals", icon: <FaChartBar /> },
   ];
+
+  const businessNav = [
+    { label: "Organization", to: "/dashboard/org-overview", icon: <FaHome /> },
+    { label: "Certificates", to: "/dashboard/certificates", icon: <FaCertificate /> },
+    { label: "Transactions", to: "/dashboard/transactions", icon: <FaExchangeAlt /> },
+    { label: "Marketplace", to: "/dashboard/marketplace", icon: <FaStore /> },
+    { label: "Team", to: "/dashboard/team", icon: <FaUsers /> },
+    { label: "ESG Reports", to: "/dashboard/esg-reports", icon: <FaChartBar /> },
+    { label: "API Access", to: "/dashboard/api-access", icon: <FaKey /> },
+  ];
+
+  const navItems = userType === "organization" ? businessNav : consumerNav;
 
   return (
     <div className="flex h-screen">
@@ -39,7 +63,6 @@ const DashboardLayout = () => {
           ))}
         </nav>
       </aside>
-
       <main className="flex-1 p-6 overflow-y-auto bg-gray-50">
         <Outlet />
       </main>

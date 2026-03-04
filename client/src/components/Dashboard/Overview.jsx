@@ -2,31 +2,29 @@ import React from "react";
 
 const Overview = () => {
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold text-green-800 mb-4">Dashboard Overview</h1>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-semibold">Your Sustainability Overview</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-2xl shadow p-4">
-          <h2 className="text-gray-600">Total Carbon Offset</h2>
-          <p className="text-2xl font-bold text-green-700">42 Tons</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-5 rounded-xl shadow">
+          <p className="text-gray-500">Total Credits Purchased</p>
+          <h3 className="text-3xl font-bold mt-1">0</h3>
         </div>
 
-        <div className="bg-white rounded-2xl shadow p-4">
-          <h2 className="text-gray-600">Certificates Earned</h2>
-          <p className="text-2xl font-bold text-green-700">5</p>
+        <div className="bg-white p-5 rounded-xl shadow">
+          <p className="text-gray-500">Total CO₂ Offset</p>
+          <h3 className="text-3xl font-bold mt-1">0 tons</h3>
         </div>
 
-        <div className="bg-white rounded-2xl shadow p-4">
-          <h2 className="text-gray-600">Transactions</h2>
-          <p className="text-2xl font-bold text-green-700">₹12,450</p>
+        <div className="bg-white p-5 rounded-xl shadow">
+          <p className="text-gray-500">Certificates</p>
+          <h3 className="text-3xl font-bold mt-1">0</h3>
         </div>
       </div>
 
-      <div className="mt-8 bg-white rounded-2xl shadow p-6">
-        <h2 className="text-xl font-semibold mb-2">Carbon Offset Progress</h2>
-        <div className="h-64 flex items-center justify-center text-gray-500">
-          [Chart Coming Soon]
-        </div>
+      <div className="bg-white p-5 rounded-xl shadow">
+        <h3 className="text-xl font-semibold mb-3">Recent Activity</h3>
+        <p className="text-gray-500">No activity yet.</p>
       </div>
     </div>
   );
