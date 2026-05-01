@@ -9,12 +9,14 @@ const authRoutes = require("./routes/authRoutes");
 const orgRoutes = require("./routes/orgRoutes");
 const individualRoutes = require("./routes/individualRoutes");
 const individualProfileRoutes = require("./routes/individualProfileRoutes");
+const individualPricingRoutes = require("./routes/individualPricingRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const carbonCreditRoutes = require('./routes/carbonCredits');
 const adminRoutes = require('./routes/adminRoutes'); 
 const bugRoutes = require("./routes/bugRoutes.js");
 const contactRoutes = require("./routes/contactRoutes");
 const faqRoutes = require("./routes/faqRoutes");
+const pricingRoutes = require("./routes/pricingRoutes");
 
 const path = require('path');
 const app = express();
@@ -26,9 +28,18 @@ const allowedOrigins = [
 dotenv.config();
 
 app.use(cors({
-  origin: allowedOrigins,
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("CORS not allowed"), false);
+    }
+  },
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
 }));
 
 app.use(express.json());
@@ -51,6 +62,9 @@ app.use("/api", bugRoutes);
 app.use("/api/user/notifications", notificationRoutes);
 app.use("/api/faqs", faqRoutes);
 app.use('/api/carbon-credits', carbonCreditRoutes);
+app.use("/api/pricing", pricingRoutes);
+app.use("/api/admin/pricing/individual", individualPricingRoutes);
+app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 5000;  

@@ -23,23 +23,10 @@ import AdminRoute from "../../../admin-frontend/src/components/Admin/AdminRoute"
 import Services from '../pages/Services';
 import VerifyOtp from '../pages/VerifyOtp';
 import ContactUs from '../pages/ContactUs';
-import DashboardLayout from '../pages/DashboardLayout';
-import Overview from '../components/Dashboard/Overview';
-import Certificates from '../components/Dashboard/Certificates';
-import Transactions from '../components/Dashboard/Transactions';
-import Marketplace from '../components/Dashboard/Marketplace';
 import BugReport from '../pages/BugReport';
-import IndividualPricing from '../pages/IndividualPricing';
 import PricingGateway from '../pages/PricingGateway';
-import ProjectDetails from '../components/Dashboard/ProjectDetails';
-import ImpactGoals from '../components/Dashboard/ImpactGoals';
-import OrganizationOverview from '../components/Dashboard/OrganizationOverview';
-import TeamMembers from '../components/Dashboard/TeamMembers';
-import ESGReports from '../components/Dashboard/ESGReports';
-import APIAccess from '../components/Dashboard/APIAccess';
-import RequireAuth from '../components/RequireAuth'; 
-import ErrorPage from '../pages/ErrorPage';
-import DashboardRedirect from "../components/DashboardRedirect";
+
+import GlobalLogout from '../pages/GlobalLogout';
 
 
 const router = createBrowserRouter(
@@ -51,7 +38,6 @@ const router = createBrowserRouter(
  <Route path="MarketplaceHero" element={<MarketplaceHero />} />
  <Route path="pricing" element={<Pricing/>}/>
  <Route path="/PricingGateway" element={<PricingGateway />} />
- <Route path="/individual-pricing" element={<IndividualPricing />} />
 <Route path="resources" element={<Resource />} />
 <Route path="solutions" element={<Solutions/>}/>
 <Route path="services" element={<Services/>}/>
@@ -66,6 +52,7 @@ const router = createBrowserRouter(
  <Route path="/register-individual" element={<RegisterIndividual />} />
  <Route path="/verify-otp" element={<VerifyOtp />} />
  	<Route path="/signin" element={<Login />} />
+  <Route path="/logout" element={<GlobalLogout />} />
  	 <Route path='/profile' element={<Profile/>}/>
  	 <Route path="/help" element={<HelpSupport />} />
  	 	<Route path="/report-bug" element={<BugReport />} />
@@ -74,28 +61,7 @@ const router = createBrowserRouter(
  	 <Route path="/settings" element={<Settings />} />
  	 	 <Route path="/forgot-password" element={<ForgotPassword />} />
  	 	 <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} /> 
- 	 	 	     <Route 
-  path="dashboard" 
-  element={<RequireAuth><DashboardLayout /></RequireAuth>} 
-  errorElement={<ErrorPage />}
->
-  {/* Redirect to correct dashboard page based on role */}
-  <Route index element={<DashboardRedirect />} />
-
-  {/* Individual user routes */}
-  <Route path="overview" element={<Overview />} />
-  <Route path="certificates" element={<Certificates />} />
-  <Route path="transactions" element={<Transactions />} />
-  <Route path="marketplace" element={<Marketplace />} />
-  <Route path="project/:id" element={<ProjectDetails />} />
-  <Route path="goals" element={<ImpactGoals allowedRoles={["individual"]} />} />
-
-  {/* Business user routes */}
-  <Route path="org-overview" element={<OrganizationOverview allowedRoles={["business"]} />} />
-  <Route path="team" element={<TeamMembers allowedRoles={["business"]} />} />
-  <Route path="esg-reports" element={<ESGReports allowedRoles={["business"]} />} />
-  <Route path="api-access" element={<APIAccess allowedRoles={["business"]} />} />
-</Route>
+ 	 	
 
  	 	 	    </>
   )  

@@ -11,10 +11,12 @@ import {
 } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import DefaultAvatar from "./DefaultAvatar";
+import { useNavigate } from "react-router-dom";
 
 const ProfileDropdown = ({ onClose, onLogout }) => {
   const user = useSelector((state) => state.auth.user);
   const profile = useSelector((state) => state.profile.data);
+const navigate = useNavigate();
 
   if (!user) {
     return null;
@@ -34,9 +36,11 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
 {
   label: user?.orgName ? "Subscription" : "Individual Subscription",
   onClick: () => {
-    window.location.href = user?.orgName
-      ? `${import.meta.env.VITE_MAIN_URL}/pricing`
-      : `${import.meta.env.VITE_MAIN_URL}/individual-pricing`;
+    navigate(
+      user?.orgName
+        ? "/marketplace/pricing"
+        : "/marketplace/individual-pricing"
+    );
   },
   icon: <FaCreditCard className="text-gray-400" />,
 },

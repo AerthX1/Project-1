@@ -27,12 +27,7 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
       to: "/profile",
       icon: <FaUser className="text-gray-400" />,
     },
-   {
-  label: user?.orgName ? "Subscription" : "Individual Subscription",
-  to: user?.orgName ? "/pricing" : "/individual-pricing",
-  icon: <FaCreditCard className="text-gray-400" />,
-},
-
+  
     
     {
       label: "Notification",
@@ -93,13 +88,7 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
         </div>
       </div>
 
-      <Link
-        to="/dashboard"
-        className="block w-full py-2 mb-5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition text-center"
-        onClick={onClose}
-      >
-        Switch to Organization Dashboard
-      </Link>
+    
 
       <ul className="text-sm space-y-1 border-b border-gray-200 pb-4 mb-4">
         {navItems.map((item) => (

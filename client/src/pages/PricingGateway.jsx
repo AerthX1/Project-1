@@ -23,6 +23,7 @@ import {
   FaCalendarAlt,
   FaMoneyBillAlt
 } from "react-icons/fa";
+import PaymentCore from "../shared/payment/PaymentCore";
 import { SiPhonepe } from "react-icons/si";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -709,10 +710,7 @@ const PricingGateway = () => {
           </div>
 
           <div className="lg:col-span-1">
-            <PaymentFormForGateway
-              subtotal={computedSubtotal}
-              onSuccessNavigate={() => navigate('/confirmation')} 
-            />
+           <PaymentCore subtotal={computedSubtotal} />
           </div>
 
         </div>

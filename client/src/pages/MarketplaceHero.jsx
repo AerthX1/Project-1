@@ -61,13 +61,14 @@ const itemVariants = {
 };
 
 const MarketplaceHero = () => {
-  const marketplaceLink = useMemo(() => {
-    return `${import.meta.env.VITE_CLIENT_URL}?token=${localStorage.getItem(
-      "token"
-    )}&userType=${localStorage.getItem(
-      "userType"
-    )}&user=${encodeURIComponent(localStorage.getItem("user"))}`;
-  }, []);
+ const marketplaceLink =
+  localStorage.getItem("token")
+    ? `${import.meta.env.VITE_CLIENT_URL}?token=${localStorage.getItem(
+        "token"
+      )}&userType=${localStorage.getItem(
+        "userType"
+      )}&user=${encodeURIComponent(localStorage.getItem("user"))}`
+    : import.meta.env.VITE_CLIENT_URL;
 
   return (
     <section className="font-sans text-gray-900 overflow-x-hidden">

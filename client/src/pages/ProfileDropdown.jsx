@@ -32,13 +32,6 @@ const profile = useSelector((state) => state.profile.data);
         </div>
       </div>
 
-     <Link
-     to="/dashboard"
-  className="block w-full py-2 mb-5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition text-center"
->
-  Switch to Organization Dashboard
-</Link>
-
    <Link
             to="/profile"
             onClick={onClose}

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile, updateProfile } from "../../../shared-redux/src/slices/profileSlice";
+import { fetchProfile, updateProfile } from "../shared-redux/src/slices/profileSlice";
 import { FaInfoCircle, FaCheckCircle, FaSpinner, FaCloudUploadAlt, FaSave, FaUser, FaBuilding, FaMapMarkerAlt, FaLink, FaPhone, FaMap } from "react-icons/fa";
 import DefaultAvatar from "../components/Header/DefaultAvatar";
-import { setUser } from "../../../shared-redux/src/slices/authSlice";
+import { setUser } from "../shared-redux/src/slices/authSlice";
 import { motion } from "framer-motion";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

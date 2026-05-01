@@ -120,11 +120,11 @@ const AdminManagePricing = () => {
                 updatedPlans[planId].features = {};
             }
 
-            if (planId === customPlanId) {
-                updatedPlans[planId].features[newFeatureKey] = "-";
-            } else {
-                updatedPlans[planId].features[newFeatureKey] = false;
-            }
+         if (planId === customPlanId) {
+  updatedPlans[planId].features[newFeatureKey] = false;
+} else {
+  updatedPlans[planId].features[newFeatureKey] = false;
+}
         });
         setPlans(updatedPlans);
         

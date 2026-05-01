@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../../../shared-redux/src/slices/authSlice";
-import { fetchProfile } from "../../../../shared-redux/src/slices/profileSlice";
+import { logout } from "../../shared-redux/src/slices/authSlice";
+import { fetchProfile } from "../../shared-redux/src/slices/profileSlice";
 import ProfileDropdown from "./ProfileDropdown";
 import DefaultAvatar from "./DefaultAvatar";
 import aerthxlogo from "../../assets/aerthxlogo.png";
@@ -17,7 +17,7 @@ const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const profile = useSelector((state) => state.profile.data);
-  const token = useSelector((state) => state.auth.token);
+const token = localStorage.getItem("accessToken");
   const userType = useSelector((state) => state.auth.userType);
   const dropdownRef = useRef(null);
   const notificationsRef = useRef(null); 
@@ -227,8 +227,8 @@ useEffect(() => {
             </NavLink>
           </li>
   <li>
- <NavLink
-  to={user?.orgName ? "/pricing" : "/individual-pricing"}
+<NavLink
+  to="/pricing"
   className={({ isActive }) =>
     `flex items-center gap-1 ${isActive ? "text-emerald-400" : "text-black"}`
   }

@@ -1,8 +1,14 @@
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const Individual = require("../models/Individual");
 const sendEmail = require("../utils/sendEmail");
 const Notification = require("../models/Notification"); 
+
+
+  const RefreshToken = require("../models/RefreshToken");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../utils/generateTokens");
 
 const registerIndividual = async (req, res) => {
   try {
@@ -44,6 +50,7 @@ const newUser = new Individual({
         about: about || "",
       description: description || "",
   avatarUrl: "", 
+      role: "individual",
 });
 
 await newUser.save()
@@ -69,15 +76,8 @@ await Notification.create({
 });
 
 
-const token = jwt.sign(
-  { id: newUser._id, email: newUser.email, userType: "Individual" }, 
-  process.env.JWT_SECRET,
-  { expiresIn: "14d" }
-);
-
     res.status(201).json({
       message: "Individual registered successfully.",
-      token,
       user: {
         id: newUser._id,
         fullName: newUser.fullName,
@@ -108,22 +108,35 @@ const loginIndividual = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password." });
     }
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email, userType: "Individual" },
-      process.env.JWT_SECRET,
-      { expiresIn: "14d" }
-    );
 
-    res.status(200).json({
-      message: "Login successful.",
-      token,
-      user: {
-        id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        role: "individual"
-      },
-    });
+const accessToken = generateAccessToken({
+  _id: user._id,
+  email: user.email,
+  role: "individual",
+});
+
+const refreshToken = generateRefreshToken({
+  _id: user._id,
+});
+
+// store refresh token
+await RefreshToken.create({
+  userId: user._id,
+  token: refreshToken,
+  expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+});
+
+res.status(200).json({
+  message: "Login successful",
+  accessToken,
+  refreshToken,
+  user: {
+    id: user._id,
+    fullName: user.fullName,
+    email: user.email,
+    role: "individual",
+  },
+});
   } catch (error) {
     console.error("Login Individual Error:", error);
     res.status(500).json({ message: "Server error." });

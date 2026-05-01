@@ -1,13 +1,14 @@
   import React, { useEffect, useState, useRef } from "react";
   import { Link, useNavigate, useLocation } from "react-router-dom";
   import { useSelector, useDispatch } from "react-redux";
-  import { logout } from "../../../../shared-redux/src/slices/authSlice";
-  import { fetchProfile } from "../../../../shared-redux/src/slices/profileSlice";
+  import { logout } from "../../shared-redux/src/slices/authSlice";
+  import { fetchProfile } from "../../shared-redux/src/slices/profileSlice";
   import DefaultAvatar from "../Header/DefaultAvatar";
   import ProfileDropdown from "../Header/ProfileDropdown";
   import { CiSearch } from "react-icons/ci";
   import { FaBell } from "react-icons/fa";
   import aerthxlogo from "../../assets/AerthXLogo.png";
+  import SubscriptionStatus from "../SubscriptionStatus";
 
   const MarketplaceNavbarControls = ({ onSearch }) => {
     const dispatch = useDispatch();
@@ -23,12 +24,13 @@
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const profile = useSelector((state) => state.profile.data);
-    const token = useSelector((state) => state.auth.token);
+  const token = localStorage.getItem("accessToken");
     const userType = useSelector((state) => state.auth.userType);
     const dropdownRef = useRef(null);
     const notificationsRef = useRef(null);
     const [query, setQuery] = useState("");
 
+    console.log("AUTH USER:", user);
     const handleSearch = () => {
       onSearch(query);
     };
@@ -191,6 +193,16 @@
           <div className="relative flex items-center space-x-4">
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
+        <SubscriptionStatus
+  userId={user?.id}
+  onSubscribe={() =>
+    navigate(
+      userType === "organization"
+        ? "/marketplace/pricing"
+        : "/marketplace/individual-pricing"
+    )
+  }
+/>
                 <div className="relative" ref={notificationsRef}>
                   <button
                     onClick={toggleNotifications}

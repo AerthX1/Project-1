@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginOrganization, loginIndividual, setUser } from "../../../shared-redux/src/slices/authSlice";
+import { loginOrganization, loginIndividual, setUser } from "../shared-redux/src/slices/authSlice";
 import aerthxlogo from "../assets/aerthxlogo.png";
 
 const Login = () => {

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerOrganization, setUser } from "../../../shared-redux/src/slices/authSlice";
+import { registerOrganization, setUser } from "../shared-redux/src/slices/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
