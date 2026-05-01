@@ -5,6 +5,11 @@ const OtpToken = require("../models/OtpToken");
 const Individual = require("../models/Individual");
 const Organization = require("../models/Organization");
 const Notification = require("../models/Notification");
+const RefreshToken = require("../models/RefreshToken");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../utils/generateTokens");
 
 const loginOrganization = async (req, res) => {
   try {
@@ -25,23 +30,35 @@ const loginOrganization = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials." });
     }
 
-    const token = jwt.sign(
-      { id: org._id, email: org.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "14d" }
-    );
 
-    res.status(200).json({
-      message: "Login successful",
-      token,
-      org: {
-        id: org._id,
-        orgName: org.orgName,
-        email: org.email,
-        role: org.role,
-        avatarUrl: org.avatarUrl,
-      },
-    });
+const accessToken = generateAccessToken({
+  _id: org._id,
+  email: org.email,
+  role: "organization",
+});
+
+const refreshToken = generateRefreshToken({
+  _id: org._id,
+});
+
+await RefreshToken.create({
+  userId: org._id,
+  token: refreshToken,
+  expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+});
+
+res.status(200).json({
+  message: "Login successful",
+  accessToken,
+  refreshToken,
+  org: {
+    id: org._id,
+    orgName: org.orgName,
+    email: org.email,
+    role: "organization",
+    avatarUrl: org.avatarUrl,
+  },
+});
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Server error" });
@@ -78,10 +95,10 @@ const sendOtp = async (req, res) => {
     });
 
     res.status(200).json({ message: "OTP sent successfully", otp });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to send OTP" });
-  }
+  }catch (err) {
+  console.error("OTP ERROR FULL:", err); // 🔥 this is key
+  res.status(500).json({ error: "Failed to send OTP" });
+}
 };
 
 const resetPassword = async (req, res) => {
@@ -145,10 +162,74 @@ The AerthX Team`
   }
 };
 
+const refreshTokenHandler = async (req, res) => {
+  const { refreshToken } = req.body;
 
+  if (!refreshToken) {
+    return res.status(401).json({ message: "No refresh token provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.JWT_SECRET
+    );
+
+    const tokenDoc = await require("../models/RefreshToken").findOne({
+      token: refreshToken,
+    });
+
+    if (!tokenDoc) {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
+
+    // get user (important)
+    let user =
+      (await Individual.findById(decoded.id)) ||
+      (await Organization.findById(decoded.id));
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const newAccessToken = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+        role: user.role || (user.orgName ? "organization" : "individual"),
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    res.json({ accessToken: newAccessToken });
+  } catch (err) {
+    return res.status(403).json({ message: "Invalid or expired refresh token" });
+  }
+};
+
+const logoutHandler = async (req, res) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res.status(400).json({ message: "Refresh token required" });
+  }
+
+  try {
+    await require("../models/RefreshToken").deleteOne({
+      token: refreshToken,
+    });
+
+    res.json({ message: "Logged out successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Logout failed" });
+  }
+};
 
 module.exports = {
   loginOrganization,
   sendOtp,
   resetPassword,
+    refreshTokenHandler,
+      logoutHandler,
 };

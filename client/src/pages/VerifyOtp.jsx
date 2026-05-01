@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { verifyOtpAction, setUser, setToken, setUserType } from "../../../shared-redux/src/slices/authSlice";
-import { fetchProfile } from "../../../shared-redux/src/slices/profileSlice";
+import { verifyOtpAction, setUser, setToken, setUserType } from "../shared-redux/src/slices/authSlice";
+import { fetchProfile } from "../shared-redux/src/slices/profileSlice";
 import axios from "axios";
 import { XCircleIcon, CheckCircleIcon, InformationCircleIcon } from "@heroicons/react/20/solid";
 

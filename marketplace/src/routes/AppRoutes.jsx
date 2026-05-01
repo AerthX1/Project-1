@@ -5,7 +5,6 @@ import RegisterChoice from '../pages/RegisterChoice';
 import Login from '../pages/Login';
 import MarketPlace from '../pages/MarketPlace';
 import SingleProject from '../pages/SingleProject';
-import PaymentPage from '../pages/PaymentPage';
 import Profile from '../pages/Profile';
 import VerifyOtp from '../pages/VerifyOtp';
 import ForgotPassword from '../pages/ForgotPassword';
@@ -13,6 +12,26 @@ import NotificationPage from '../pages/NotificationPage';
 import HelpSupport from '../pages/HelpSupport';
 import BugReport from '../pages/BugReport';
 import ContactFormPage from '../pages/ContactFormPage';
+import GlobalLogout from '../pages/GlobalLogout';
+import Pricing from "../pages/Pricing";
+import IndividualPricing from "../pages/IndividualPricing";
+import PricingGateway from "../pages/PricingGateway";
+
+import DashboardLayout from '../pages/DashboardLayout';
+import Overview from '../Components/Dashboard/Overview';
+import Certificates from '../Components/Dashboard/Certificates';
+import Transactions from '../Components/Dashboard/Transactions';
+import Marketplace from '../Components/Dashboard/Marketplace';
+import ProjectDetails from '../Components/Dashboard/ProjectDetails';
+import ImpactGoals from '../Components/Dashboard/ImpactGoals';
+import OrganizationOverview from '../Components/Dashboard/OrganizationOverview';
+import TeamMembers from '../Components/Dashboard/TeamMembers';
+import ESGReports from '../Components/Dashboard/ESGReports';
+import APIAccess from '../Components/Dashboard/APIAccess';
+import RequireAuth from '../components/RequireAuth'; 
+import ErrorPage from '../pages/ErrorPage';
+import DashboardRedirect from "../components/DashboardRedirect";
+import FeatureGate from "../Components/FeatureGate";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,18 +40,67 @@ const router = createBrowserRouter(
         <Route index element={<MarketplacePage />} />
         <Route path="marketplace" element={<MarketPlace />} />
         <Route path="/project/:id" element={<SingleProject />} />
+          <Route path="marketplace/pricing" element={<Pricing />} />
+  <Route path="marketplace/individual-pricing" element={<IndividualPricing />} />
 
       </Route>
  <Route path="/profile" element={<Profile />} />
       <Route path="/register-choice" element={<RegisterChoice />} />
       <Route path="/verify-otp" element={<VerifyOtp />} />
       <Route path="/signin" element={<Login />} />
+      <Route path="/logout" element={<GlobalLogout />} />
          <Route path="/forgot-password" element={<ForgotPassword />} />
            <Route path="/notification" element={<NotificationPage />} />
            <Route path="/help" element={<HelpSupport />} />
+           <Route path="/PricingGateway" element={<PricingGateway />} />
             <Route path="/report-bug" element={<BugReport />} />
                <Route path="/contact-form" element={<ContactFormPage />} />
-      <Route path="/payment/:id" element={<PaymentPage />} />
+
+                	     <Route 
+  path="dashboard" 
+  element={<RequireAuth><DashboardLayout /></RequireAuth>} 
+  errorElement={<ErrorPage />}
+>
+  {/* Redirect to correct dashboard page based on role */}
+  <Route index element={<DashboardRedirect />} />
+
+  {/* Individual user routes */}
+  <Route path="overview" element={<Overview />} />
+  <Route path="certificates" element={<Certificates />} />
+  <Route path="transactions" element={<Transactions />} />
+  <Route path="marketplace" element={<Marketplace />} />
+  <Route path="project/:id" element={<ProjectDetails />} />
+  <Route path="goals" element={<ImpactGoals allowedRoles={["individual"]} />} />
+
+  {/* Business user routes */}
+  <Route path="org-overview" element={<OrganizationOverview allowedRoles={["organization"]} />} />
+<Route
+  path="api-access"
+  element={
+    <FeatureGate feature="APIAccess">
+      <APIAccess />
+    </FeatureGate>
+  }
+/>
+
+<Route
+  path="team"
+  element={
+    <FeatureGate feature="Team">
+      <TeamMembers />
+    </FeatureGate>
+  }
+/>
+
+<Route
+  path="esg-reports"
+  element={
+    <FeatureGate feature="ESG Reports">
+      <ESGReports />
+    </FeatureGate>
+  }
+/>
+</Route>
     </>
   )
 );

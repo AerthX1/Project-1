@@ -98,8 +98,7 @@ const token = jwt.sign(
 
 
     res.status(201).json({
-      message: "Organization registered successfully.",
-      token, 
+      message: "Organization registered successfully.", 
       org: {
         id: newOrg._id,
         orgName: newOrg.orgName,

@@ -44,9 +44,24 @@ const SingleProject = () => {
     fetchProject();
   }, [id, API]);
 
-  const handleBuyClick = () => {
-    navigate(`/payment/${project._id}`);
-  };
+
+  const formatRupees = (amount) => {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+  }).format(amount);
+};
+
+const handleBuyClick = () => {
+  navigate("/PricingGateway", {
+    state: {
+      source: "individual",
+      projectId: project._id,
+      tons: 1,
+      userType: userType,  
+    },
+  });
+};
 
 const loggedInUser = useSelector((state) => state.auth.user);
 const userType = loggedInUser?.type || "Individual";
@@ -174,9 +189,9 @@ const handleContactClick = () => {
               Carbon Credit Summary
             </h3>
             <div className="mt-6 space-y-4 text-gray-800 text-base sm:text-lg">
-              <div className="flex justify-between border-b pb-2"><span className="text-gray-600 font-medium">💰 Price per Ton</span><span className="font-bold text-green-800">${project.pricePerTon}</span></div>
+              <div className="flex justify-between border-b pb-2"><span className="text-gray-600 font-medium">💰 Price per Ton</span><span className="font-bold text-green-800">{formatRupees(project.pricePerTon)}</span></div>
               <div className="flex justify-between border-b pb-2"><span className="text-gray-600 font-medium">📦 Total Tons Available</span><span>{project.tons}</span></div>
-              <div className="flex justify-between"><span className="text-gray-600 font-medium">🧾 Total Project Cost</span><span className="text-green-900 font-semibold">${project.totalPrice}</span></div>
+              <div className="flex justify-between"><span className="text-gray-600 font-medium">🧾 Total Project Cost</span><span className="text-green-900 font-semibold">{formatRupees(project.totalPrice)}</span></div>
             </div>
           </div>
           <div className="text-sm text-gray-600 italic text-center mt-4">

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../../../shared-redux/src/slices/authSlice"; 
-import { fetchProfile } from "../../../../shared-redux/src/slices/profileSlice";
+import { logout } from "../../shared-redux/src/slices/authSlice"; 
+import { fetchProfile } from "../../shared-redux/src/slices/profileSlice";
 import DefaultAvatar from "./DefaultAvatar";
 import ProfileDropdown from "./ProfileDropdown";
 

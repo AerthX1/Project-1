@@ -9,7 +9,8 @@ import AdminManageCarbonCredits from "../components/Admin/AdminManageCarbonCredi
 import AdminUpdateCarbonCredit from "../components/Admin/AdminUpdateCarbonCredit"; 
 import AdminUserData from "../components/Admin/AdminUserData";
 import AdminFAQManager from "../components/Admin/AdminFAQManager";
-import AdminManagePricing from "../components/Admin/AdminManagePricing"; // New Import
+import AdminManagePricing from "../components/Admin/AdminManagePricing";
+import AdminIndividualPricing from "../components/Admin/AdminIndividualPricing";
 
 
 import {
@@ -30,7 +31,8 @@ const navItems = [
   { id: "users", icon: <FaUsers />, label: "Live Users" },
   { id: "inventory", icon: <FaLeaf />, label: "Carbon Inventory" },
   { id: "controls", icon: <FaCogs />, label: "Controls" }, 
-  { id: "managepricing", icon: <FaTags />, label: "Manage Pricing" }, // New Nav Item
+  { id: "managepricing", icon: <FaTags />, label: "Org Pricing" },
+{ id: "individualpricing", icon: <FaTags />, label: "Individual Pricing" },
   { id: "managecredits", icon: <FaEdit />, label: "Manage Credits" },
   { id: "userdata", icon: <FaUsers />, label: "User Data" }, 
   { id: "userreports", icon: <FaClipboardList />, label: "User Reports" },
@@ -56,8 +58,10 @@ const renderContent = () => {
         return <CarbonInventory />;
       case "controls":
         return <AdminControls />;
-      case "managepricing": // New Case
+      case "managepricing":
         return <AdminManagePricing />;
+case "individualpricing":
+  return <AdminIndividualPricing />;
       case "managecredits":
   return (
     <AdminManageCarbonCredits 
