@@ -94,17 +94,17 @@ const BusinessSolutions = () => {
 
   return (
     <div className="w-full text-gray-800 bg-gray-50 overflow-hidden">
-      <div className="relative px-6 md:px-16 pt-40 pb-32 overflow-hidden bg-gradient-to-br from-green-600 via-emerald-600 to-teal-500 min-h-screen flex items-center justify-center">
+      <div className="relative px-4 sm:px-6 md:px-16 pt-40 pb-32 overflow-hidden bg-gradient-to-br from-green-600 via-emerald-600 to-teal-500 min-h-screen flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
           className="max-w-7xl mx-auto text-center space-y-12 text-white"
         >
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-snug drop-shadow-lg">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-snug drop-shadow-lg">
             Empower Your Business to Lead a Sustainable Future
           </h1>
-          <p className="mt-8 text-xl max-w-4xl mx-auto leading-relaxed drop-shadow-md">
+          <p className="mt-8 text-sm sm:text-base md:text-xl max-w-4xl mx-auto leading-relaxed drop-shadow-md">
             Our powerful platform is more than just a tool; it's your partner in achieving environmental and social goals. From seamless compliance to transparent reporting, we help you showcase your leadership to the world.
           </p>
           {userType && userType.toLowerCase() === "organization" && (
@@ -112,7 +112,7 @@ const BusinessSolutions = () => {
               onClick={handlePricingClick}
               whileHover={{ scale: 1.05, boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.3)" }}
               whileTap={{ scale: 0.95 }}
-              className="mt-16 px-14 py-6 bg-white text-green-700 text-xl font-bold rounded-full shadow-2xl hover:bg-gray-100 transition-all duration-300"
+              className="mt-16 px-14 py-6 bg-white text-green-700 text-sm sm:text-base md:text-xl font-bold rounded-full shadow-2xl hover:bg-gray-100 transition-all duration-300"
             >
               Explore Business Plans
             </motion.button>
@@ -120,14 +120,14 @@ const BusinessSolutions = () => {
         </motion.div>
       </div>
 
-      <div className="px-6 md:px-16 py-32 max-w-7xl mx-auto">
-        <FeatureSection className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center mb-64">
+      <div className="px-4 sm:px-6 md:px-16 py-14 sm:py-20 md:py-32 max-w-7xl mx-auto">
+        <FeatureSection className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 md:gap-24 items-center mb-64">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="w-full h-96 rounded-4xl shadow-3xl overflow-hidden order-last lg:order-first"
+            className="w-full h-60 sm:h-72 md:h-96 rounded-4xl shadow-3xl overflow-hidden order-last lg:order-first"
           >
             <div className={`w-full h-full flex items-center justify-center p-8 ${features[0].imageClass}`}>
               <p className="text-white text-4xl font-bold text-center">{features[0].imageText}</p>
@@ -140,14 +140,14 @@ const BusinessSolutions = () => {
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             className="space-y-8"
           >
-            <h2 className="text-5xl font-bold text-green-900">{features[0].title}</h2>
-            <p className="text-gray-700 text-xl leading-relaxed">{features[0].desc}</p>
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-green-900">{features[0].title}</h2>
+            <p className="text-gray-700 text-sm sm:text-base md:text-xl leading-relaxed">{features[0].desc}</p>
           </motion.div>
         </FeatureSection>
 
         <FeatureSection className="text-center mb-64">
-          <h2 className="text-5xl font-bold text-green-900 mb-12">{features[1].title}</h2>
-          <p className="text-gray-700 text-xl max-w-4xl mx-auto mb-20 leading-relaxed">{features[1].desc}</p>
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-green-900 mb-12">{features[1].title}</h2>
+          <p className="text-gray-700 text-sm sm:text-base md:text-xl max-w-4xl mx-auto mb-20 leading-relaxed">{features[1].desc}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             <motion.div
               variants={cardVariant}
@@ -158,7 +158,7 @@ const BusinessSolutions = () => {
               className="bg-white rounded-4xl p-12 shadow-lg transition-all duration-300"
             >
               <h4 className="text-3xl font-bold text-green-800 mb-6">Automated Reporting</h4>
-              <p className="text-gray-700 text-lg">Our system automatically generates comprehensive reports, saving you manual work and ensuring accuracy and compliance.</p>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg">Our system automatically generates comprehensive reports, saving you manual work and ensuring accuracy and compliance.</p>
             </motion.div>
             <motion.div
               variants={cardVariant}
@@ -169,16 +169,16 @@ const BusinessSolutions = () => {
               className="bg-white rounded-4xl p-12 shadow-lg transition-all duration-300"
             >
               <h4 className="text-3xl font-bold text-green-800 mb-6">Compliance Focused</h4>
-              <p className="text-gray-700 text-lg">Ensure your reports meet the latest regulatory requirements and are ready for audits and disclosures, built on global frameworks.</p>
+              <p className="text-gray-700 text-sm sm:text-base md:text-lg">Ensure your reports meet the latest regulatory requirements and are ready for audits and disclosures, built on global frameworks.</p>
             </motion.div>
           </div>
         </FeatureSection>
 
         <FeatureSection className="bg-white rounded-5xl shadow-3xl p-16 lg:p-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-20 items-center">
             <div className="space-y-8">
-              <h2 className="text-5xl font-bold text-green-900">{features[2].title}</h2>
-              <p className="text-gray-700 text-xl leading-relaxed">{features[2].desc}</p>
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-green-900">{features[2].title}</h2>
+              <p className="text-gray-700 text-sm sm:text-base md:text-xl leading-relaxed">{features[2].desc}</p>
               <ul className="list-disc list-inside space-y-4 mt-8 text-gray-700 font-medium text-lg">
                 <li>Real-time emissions tracking</li>
                 <li>Customizable data visualizations and dashboards</li>
@@ -203,16 +203,16 @@ const BusinessSolutions = () => {
       </div>
 
       <div className="bg-gray-900 py-40 text-white">
-        <div className="max-w-7xl mx-auto px-6 md:px-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-16">
           <FeatureSection className="text-center mb-20">
             <h2 className="text-5xl sm:text-6xl font-bold leading-tight">
               A Complete Suite of Tools
             </h2>
-            <p className="mt-8 text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="mt-8 text-sm sm:text-base md:text-xl text-gray-300 max-w-3xl mx-auto">
               We provide everything you need to manage your sustainability journey from start to finish, with a dedicated team of experts ready to support you.
             </p>
           </FeatureSection>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10 md:gap-16">
             {subFeatures.map((feature, idx) => (
               <motion.div
                 key={idx}
@@ -221,21 +221,21 @@ const BusinessSolutions = () => {
                 initial="hidden"
                 whileHover={{ y: -12, boxShadow: "0 20px 30px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -3px rgba(0, 0, 0, 0.1)" }}
                 viewport={{ once: true, amount: 0.3 }}
-                className="bg-gray-800 rounded-4xl p-12 shadow-lg transition-all duration-300 transform hover:-translate-y-3"
+                className="bg-gray-800 rounded-4xl p-5 sm:p-8 md:p-12 shadow-lg transition-all duration-300 transform hover:-translate-y-3"
               >
                 <h3 className="text-3xl font-bold text-white">{feature.title}</h3>
-                <p className="mt-6 text-gray-400 text-lg">{feature.desc}</p>
+                <p className="mt-6 text-gray-400 text-sm sm:text-base md:text-lg">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </div>
 
-      <FeatureSection className="py-40 max-w-5xl mx-auto text-center px-6 space-y-12">
-        <h3 className="text-5xl md:text-6xl font-bold leading-tight text-green-900">
+      <FeatureSection className="py-16 sm:py-24 md:py-40 max-w-5xl mx-auto text-center px-6 space-y-12">
+        <h3 className="text-2xl sm:text-3xl md:text-5xl md:text-6xl font-bold leading-tight text-green-900">
           Ready to Lead in Sustainability?
         </h3>
-        <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+        <p className="text-sm sm:text-base md:text-xl text-gray-700 max-w-3xl mx-auto">
           Join the leading businesses that are building a sustainable future. Discover a plan that fits your organization and start making a real impact today.
         </p>
         {userType && userType.toLowerCase() === "organization" && (

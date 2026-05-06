@@ -59,7 +59,7 @@ const itemVariants = {
 
 const GlowingButton = ({ children, className, ...props }) => (
   <motion.button
-    className={`relative px-8 py-3 rounded-full font-bold overflow-hidden group ${className}`}
+  className={`relative px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-bold overflow-hidden group ${className}`}
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
     {...props}
@@ -246,7 +246,7 @@ const Services = () => {
         }
       `}</style>
 
-      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-600 to-green-800 text-white">
+      <section className="relative min-h-[80vh] sm:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-600 to-green-800 text-white py-16 sm:py-20">
         <div className="absolute inset-0 z-0 opacity-15">
           <motion.div
             className="absolute -top-1/4 -left-1/4 w-96 h-96 bg-emerald-500 rounded-full mix-blend-lighten filter blur-3xl opacity-30"
@@ -274,9 +274,9 @@ const Services = () => {
           />
         </div>
 
-        <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center">
+        <div className="container mx-auto px-4 sm:px-6 md:px-10 relative z-10 text-center flex flex-col items-center">
           <motion.h1
-            className="text-5xl md:text-7xl font-extrabold leading-tight tracking-tighter mb-6 drop-shadow-lg"
+            className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tighter mb-4 sm:mb-6 drop-shadow-lg"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
@@ -287,7 +287,7 @@ const Services = () => {
             </span>
           </motion.h1>
           <motion.p
-            className="text-lg md:text-xl max-w-4xl mx-auto mb-10 opacity-90"
+           className="text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto mb-6 sm:mb-8 md:mb-10 opacity-90"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
@@ -296,7 +296,7 @@ const Services = () => {
             verifiable impact reporting, and building a truly green enterprise.
           </motion.p>
           <motion.div
-            className="flex flex-col sm:flex-row justify-center gap-5"
+           className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 md:gap-5"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
@@ -307,7 +307,7 @@ const Services = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-white/20 border border-white/30 text-white px-8 py-3 rounded-full font-bold text-lg backdrop-blur-sm hover:bg-white/30 transition-all duration-300"
+             className="bg-white/20 border border-white/30 text-white px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base md:text-lg font-bold backdrop-blur-sm hover:bg-white/30 transition-all duration-300"
             >
               Learn More
             </motion.button>
@@ -317,17 +317,17 @@ const Services = () => {
         <motion.img
           src="https://cdn.dribbble.com/users/120286/screenshots/15609653/media/ae04e578c2e6f47702f308a0df5a525d.png?resize=1000x750&vertical=center"
           alt="AerthX Dashboard Preview"
-          className="absolute bottom-0 right-0 w-3/4 md:w-1/2 lg:w-2/5 drop-shadow-2xl translate-x-1/4 md:translate-x-1/5 translate-y-1/4 md:translate-y-1/5"
+         className="hidden sm:block absolute bottom-0 right-0 w-2/3 md:w-1/2 lg:w-2/5 drop-shadow-2xl translate-x-1/5 md:translate-x-1/6 translate-y-1/5 md:translate-y-1/6"
           initial={{ opacity: 0, x: 100, y: 100 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
           transition={{ duration: 1, delay: 1, ease: "easeOut" }}
         />
       </section>
 
-      <section className="py-24 bg-gradient-to-br from-white to-gray-50 relative z-10">
+      <section className="py-12 sm:py-16 md:py-24 bg-gradient-to-br from-white to-gray-50 relative z-10">
         <div className="container mx-auto px-6 max-w-6xl">
           <motion.h2
-            className="text-4xl md:text-5xl font-bold text-center mb-16 leading-tight"
+         className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 sm:mb-12 md:mb-16 leading-tight"
             variants={textVariants}
             initial="hidden"
             whileInView="visible"
@@ -336,7 +336,7 @@ const Services = () => {
             Simplify Your <span className="text-emerald-600">Sustainability Journey</span>
           </motion.h2>
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 md:gap-10"
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
@@ -345,7 +345,7 @@ const Services = () => {
             {coreServices.map((service, index) => (
               <motion.div
                 key={index}
-                className="group p-8 rounded-2xl bg-white shadow-lg border border-gray-100 flex flex-col items-center text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+                className="group p-5 sm:p-6 md:p-8 rounded-2xl bg-white shadow-md sm:shadow-lg border border-gray-100 flex flex-col items-center text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
                 variants={cardVariants}
                 custom={index}
               >
@@ -379,7 +379,7 @@ const Services = () => {
       <section className="py-24 bg-white relative z-20">
         <div className="container mx-auto px-6 max-w-7xl">
           <motion.div
-            className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center"
             variants={sectionVariants}
             initial="hidden"
             whileInView="visible"
@@ -512,7 +512,7 @@ const Services = () => {
           >
             Powering Your <span className="text-indigo-600">Enterprise Solutions</span>
           </motion.h2>
-          <div className="grid gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:gap-8 md:gap-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {advancedFeatures.map((feature, index) => (
               <motion.div
                 key={index}
@@ -550,7 +550,7 @@ const Services = () => {
           >
             Why Leading Businesses <span className="text-green-600">Choose AerthX</span>
           </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 sm:gap-x-6 md:gap-x-8 gap-y-8 sm:gap-y-10 md:gap-y-12">
             {whyChooseUsPoints.map((point, index) => (
               <motion.div
                 key={index}
@@ -574,12 +574,12 @@ const Services = () => {
         </div>
       </section>
 
-      <section className="relative py-24 bg-cover bg-center text-white overflow-hidden"
+      <section className="relative py-12 sm:py-16 md:py-24 bg-cover bg-center text-white overflow-hidden"
         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1510511451846-957779f428c0?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}>
         <div className="absolute inset-0 bg-emerald-800 bg-opacity-80 backdrop-brightness-75" />
         <div className="container mx-auto px-6 relative z-10 text-center">
           <motion.h2
-            className="text-4xl md:text-5xl font-extrabold leading-tight mb-6 drop-shadow-lg"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-4 sm:mb-6 drop-shadow-lg"
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
@@ -588,7 +588,7 @@ const Services = () => {
             Ready to Accelerate Your Impact?
           </motion.h2>
           <motion.p
-            className="text-xl max-w-3xl mx-auto mb-10 opacity-90"
+           className="text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl sm:max-w-3xl mx-auto mb-6 sm:mb-8 md:mb-10 opacity-90"
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
@@ -603,7 +603,7 @@ const Services = () => {
             transition={{ duration: 0.7, delay: 0.4 }}
             viewport={{ once: true }}
           >
-            <GlowingButton className="text-xl px-10 py-4">
+            <GlowingButton className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-2.5 sm:py-3 md:py-4">
               Explore Our Plans <FiArrowRight className="inline-block ml-3" />
             </GlowingButton>
           </motion.div>

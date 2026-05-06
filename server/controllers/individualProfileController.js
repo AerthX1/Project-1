@@ -1,4 +1,5 @@
 const Individual = require("../models/Individual");
+const { uploadToImageKit } = require("../utils/imagekit");
 
 const getIndividualProfile = async (req, res) => {
   try {
@@ -28,9 +29,17 @@ const updateIndividualProfile = async (req, res) => {
       }
     });
 
-    if (req.file) {
-      updatedData.avatarUrl = `/uploads/${req.file.filename}`;
-    }
+ if (req.file) {
+  const fileBuffer = req.file.buffer;
+
+  const result = await uploadToImageKit(
+    fileBuffer,
+    `user_${userId}_${Date.now()}`,
+    "/users"
+  );
+
+  updatedData.avatarUrl = result.url;
+}
 
     const updatedUser = await Individual.findByIdAndUpdate(
       userId,

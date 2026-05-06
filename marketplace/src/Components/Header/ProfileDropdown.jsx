@@ -62,24 +62,14 @@ const navigate = useNavigate();
     },
   ];
 
-  const getAvatarUrl = () => {
-    if (profile?.user?.avatarUrl) {
-      return `${import.meta.env.VITE_API_URL.replace("/api", "")}${
-        profile.user.avatarUrl
-      }`;
-    }
-    if (profile?.org?.avatarUrl) {
-      return `${import.meta.env.VITE_API_URL.replace("/api", "")}${
-        profile.org.avatarUrl
-      }`;
-    }
-    if (user.avatarUrl) {
-      return `${import.meta.env.VITE_API_URL.replace("/api", "")}${
-        user.avatarUrl
-      }`;
-    }
-    return null;
-  };
+const getAvatarUrl = () => {
+  return (
+    profile?.user?.avatarUrl ||
+    profile?.org?.avatarUrl ||
+    user?.avatarUrl ||
+    null
+  );
+};
 
   return (
     <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-lg z-50 p-6 border border-gray-200">

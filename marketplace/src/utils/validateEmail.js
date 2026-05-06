@@ -6,7 +6,6 @@ export const validateEmailFrontend = async (email) => {
 
   try {
     const res = await axios.get(url);
-    console.log("✅ AbstractAPI frontend response:", res.data);
     return res.data;
   } catch (err) {
     console.error("❌ AbstractAPI frontend error:", err.message);

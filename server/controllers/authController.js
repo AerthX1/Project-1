@@ -68,8 +68,8 @@ res.status(200).json({
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+   user: process.env.MAIL_USER,
+pass: process.env.MAIL_PASS,
   },
 });
 
@@ -107,9 +107,6 @@ const resetPassword = async (req, res) => {
   try {
     const otpDoc = await OtpToken.findOne({ email });
 
-     console.log("Frontend OTP:", otp, typeof otp);
-    console.log("DB OTP:", otpDoc?.otp, typeof otpDoc?.otp);
-    console.log("Email:", email);
 
  if (!otpDoc || otpDoc.otp !== otp) return res.status(400).json({ error: "OTP expired or invalid" });
 
@@ -153,7 +150,6 @@ Thank you,
 The AerthX Team`
 });
 
-    console.log("✅ Password change email sent to:", email);
 
     res.status(200).json({ message: "Password updated successfully" });
   } catch (err) {

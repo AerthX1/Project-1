@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/api"; // adjust path
 import { FaBell, FaCheckCircle, FaTimesCircle, FaInfoCircle, FaEnvelopeOpenText } from "react-icons/fa";
 import { MdNotificationsActive, MdOutlineNotificationsNone } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("token");
+const token = localStorage.getItem("accessToken");
   const userType = localStorage.getItem("userType");
 
   useEffect(() => {
@@ -18,12 +18,7 @@ const NotificationPage = () => {
             ? "organization"
             : "individual";
 
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/user/notifications/${endpoint}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+      const res = await api.get(`/user/notifications/${endpoint}`);
 
         setNotifications(res.data.notifications || []);
       } catch (error) {
@@ -83,10 +78,10 @@ const NotificationPage = () => {
             transition={{ type: "spring", stiffness: 150, damping: 10 }}
             className="flex flex-col items-center justify-center"
           >
-            <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-5 sm:p-6 rounded-full shadow-2xl inline-block transform -rotate-6 hover:rotate-0 transition-transform duration-500 mb-4">
+            <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-3 sm:p-5 md:p-6 rounded-full shadow-2xl inline-block transform -rotate-6 hover:rotate-0 transition-transform duration-500 mb-4">
               <FaBell className="text-4xl sm:text-5xl text-white animate-ring" />
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-700 to-emerald-900 drop-shadow-md leading-tight">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-700 to-emerald-900 drop-shadow-md leading-tight">
               Message Hub
             </h1>
             <p className="mt-3 text-sm sm:text-base md:text-lg text-gray-600 max-w-lg mx-auto font-light leading-relaxed">

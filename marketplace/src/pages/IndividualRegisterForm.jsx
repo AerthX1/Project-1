@@ -62,10 +62,8 @@ setLocalLoading(true);
     try {
       const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
 
-      console.log("send-otp API response:", res);
 
       if (res.status === 200) {
-        console.log("Navigate called");
         navigate("/verify-otp", { state: { form, userType: "Individual" } });
       }
     } catch (err) {

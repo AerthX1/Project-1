@@ -62,8 +62,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Register form submitted");
-    console.log("API_URL is:", API_URL);
+  
 
     const requiredFields = ['orgName', 'orgType', 'industry', 'phone', 'country', 'state', 'city', 'fullName', 'email', 'password'];
     for (const field of requiredFields) {
@@ -85,12 +84,12 @@ const Register = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Sending OTP request...");
+    
       const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
-      console.log("send-otp response:", res);
+     
 
       if (res.status === 200 || res.status === 201) {
-        console.log("Navigate called");
+       
         navigate("/verify-otp", { state: { form, userType: "organization" } });
       } else {
         console.log("Unexpected status:", res.status);
@@ -105,13 +104,13 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-emerald-50 to-teal-100 text-gray-800 antialiased">
-      <div className="w-full max-w-4xl mx-auto py-12 px-8 sm:px-12 lg:px-16">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center p-3 sm:p-6 bg-gradient-to-br from-emerald-50 to-teal-100 text-gray-800 antialiased">
+      <div className="w-full max-w-4xl mx-auto py-6 sm:py-10 px-4 sm:px-8 lg:px-16">
         <div className="text-center mb-16">
-          <h1 className="text-6xl font-extrabold text-green-700 tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-green-700 tracking-tight leading-tight">
             Register Your Organization
           </h1>
-          <p className="mt-6 text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-6 text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Begin your journey with us. Provide accurate details to effortlessly streamline your operations and connect with a thriving community.
           </p>
         </div>
@@ -123,9 +122,9 @@ const Register = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-7">
+        <form onSubmit={handleSubmit} className="grid grid grid-cols-1 lg:grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-5 sm:gap-y-7">
           <div className="md:col-span-2">
-            <label htmlFor="orgName" className="block text-base font-semibold text-gray-700 mb-2">Organization Name</label>
+            <label htmlFor="orgName" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Organization Name</label>
             <input
               id="orgName"
               name="orgName"
@@ -138,7 +137,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label htmlFor="orgType" className="block text-base font-semibold text-gray-700 mb-2">Organization Type</label>
+            <label htmlFor="orgType" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Organization Type</label>
             <div className="relative">
               <select
                 id="orgType"
@@ -162,7 +161,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label htmlFor="industry" className="block text-base font-semibold text-gray-700 mb-2">Industry</label>
+            <label htmlFor="industry" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Industry</label>
             <div className="relative">
               <select
                 id="industry"
@@ -191,7 +190,7 @@ const Register = () => {
           </div>
 
           <div className="md:col-span-2">
-            <label htmlFor="phone" className="block text-base font-semibold text-gray-700 mb-2">Phone Number</label>
+            <label htmlFor="phone" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Phone Number</label>
             <input
               id="phone"
               name="phone"
@@ -205,7 +204,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label htmlFor="country" className="block text-base font-semibold text-gray-700 mb-2">Country</label>
+            <label htmlFor="country" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Country</label>
             <input
               id="country"
               name="country"
@@ -218,7 +217,7 @@ const Register = () => {
           </div>
 
           <div>
-            <label htmlFor="state" className="block text-base font-semibold text-gray-700 mb-2">State / Province</label>
+            <label htmlFor="state" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">State / Province</label>
             <input
               id="state"
               name="state"
@@ -231,7 +230,7 @@ const Register = () => {
           </div>
 
           <div className="md:col-span-2">
-            <label htmlFor="city" className="block text-base font-semibold text-gray-700 mb-2">City</label>
+            <label htmlFor="city" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">City</label>
             <input
               id="city"
               name="city"
@@ -244,7 +243,7 @@ const Register = () => {
           </div>
 
           <div className="md:col-span-2">
-            <label htmlFor="fullName" className="block text-base font-semibold text-gray-700 mb-2">Your Full Name (Primary Contact)</label>
+            <label htmlFor="fullName" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Your Full Name (Primary Contact)</label>
             <input
               id="fullName"
               name="fullName"
@@ -257,7 +256,7 @@ const Register = () => {
           </div>
 
           <div className="md:col-span-2">
-            <label htmlFor="email" className="block text-base font-semibold text-gray-700 mb-2">Email Address</label>
+            <label htmlFor="email" className="block text-sm sm:text-basetext-base font-semibold text-gray-700 mb-2">Email Address</label>
             <input
               id="email"
               type="email"
@@ -277,7 +276,7 @@ const Register = () => {
           </div>
 
           <div className="md:col-span-2 relative">
-            <label htmlFor="password" className="block text-base font-semibold text-gray-700 mb-2">
+            <label htmlFor="password" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">
               Password
             </label>
             <input
@@ -291,13 +290,13 @@ const Register = () => {
               required
             />
             <div
-              className="absolute top-11 right-4 cursor-pointer text-gray-600 hover:text-green-600 transition"
+              className="absolute top-10 sm:top-11 right-4 cursor-pointer text-gray-600 hover:text-green-600 transition"
               onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
             </div>
           </div>
-          <div className="md:col-span-2 flex items-start mt-6">
+          <div className="md:col-span-2 flex items-start gap-2 sm:gap-4 mt-6">
             <input
               id="termsAgreed"
               type="checkbox"
@@ -306,7 +305,7 @@ const Register = () => {
               onChange={handleChange}
               className="mt-1 h-5 w-5 text-green-600 focus:ring-green-500 border-gray-300 rounded-sm cursor-pointer"
             />
-            <label htmlFor="termsAgreed" className={`ml-4 text-base ${!form.termsAgreed ? "text-red-600" : "text-gray-700"} cursor-pointer leading-relaxed`}>
+            <label htmlFor="termsAgreed" className={`ml-4 text-sm sm:text-base ${!form.termsAgreed ? "text-red-600" : "text-gray-700"} cursor-pointer leading-relaxed`}>
               I agree to the{" "}
               <a href="#" className="text-green-600 hover:text-green-700 underline font-semibold" onClick={(e) => e.preventDefault()}>Terms & Conditions</a> and{" "}
               <a href="#" className="text-green-600 hover:text-green-700 underline font-semibold" onClick={(e) => e.preventDefault()}>Privacy Policy</a> *
@@ -338,7 +337,7 @@ const Register = () => {
 
           <Link
             to="/signin"
-            className="md:col-span-2 text-center text-green-700 hover:text-green-900 mt-4 text-lg underline font-medium transition duration-200"
+            className="md:col-span-2 text-center text-green-700 hover:text-green-900 mt-4 text-sm sm:text-base underline font-medium transition duration-200"
           >
             Already have an account? Sign In
           </Link>

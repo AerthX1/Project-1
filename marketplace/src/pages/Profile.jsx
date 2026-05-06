@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile, updateProfile } from "../shared-redux/src/slices/profileSlice";
 import { FaInfoCircle, FaCheckCircle, FaSpinner, FaCloudUploadAlt, FaSave, FaUser, FaBuilding, FaMapMarkerAlt, FaLink, FaPhone, FaMap } from "react-icons/fa";
-import DefaultAvatar from "../Components/Header/DefaultAvatar";
+import DefaultAvatar from "../components/Header/DefaultAvatar";
 import { setUser } from "../shared-redux/src/slices/authSlice";
 import { motion } from "framer-motion";
 import { toast, ToastContainer } from "react-toastify";
@@ -12,8 +12,7 @@ const MotionDiv = motion.div;
 
 const Profile = () => {
     const dispatch = useDispatch();
-    const { data: profileData, status: profileStatus } = useSelector((state) => state.profile);
-    const token = useSelector((state) => state.auth.token);
+  const { data: profileData, loading } = useSelector((state) => state.profile);
     const userType = useSelector((state) => state.auth.userType);
 
     const [form, setForm] = useState(null);
@@ -21,11 +20,12 @@ const Profile = () => {
     const [previewAvatarUrl, setPreviewAvatarUrl] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    useEffect(() => {
-        if (token && userType) {
-            dispatch(fetchProfile({ token, userType }));
-        }
-    }, [dispatch, token, userType]);
+  
+useEffect(() => {
+  if (userType) {
+    dispatch(fetchProfile({ userType }));
+  }
+}, [dispatch, userType]);
 
     useEffect(() => {
         if (profileData) {
@@ -37,7 +37,7 @@ const Profile = () => {
                 industry: data.industry || "",
                 website: data.website || "",
                 email: data.email || "",
-                   about: data.about || "",
+                about: data.about || "",
                 description: data.description || "",
                 city: data.city || "",
                 state: data.state || "",
@@ -46,10 +46,9 @@ const Profile = () => {
                 designation: data.designation || "",
             });
 
-            if (data.avatarUrl) {
-                const fullUrl = `${import.meta.env.VITE_API_URL.replace("/api", "")}${data.avatarUrl}`;
-                setPreviewAvatarUrl(fullUrl);
-            }
+         if (data.avatarUrl) {
+  setPreviewAvatarUrl(data.avatarUrl);
+}
         }
     }, [profileData]);
 
@@ -69,7 +68,7 @@ const Profile = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!form || !token) {
+      if (!form) {
             toast.error("Profile data not loaded. Please try again.");
             return;
         }
@@ -84,16 +83,16 @@ const Profile = () => {
         }
 
         try {
-            const res = await dispatch(updateProfile({ token, userType, formData })).unwrap();
+            const res = await dispatch(updateProfile({ userType, formData })).unwrap();
             
-            if (res.avatarUrl) {
-                const updatedUser = {
-                    ...(userType === "organization" ? res.org : res.user),
-                    avatarUrl: res.avatarUrl,
-                };
-                dispatch(setUser(updatedUser));
-                localStorage.setItem("user", JSON.stringify(updatedUser));
-            }
+          const updatedUser = userType === "organization" ? res.org : res.user;
+
+dispatch(setUser(updatedUser));
+localStorage.setItem("user", JSON.stringify(updatedUser));
+
+if (updatedUser?.avatarUrl) {
+  setPreviewAvatarUrl(updatedUser.avatarUrl);
+}
             toast.success("Profile updated successfully!");
         } catch (error) {
             console.error("Error updating profile:", error);
@@ -118,7 +117,7 @@ const Profile = () => {
         description: "Tell us more about your organization or yourself. (Max 500 characters)",
     };
 
-    if (profileStatus === "loading" || !form) {
+    if (loading || !form) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-[#0A0A0A]">
                 <FaSpinner className="animate-spin text-green-500 text-6xl" />
@@ -169,21 +168,21 @@ const Profile = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#0A0A0A] via-[#151515] to-[#0A0A0A] text-white font-sans py-12">
+        <div className="min-h-screen bg-gradient-to-br from-[#0A0A0A] via-[#151515] to-[#0A0A0A] text-white font-sans py-8 sm:py-10 md:py-12 px-4 sm:px-6">
             <MotionDiv
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="w-full max-w-6xl mx-auto rounded-3xl overflow-hidden shadow-2xl bg-white/5 backdrop-blur-2xl border border-white/10"
+                className="w-full max-w-6xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl bg-white/5 backdrop-blur-2xl border border-white/10"
             >
-                <div className="relative p-12 text-center bg-gradient-to-br from-[#1A1A1A] to-[#252525] border-b border-white/10 overflow-hidden">
+                <div className="relative p-6 sm:p-8 md:p-12 text-center bg-gradient-to-br from-[#1A1A1A] to-[#252525] border-b border-white/10 overflow-hidden">
                     <div className="absolute inset-0 z-0 bg-dots opacity-50"></div>
                     <div className="relative z-10 flex flex-col items-center">
                         <motion.div
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.5 }}
-                            className="relative w-48 h-48 rounded-full shadow-2xl border-4 border-[#50C878] transition-transform duration-300 hover:scale-105 group"
+                            className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-48 md:h-48 rounded-full shadow-xl sm:shadow-2xl border-4 border-[#50C878] transition-transform duration-300 hover:scale-105 group"
                         >
                             <div className="w-full h-full rounded-full overflow-hidden bg-gray-700/50">
                                 {previewAvatarUrl ? (
@@ -198,7 +197,7 @@ const Profile = () => {
                             </label>
                         </motion.div>
                         
-                        <h1 className="mt-6 text-4xl font-extrabold text-white tracking-tight">
+                        <h1 className="mt-4 sm:mt-6 text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
                             {userType === "organization" ? form.orgName : form.fullName}
                         </h1>
                         <p className="text-sm text-gray-400 mt-2 font-light">
@@ -207,10 +206,10 @@ const Profile = () => {
                     </div>
                 </div>
 
-                <div className="md:flex">
-                    <div className="md:w-1/3 p-8 flex flex-col items-start justify-center border-b md:border-b-0 md:border-r border-white/10">
+              <div className="flex flex-col md:flex-row">
+                    <div className="md:w-1/3 p-5 sm:p-6 md:p-8 flex flex-col items-start justify-center border-b md:border-b-0 md:border-r border-white/10">
                         <MotionDiv variants={sectionVariants} initial="hidden" animate="visible" className="w-full">
-                            <h3 className="text-xl font-semibold text-white mb-4">Summary</h3>
+                            <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">Summary</h3>
                             <MotionDiv variants={inputVariants} className="p-4 rounded-xl border border-white/10 bg-white/5 space-y-3">
                                 <p className="text-sm text-gray-300 flex items-center gap-2">
                                     <FaMapMarkerAlt className="text-gray-500" />
@@ -230,16 +229,16 @@ const Profile = () => {
                         </MotionDiv>
 
                         <MotionDiv variants={sectionVariants} initial="hidden" animate="visible" className="mt-8 w-full">
-                            <h3 className="text-xl font-semibold text-white mb-4">About</h3>
+                            <h3 className="text-xl font-semibold text-white mb-4">Description</h3>
                          <MotionDiv
   variants={inputVariants}
-  className="p-5 rounded-2xl border border-green-500/20 bg-gradient-to-br from-white/5 to-green-500/5 shadow-lg"
+  className="p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-green-500/20 bg-gradient-to-br from-white/5 to-green-500/5 shadow-lg"
 >
   <label
     htmlFor="description"
     className="block text-sm font-medium text-green-400 mb-2"
   >
-    About You / Organization
+    description / Organization
   </label>
 
   <div className="relative">
@@ -254,7 +253,7 @@ const Profile = () => {
       className="w-full p-3 rounded-xl bg-black/20 border border-white/10 text-gray-200 text-sm placeholder-gray-500 italic font-light resize-none focus:outline-none focus:ring-2 focus:ring-green-400/40 transition"
     />
     <span className="absolute bottom-2 right-3 text-xs text-gray-500">
-      {form.description.length} / 300
+      {form.description.length} / 500
     </span>
   </div>
 </MotionDiv>
@@ -298,7 +297,7 @@ const Profile = () => {
                         )}
                     </div>
 
-                    <div className="md:w-2/3 p-8 md:p-12">
+                    <div className="md:w-2/3 p-5 sm:p-6 md:p-12">
                         <MotionDiv variants={sectionVariants} initial="hidden" animate="visible">
                             <h2 className="text-2xl font-bold text-white mb-8 tracking-tight">
                                 Edit Your Profile
@@ -308,7 +307,7 @@ const Profile = () => {
                             {userType === "organization" && (
                                 <MotionDiv variants={sectionVariants}>
                                     <h3 className="text-xl font-semibold text-gray-200 border-b border-gray-700 pb-2 mb-4">Organization Details</h3>
-                                    <MotionDiv variants={inputVariants} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <MotionDiv variants={inputVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
                                         {orgFields.map(({ label, name, type, icon }) => (
                                             <div key={name} className="flex flex-col">
                                                 <label htmlFor={name} className="font-medium text-gray-400 mb-2 text-sm flex items-center gap-2">
@@ -416,9 +415,8 @@ const Profile = () => {
                                     whileTap={{ scale: 0.98 }}
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className={`flex items-center gap-2 px-8 py-3 rounded-full text-gray-900 font-bold shadow-lg transition-all duration-200
-                                        ${isSubmitting ? "bg-green-500/50 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"}
-                                    `}
+                                   className={`flex items-center gap-2 px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 rounded-full text-sm sm:text-base text-gray-900 font-bold shadow-lg transition-all duration-200
+${isSubmitting ? "bg-green-500/50 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"}`}
                                 >
                                     {isSubmitting ? (
                                         <>

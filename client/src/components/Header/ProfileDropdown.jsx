@@ -51,38 +51,28 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
     },
   ];
 
-  const getAvatarUrl = () => {
-    if (profile?.user?.avatarUrl) {
-      return `${import.meta.env.VITE_API_URL.replace("/api", "")}${
-        profile.user.avatarUrl
-      }`;
-    }
-    if (profile?.org?.avatarUrl) {
-      return `${import.meta.env.VITE_API_URL.replace("/api", "")}${
-        profile.org.avatarUrl
-      }`;
-    }
-    if (user.avatarUrl) {
-      return `${import.meta.env.VITE_API_URL.replace("/api", "")}${
-        user.avatarUrl
-      }`;
-    }
-    return null;
-  };
+const getAvatarUrl = () => {
+  return (
+    profile?.user?.avatarUrl ||
+    profile?.org?.avatarUrl ||
+    user?.avatarUrl ||
+    null
+  );
+};
 
   return (
-    <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-lg z-50 p-6 border border-gray-200">
-      <div className="flex items-center gap-4 mb-6">
+    <div className="fixed lg:absolute top-[190px] lg:top-auto left-1/2 lg:left-auto right-auto lg:right-0 -translate-x-1/2 lg:translate-x-0 mt-0 lg:mt-3 w-[95vw] sm:w-[92vw] lg:w-80 max-w-md max-h-[80vh] overflow-y-auto bg-white rounded-2xl shadow-2xl z-[9999] p-4 sm:p-6 border border-gray-200">
+      <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
         <DefaultAvatar
           name={user.fullName || user.orgName || "User"}
-          size={48}
+          size={40}
           avatarUrl={getAvatarUrl()}
         />
         <div>
           <p className="font-semibold text-gray-900 text-lg truncate max-w-[220px]">
             {user.fullName || user.orgName || "User"}
           </p>
-          <p className="text-sm text-gray-500 truncate max-w-[220px]">
+          <p className="text-xs sm:text-sm text-gray-500 truncate max-w-[220px]">
             {user.email}
           </p>
         </div>
@@ -90,13 +80,13 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
 
     
 
-      <ul className="text-sm space-y-1 border-b border-gray-200 pb-4 mb-4">
+      <ul className="text-xs sm:text-sm space-y-1 border-b border-gray-200 pb-4 mb-4">
         {navItems.map((item) => (
           <li key={item.label}>
             <Link
               to={item.to}
               onClick={onClose}
-              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-indigo-50 font-medium text-gray-700 transition"
+              className="flex items-center gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg hover:bg-indigo-50 font-medium text-gray-700 transition"
             >
               {item.icon}
               {item.label}
@@ -105,7 +95,7 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
         ))}
       </ul>
 
-      <div className="flex justify-between items-center text-sm text-gray-500">
+      <div className="flex justify-between items-center text-xs sm:text-sm text-gray-500">
         <span className="flex items-center gap-1 text-gray-600">
           <FaGlobe className="text-indigo-600" />
           English
@@ -115,7 +105,7 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
 
       <button
         onClick={onLogout}
-        className="w-full mt-5 py-2 bg-red-600 text-white rounded-md text-sm font-semibold hover:bg-red-700 transition"
+        className="w-full mt-5 py-2 bg-red-600 text-white rounded-md text-xs sm:text-sm font-semibold hover:bg-red-700 transition"
       >
         Sign out
       </button>

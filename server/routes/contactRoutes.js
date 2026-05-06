@@ -21,6 +21,7 @@ router.post("/send-message", async (req, res) => {
       },
     });
 
+    try {
     await transporter.sendMail({
       from: `"AerthX Contact Form" <${process.env.MAIL_USER}>`, 
       to: "support@aerthx.com", 
@@ -32,6 +33,9 @@ router.post("/send-message", async (req, res) => {
         <p><b>Message:</b> ${message}</p>
       `,
     });
+  } catch (err) {
+  console.error("Email failed:", err);
+}
 
     res.json({ success: true, message: "Message sent successfully!" });
   } catch (error) {

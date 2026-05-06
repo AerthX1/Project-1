@@ -45,15 +45,16 @@ try {
 
   // Sync logout between tabs
   useEffect(() => {
-    const handleStorage = () => {
-      const token = localStorage.getItem("accessToken");
-
-      if (!token) {
-        dispatch(logout());
-        window.location.href = "/login";
-      }
-    };
-
+ const handleStorage = () => {
+  const token = localStorage.getItem("accessToken");
+if (!token) {
+  // 🔥 stop infinite reload
+  if (window.location.pathname !== "/") {
+    dispatch(logout());
+    window.location.href = "/";
+  }
+}
+};
     window.addEventListener("storage", handleStorage);
 
     return () => {

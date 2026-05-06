@@ -32,6 +32,7 @@ import RequireAuth from '../components/RequireAuth';
 import ErrorPage from '../pages/ErrorPage';
 import DashboardRedirect from "../components/DashboardRedirect";
 import FeatureGate from "../Components/FeatureGate";
+import Settings from '../pages/Settings';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -55,6 +56,8 @@ const router = createBrowserRouter(
            <Route path="/PricingGateway" element={<PricingGateway />} />
             <Route path="/report-bug" element={<BugReport />} />
                <Route path="/contact-form" element={<ContactFormPage />} />
+                <Route path="/settings" element={<Settings />} />
+                
 
                 	     <Route 
   path="dashboard" 

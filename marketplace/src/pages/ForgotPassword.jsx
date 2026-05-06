@@ -67,6 +67,7 @@ const ForgotPassword = () => {
       await axios.post(`${import.meta.env.VITE_API_URL}/auth/reset-password`, {
         email,
         password,
+         otp,
       });
       setMessage("Password reset successful. Redirecting to login...");
       setTimeout(() => navigate("/signin"), 2000);
@@ -90,13 +91,13 @@ const ForgotPassword = () => {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-emerald-300 rounded-lg bg-white bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition duration-200"
+                className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm sm:text-base border border-emerald-300 rounded-lg bg-white bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition duration-200"
               />
             </div>
             <button
               onClick={sendOtp}
               disabled={loading}
-              className={`w-full py-3 rounded-lg text-white font-bold text-lg shadow-md transition duration-300 ${
+              className={`w-full py-2.5 sm:py-3 rounded-lg text-white font-bold text-sm sm:text-base shadow-md transition duration-300 ${
                 loading ? "bg-emerald-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               }`}
             >
@@ -120,7 +121,7 @@ const ForgotPassword = () => {
             </div>
             <button
               onClick={verifyOtp}
-              className="w-full py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+             className="w-full py-2.5 sm:py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm sm:text-base shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             >
               Verify OTP
             </button>
@@ -192,7 +193,7 @@ const ForgotPassword = () => {
   });
 
   return (
-    <div className="leaf-container min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-lime-100 via-green-100 to-emerald-200">
+    <div className="leaf-container min-h-screen flex items-center justify-center px-4 sm:px-6 py-10 sm:py-16 bg-gradient-to-br from-lime-100 via-green-100 to-emerald-200">
       <style>
         {`
         .leaf-container {
@@ -248,34 +249,34 @@ const ForgotPassword = () => {
         `}
       </style>
       {leaves}
-      <div className="max-w-md w-full bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg p-10 rounded-3xl shadow-2xl border-t-8 border-emerald-500 z-10">
-        <div className="relative flex flex-col items-center mb-8">
+      <div className="max-w-md w-full bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg p-5 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl shadow-2xl border-t-8 border-emerald-500 z-10">
+        <div className="relative flex flex-col items-center mb-6 sm:mb-8">
           {step > 1 && (
             <button
               onClick={() => setStep(step - 1)}
-              className="absolute top-0 left-0 text-gray-600 hover:text-emerald-600 transition"
+            className="absolute top-0 left-0 text-gray-600 hover:text-emerald-600 transition p-1"
               title="Go back"
             >
               <FaArrowLeft className="w-6 h-6" />
             </button>
           )}
-          <FaLock className="h-16 w-16 text-emerald-600 mb-4" />
-          <h2 className="text-4xl font-extrabold text-gray-800 text-center">
+          <FaLock className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-emerald-600 mb-3 sm:mb-4" />
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-800 text-center">
             Forgot Password?
           </h2>
-          <p className="text-sm text-gray-600 mt-3 text-center">
+          <p className="text-xs sm:text-sm text-gray-600 mt-2 sm:mt-3 text-center px-2">
             {step === 1 && "Enter your email and we'll send a code to reset your password."}
             {step === 2 && "Enter the OTP we sent to your email to verify your identity."}
             {step === 3 && "Create a new, strong password for your account."}
           </p>
         </div>
         {message && (
-          <div className="bg-emerald-100 text-emerald-700 px-4 py-3 rounded-lg mb-6 text-center text-sm font-medium border border-emerald-200">
+          <div className="bg-emerald-100 text-emerald-700 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg mb-4 sm:mb-6 text-center text-xs sm:text-sm font-medium border border-emerald-200">
             {message}
           </div>
         )}
         {error && (
-          <div className="bg-red-100 text-red-700 px-4 py-3 rounded-lg mb-6 text-center text-sm font-medium border border-red-200">
+          <div className="bg-red-100 text-red-700 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg mb-4 sm:mb-6 text-center text-xs sm:text-sm font-medium border border-red-200">
             {error}
           </div>
         )}
@@ -285,4 +286,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;  
+export default ForgotPassword;

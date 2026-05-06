@@ -10,7 +10,7 @@ export const registerOrganization = createAsyncThunk(
   "auth/registerOrganization",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/organization/register`, formData);
+      const response = await api.post(`/organization/register`, formData);
       const { token, org } = response.data;
      localStorage.setItem("accessToken", token);
       localStorage.setItem("user", JSON.stringify(org));
@@ -37,12 +37,7 @@ localStorage.setItem("accessToken", accessToken);
 localStorage.setItem("refreshToken", refreshToken);
 localStorage.setItem("user", JSON.stringify(finalUser));
 localStorage.setItem("userType", "organization");
-      console.log("Saved to localStorage:", {
-accessToken: localStorage.getItem("accessToken") || null,
-refreshToken: localStorage.getItem("refreshToken") || null,
-  user: localStorage.getItem("user"),
-  userType: localStorage.getItem("userType"),
-});
+    
       return {
   accessToken,
   refreshToken,
@@ -61,7 +56,7 @@ export const verifyOtpAction = createAsyncThunk(
   "auth/verifyOtp",
   async ({ email, otp, form, userType }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/auth/verify-otp`, {
+   const response = await api.post(`/auth/verify-otp`, {
         email,
         otp,
         form,
@@ -88,7 +83,7 @@ export const registerIndividual = createAsyncThunk(
   "auth/registerIndividual",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/individual/register`, formData);
+     const response = await api.post(`/individual/register`, formData);
       const { token, user } = response.data;
 localStorage.setItem("accessToken", token);
       localStorage.setItem("user", JSON.stringify(user));
@@ -114,12 +109,7 @@ localStorage.setItem("refreshToken", refreshToken);
 localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("forceReload", Date.now().toString());
       localStorage.setItem("userType", "individual");
-      console.log("Saved to localStorage:", {
- accessToken: localStorage.getItem("accessToken") || null,
-refreshToken: localStorage.getItem("refreshToken") || null,
-  user: localStorage.getItem("user"),
-  userType: localStorage.getItem("userType"),
-});
+
      return {
   accessToken,
   refreshToken,

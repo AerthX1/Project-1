@@ -92,13 +92,13 @@ const RegisterIndividual = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-green-50 to-teal-100 text-gray-800 antialiased">
-      <div className="w-full max-w-4xl mx-auto py-12 px-8 sm:px-12 lg:px-16">
+    <div className="min-h-screen w-full flex flex-col items-center justify-start sm:justify-center p-3 sm:p-6 bg-gradient-to-br from-green-50 to-teal-100 text-gray-800 antialiased">
+      <div className="w-full max-w-4xl mx-auto py-6 sm:py-10 px-4 sm:px-8 lg:px-16">
         <div className="text-center mb-16">
-          <h1 className="text-6xl font-extrabold text-green-700 tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-green-700 tracking-tight leading-tight">
             Join as an Individual
           </h1>
-          <p className="mt-6 text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-6 grid-cols-1 lg:grid-cols-2 text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Create your personal profile to get started and explore new opportunities.
           </p>
         </div>
@@ -110,9 +110,9 @@ const RegisterIndividual = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-7">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-5 sm:gap-y-7">
           <div className="md:col-span-2">
-            <label htmlFor="fullName" className="block text-base font-semibold text-gray-700 mb-2">Full Name</label>
+            <label htmlFor="fullName" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Full Name</label>
             <input
               id="fullName"
               name="fullName"
@@ -125,7 +125,7 @@ const RegisterIndividual = () => {
           </div>
 
           <div className="md:col-span-2">
-            <label htmlFor="email" className="block text-base font-semibold text-gray-700 mb-2">Email Address</label>
+            <label htmlFor="email" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Email Address</label>
             <input
               id="email"
               type="email"
@@ -145,7 +145,7 @@ const RegisterIndividual = () => {
           </div>
 
           <div className="md:col-span-2 relative">
-            <label htmlFor="password" className="block text-base font-semibold text-gray-700 mb-2">Password</label>
+            <label htmlFor="password" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Password</label>
             <input
               id="password"
               type={showPassword ? "text" : "password"}
@@ -159,7 +159,7 @@ const RegisterIndividual = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 top-8 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+              className="absolute inset-y-0 right-0 top-9 sm:top-10 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? (
@@ -177,7 +177,7 @@ const RegisterIndividual = () => {
           </div>
 
           <div>
-            <label htmlFor="designation" className="block text-base font-semibold text-gray-700 mb-2">Designation </label>
+            <label htmlFor="designation" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Designation </label>
             <input
               id="designation"
               name="designation"
@@ -189,7 +189,7 @@ const RegisterIndividual = () => {
           </div>
 
           <div>
-            <label htmlFor="phone" className="block text-base font-semibold text-gray-700 mb-2">Phone Number</label>
+            <label htmlFor="phone" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Phone Number</label>
             <input
               id="phone"
               name="phone"
@@ -202,44 +202,44 @@ const RegisterIndividual = () => {
           </div>
 
           <div>
-            <label htmlFor="country" className="block text-base font-semibold text-gray-700 mb-2">Country</label>
+            <label htmlFor="country" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">Country</label>
             <input
               id="country"
               name="country"
               value={form.country}
               onChange={handleChange}
               placeholder="e.g., India"
-              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-sm sm:text-base placeholder-gray-500"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="state" className="block text-base font-semibold text-gray-700 mb-2">State / Province</label>
+            <label htmlFor="state" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">State / Province</label>
             <input
               id="state"
               name="state"
               value={form.state}
               onChange={handleChange}
               placeholder="e.g., Maharashtra, Gujarat"
-              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-sm sm:text-base placeholder-gray-500"
             />
           </div>
 
           <div className="md:col-span-2">
-            <label htmlFor="city" className="block text-base font-semibold text-gray-700 mb-2">City</label>
+            <label htmlFor="city" className="block text-sm sm:text-base font-semibold text-gray-700 mb-2">City</label>
             <input
               id="city"
               name="city"
               value={form.city}
               onChange={handleChange}
               placeholder="City"
-              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-lg placeholder-gray-500"
+              className="w-full p-4 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-green-600 transition-all duration-300 text-sm sm:text-base placeholder-gray-500"
               required
             />
           </div>
 
-          <div className="md:col-span-2 flex items-start mt-6">
+          <div className="md:col-span-2 flex items-start gap-2 sm:gap-4 mt-6">
             <input
               id="termsAgreed"
               type="checkbox"
@@ -248,7 +248,7 @@ const RegisterIndividual = () => {
               onChange={handleChange}
               className="mt-1 h-5 w-5 text-green-600 focus:ring-green-500 border-gray-300 rounded-sm cursor-pointer"
             />
-            <label htmlFor="termsAgreed" className={`ml-4 text-base ${!form.termsAgreed ? "text-red-600" : "text-gray-700"} cursor-pointer leading-relaxed`}>
+            <label htmlFor="termsAgreed" className={`ml-4 text-sm sm:text-base ${!form.termsAgreed ? "text-red-600" : "text-gray-700"} cursor-pointer leading-relaxed`}>
               I agree to the{" "}
               <a href="#" className="text-green-600 hover:text-green-700 underline font-semibold" onClick={(e) => e.preventDefault()}>Terms & Conditions</a> and{" "}
               <a href="#" className="text-green-600 hover:text-green-700 underline font-semibold" onClick={(e) => e.preventDefault()}>Privacy Policy</a> *
@@ -279,7 +279,7 @@ const RegisterIndividual = () => {
 
           <Link
             to="/signin"
-            className="md:col-span-2 text-center text-green-700 hover:text-green-900 mt-4 text-lg underline font-medium transition duration-200"
+            className="md:col-span-2 text-center text-green-700 hover:text-green-900 mt-4 text-sm sm:text-base underline font-medium transition duration-200"
           >
             Already have an account? Sign In
           </Link>

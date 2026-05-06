@@ -262,7 +262,7 @@ const AdminUserData = () => {
   const renderRow = (item, type) => (
     <div
       key={item._id}
-      className="grid grid-cols-[30px_1fr_1.5fr_1.5fr_0.5fr] items-center bg-white shadow-sm rounded-lg px-4 py-3 mb-2 hover:shadow-md relative cursor-pointer"
+      className="grid grid-cols-1 sm:grid-cols-[30px_1fr_1.5fr_1.5fr_0.5fr] gap-2 sm:gap-0 items-start sm:items-center bg-white shadow-sm rounded-lg px-4 py-3 mb-2 hover:shadow-md relative cursor-pointer"
       onClick={() => handleView(item)}
     >
       <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
@@ -284,7 +284,7 @@ const AdminUserData = () => {
           onClick={() => toggleDropdown(item._id)}
         />
         {dropdownVisible === item._id && (
-          <div className="absolute right-0 top-6 z-10 bg-white border shadow rounded w-36">
+          <div className="absolute right-0 sm:right-0 left-0 sm:left-auto top-6 w-full sm:w-36 z-10 bg-white border shadow rounded w-36">
             <button
               className="w-full px-4 py-2 text-left hover:bg-gray-100"
               onClick={() => handleView(item)}
@@ -321,10 +321,10 @@ const AdminUserData = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex gap-4">
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6">
+        <div className="flex flex-wrap gap-2">
           <button
-            className={`px-4 py-2 rounded ${
+            className={`w-full sm:w-auto px-4 py-2 text-sm sm:text-base rounded ${
               activeTab === "individual"
                 ? "bg-green-600 text-white"
                 : "bg-gray-200 text-gray-800"
@@ -334,7 +334,7 @@ const AdminUserData = () => {
             Individual ({filterData(individuals).length})
           </button>
           <button
-            className={`px-4 py-2 rounded ${
+            className={`w-full sm:w-auto px-4 py-2 text-sm sm:text-base rounded ${
               activeTab === "organization"
                 ? "bg-green-600 text-white"
                 : "bg-gray-200 text-gray-800"
@@ -345,13 +345,13 @@ const AdminUserData = () => {
           </button>
         </div>
         <div className="flex items-center gap-2">
-          <div className="relative w-64">
+         <div className="relative w-full sm:w-64">
             <input
               type="text"
               placeholder="Search by ID, Name, or Org"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-green-500"
+              className="w-full pl-10 pr-3 sm:pr-4 py-2 text-sm sm:text-base border rounded-lg shadow-sm focus:ring-2 focus:ring-green-500"
             />
             <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
           </div>
@@ -361,15 +361,15 @@ const AdminUserData = () => {
               onClick={() => setMainActionsDropdown(!mainActionsDropdown)}
             />
             {mainActionsDropdown && (
-              <div className="absolute right-0 top-6 z-10 bg-white border shadow rounded w-48">
+              <div className="absolute right-0 sm:right-0 left-0 sm:left-auto top-6 w-full sm:w-48 z-10 bg-white border shadow rounded w-48">
                 <button
-                  className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                  className=" w-full sm:w-auto px-4 py-2 text-sm sm:text-base text-left hover:bg-gray-100"
                   onClick={handleSelectAll}
                 >
                   {isAllSelected ? "Cancel Selection" : "Select All"}
                 </button>
                 <button
-                  className={`w-full px-4 py-2 text-left hover:bg-gray-100 ${
+                  className={` w-full sm:w-auto px-4 py-2 text-sm sm:text-base text-left hover:bg-gray-100 ${
                     selectedUsers.size === 0 ? "text-gray-400 cursor-not-allowed" : ""
                   }`}
                   onClick={handleMailToSelected}
@@ -378,7 +378,7 @@ const AdminUserData = () => {
                   Mail to Selected ({selectedUsers.size})
                 </button>
                 <button
-                  className={`w-full px-4 py-2 text-left hover:bg-gray-100 ${
+                  className={`w-full sm:w-auto px-4 py-2 text-sm sm:text-base text-left hover:bg-gray-100 ${
                     selectedUsers.size === 0 ? "text-gray-400 cursor-not-allowed" : ""
                   }`}
                   onClick={() => handleNotification(null)}
@@ -387,13 +387,13 @@ const AdminUserData = () => {
                   Notification ({selectedUsers.size})
                 </button>
                 <button
-                  className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
+                  className="w-full sm:w-auto px-4 py-2 text-sm sm:text-base text-left hover:bg-gray-100 flex items-center gap-2"
                   onClick={handleExportCSV}
                 >
                   <FaDownload /> Export CSV
                 </button>
                 <button
-                  className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
+                  className="w-full sm:w-auto px-4 py-2 text-sm sm:text-base text-left hover:bg-gray-100 flex items-center gap-2"
                   onClick={handleExportPDF}
                 >
                   <FaDownload /> Export PDF
@@ -403,7 +403,7 @@ const AdminUserData = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-[30px_1fr_1.5fr_1.5fr_0.5fr] font-semibold text-gray-700 mb-2 px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-[30px_1fr_1.5fr_1.5fr_0.5fr] font-semibold text-gray-700 mb-2 px-4">
         <span></span>
         <span>ID</span>
         <span>Name</span>
@@ -473,7 +473,7 @@ const AdminUserData = () => {
                   required
                 ></textarea>
               </div>
-              <div className="flex justify-end gap-4">
+              <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4">
                 <button
                   type="button"
                   onClick={() => setShowMailForm(false)}
@@ -531,7 +531,7 @@ const AdminUserData = () => {
                 <textarea
                   value={notificationMessage}
                   onChange={(e) => setNotificationMessage(e.target.value)}
-                  className="w-full px-4 py-2 border rounded-lg h-32 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-2 border rounded-lg h-28 sm:h-32 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
                 ></textarea>
               </div>

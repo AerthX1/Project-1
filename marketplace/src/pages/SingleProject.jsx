@@ -54,13 +54,13 @@ const SingleProject = () => {
 
 const handleBuyClick = () => {
   navigate("/PricingGateway", {
-    state: {
-      source: "individual",
-      projectId: project._id,
-      tons: 1,
-      userType: userType,  
-    },
-  });
+  state: {
+    type: "carbon_credit",  // 🔥 MUST
+    project: project,       // full project object
+    tons: 1,
+    userType:userType
+  }
+});
 };
 
 const loggedInUser = useSelector((state) => state.auth.user);
@@ -74,21 +74,21 @@ const handleContactClick = () => {
   if (!project) return <div className="text-center mt-10 text-red-500">Project not found.</div>;
 
   return (
-    <div className="min-h-screen w-full bg-white text-gray-800 font-sans">
-      <div className="relative w-full h-[300px] sm:h-[360px] md:h-[420px] overflow-hidden">
+    <div className="min-h-screen w-full bg-white text-gray-800 font-sans overflow-x-hidden">
+      <div className="relative w-full h-[260px] sm:h-[340px] md:h-[420px] lg:h-[500px] overflow-hidden">
         <img
   src={`${import.meta.env.VITE_FILE_URL}${project.image}`}
           alt={project.title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/60 flex flex-col justify-center items-center text-center px-4">
-          <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-extrabold drop-shadow-lg leading-tight">
+        <div className="absolute inset-0 bg-black/60 flex flex-col justify-center items-center text-center px-4 sm:px-6">
+          <h1 className="text-white text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold drop-shadow-lg leading-tight max-w-5xl">
             {project.title}
           </h1>
-          <p className="mt-4 text-gray-100 text-base sm:text-lg max-w-2xl">
+          <p className="mt-4 text-gray-100 text-sm sm:text-base lg:text-lg max-w-3xl leading-relaxed">
             Contribute to a greener planet by supporting verified, impactful carbon credit projects.
           </p>
-          <div className="mt-4 flex flex-wrap gap-3 justify-center">
+          <div className="mt-5 flex flex-wrap gap-3 justify-center items-center">
             <div className="flex items-center gap-2 bg-green-600 text-white px-4 py-1 rounded-full text-sm font-medium shadow hover:scale-105 transition">
               <ShieldCheck className="h-4 w-4" /> Verified by {project.verifiedBy}
             </div>
@@ -99,22 +99,22 @@ const handleContactClick = () => {
         </div>
       </div>
 
-      <section className="px-6 sm:px-12 py-12 bg-gray-50 border-b border-gray-200">
+      <section className="px-4 sm:px-6 lg:px-12 py-10 sm:py-12 bg-gray-50 border-b border-gray-200">
         <div className="w-full mx-auto">
           <div className="flex items-center gap-3 mb-6">
             <Info className="w-6 h-6 text-green-600" />
-            <h2 className="text-2xl sm:text-3xl font-bold text-green-700">Project Overview</h2>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-green-700 leading-tight">Project Overview</h2>
           </div>
 
-          <div className="w-full text-center px-6 sm:px-12 pt-12 mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-wide font-serif">
+          <div className="w-full text-center px-2 sm:px-6 lg:px-12 pt-8 sm:pt-10 lg:pt-12 mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight tracking-wide font-serif">
               {project.title}
             </h1>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8 text-gray-800 leading-relaxed text-base sm:text-lg tracking-wide">
+          <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 sm:p-6 lg:p-8 text-gray-800 leading-relaxed text-base sm:text-lg tracking-wide">
             <p className="mb-4">{project.info}</p>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               <div className="flex items-center gap-3 p-3 bg-green-50 border border-green-100 rounded-lg shadow-sm">
                 <BadgeCheck className="text-green-600 w-6 h-6" />
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
@@ -134,30 +134,30 @@ const handleContactClick = () => {
         </div>
       </section>
 
-      <section className="px-6 sm:px-12 py-12 bg-[#f8fafc]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="bg-white border border-gray-100 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 text-center">
+      <section className="px-4 sm:px-6 lg:px-12 py-10 sm:py-12 bg-[#f8fafc]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-md hover:shadow-xl  transition-all duration-300 p-6 text-center">
             <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3">
               <Leaf className="text-green-600 w-6 h-6" />
             </div>
             <h4 className="text-lg font-semibold text-gray-800">Category</h4>
             <p className="text-sm text-gray-600 mt-1">{project.category}</p>
           </div>
-          <div className="bg-white border border-gray-100 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 text-center">
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-md hover:shadow-xl  transition-all duration-300 p-6 text-center">
             <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3">
               <Layers className="text-green-600 w-6 h-6" />
             </div>
             <h4 className="text-lg font-semibold text-gray-800">Type</h4>
             <p className="text-sm text-gray-600 mt-1">{project.projectType}</p>
           </div>
-          <div className="bg-white border border-gray-100 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 text-center">
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-6 text-center">
             <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3">
               <Zap className="text-green-600 w-6 h-6" />
             </div>
             <h4 className="text-lg font-semibold text-gray-800">Vintage</h4>
             <p className="text-sm text-gray-600 mt-1">{project.vintage}</p>
           </div>
-          <div className="bg-white border border-gray-100 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 text-center">
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-6 text-center">
             <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3">
               <CalendarDays className="text-green-600 w-6 h-6" />
             </div>
@@ -167,13 +167,13 @@ const handleContactClick = () => {
         </div>
       </section>
 
-      <section className="px-6 sm:px-12 py-12 bg-white grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8 text-gray-800">
+      <section className="px-4 sm:px-6 lg:px-12 py-10 sm:py-12 bg-white grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 sm:p-6 lg:p-8 overflow-hidden text-gray-800">
           <h3 className="text-xl font-semibold text-green-700 mb-6 flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-green-600" />
             Technical Details
           </h3>
-          <ul className="space-y-5 text-base sm:text-lg">
+          <ul className="space-y-4 sm:space-y-5 text-sm sm:text-base lg:text-lg break-words">
             <li className="flex items-start gap-3"><BookOpen className="w-5 h-5 text-green-600 mt-1" /><div><strong>Methodology:</strong> {project.methodology}</div></li>
             <li className="flex items-start gap-3"><CalendarDays className="w-5 h-5 text-green-600 mt-1" /><div><strong>Issuance Year:</strong> {project.vintageYear}</div></li>
             <li className="flex items-start gap-3"><CheckCircle className="w-5 h-5 text-green-600 mt-1" /><div><strong>Retired:</strong> {project.retired ? "Yes" : "No"}</div></li>
@@ -182,7 +182,7 @@ const handleContactClick = () => {
           </ul>
         </div>
 
-        <div className="bg-green-50 border border-green-100 rounded-2xl shadow-lg p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        <div className="bg-green-50 border border-green-100 rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 flex flex-col justify-between space-y-6">
           <div>
             <h3 className="text-2xl font-bold text-green-700 flex items-center gap-2">
               <Leaf className="w-6 h-6 text-green-600" />
@@ -201,12 +201,12 @@ const handleContactClick = () => {
       </section>
 
       {project.sdgs?.length > 0 && (
-        <section className="w-full px-6 sm:px-12 py-14 bg-gray-50 border-t border-gray-200">
+        <section className="w-full px-4 sm:px-6 lg:px-12 py-10 sm:py-14 bg-gray-50 border-t border-gray-200">
           <div className="max-w-7xl mx-auto">
             <h3 className="text-3xl font-bold text-green-700 mb-8">
               Sustainable Development Goals (SDGs)
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
               {project.sdgs.map((goal, idx) => (
                 <div key={idx} className="bg-white border border-green-100 rounded-xl p-4 shadow-sm hover:shadow-md transition duration-200">
                   <p className="text-sm sm:text-base font-medium text-gray-700 leading-snug text-center">
@@ -220,7 +220,7 @@ const handleContactClick = () => {
       )}
 
       {project.additionalNotes && (
-        <section className="w-full px-6 sm:px-12 py-10 bg-white border-t border-gray-200">
+        <section className="w-full px-4 sm:px-6 lg:px-12 py-10 bg-white border-t border-gray-200">
           <h3 className="text-xl font-semibold text-green-700 mb-4">Additional Notes</h3>
           <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
             {project.additionalNotes}
@@ -228,7 +228,7 @@ const handleContactClick = () => {
         </section>
       )}
 
-      <section className="w-full py-16 px-6 sm:px-12 bg-gradient-to-r from-green-700 via-green-600 to-green-500 text-white text-center">
+      <section className="w-full py-12 sm:py-16 px-4 sm:px-6 lg:px-12 bg-gradient-to-r from-green-700 via-green-600 to-green-500 text-white text-center">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4 leading-snug">
             Ready to make an impact?
@@ -236,16 +236,16 @@ const handleContactClick = () => {
           <p className="text-base sm:text-lg mb-6 text-white/90">
             Support this verified project and contribute to a greener, more sustainable planet.
           </p>
-          <div className="flex justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
             <button
               onClick={handleBuyClick}
-              className="inline-flex items-center gap-2 bg-white text-green-700 hover:bg-green-100 font-semibold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-base sm:text-lg"
+              className="inline-flex items-center justify-center gap-2 bg-white text-green-700 hover:bg-green-100 font-semibold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base lg:text-lg w-full sm:w-auto"
             >
               <Leaf className="w-5 h-5" /> Buy Carbon Credit
             </button>
             <button
               onClick={handleContactClick}
-              className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white/20 font-semibold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-base sm:text-lg"
+              className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white/20 font-semibold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base lg:text-lg w-full sm:w-auto"
             >
               <Phone className="w-5 h-5" /> Contact Us
             </button>

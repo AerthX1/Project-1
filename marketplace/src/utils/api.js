@@ -25,6 +25,15 @@ api.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem("refreshToken");
 
+// 🔥 If refresh token missing → logout immediately
+if (!refreshToken) {
+  localStorage.clear();
+  if (window.location.pathname !== "/") {
+  window.location.href = "/";
+}
+  return Promise.reject(error);
+}
+
         const res = await axios.post(
           `${import.meta.env.VITE_API_URL}/auth/refresh`,
           { refreshToken }
@@ -40,7 +49,9 @@ api.interceptors.response.use(
 
       } catch (err) {
         localStorage.clear();
-        window.location.href = "/login";
+  if (window.location.pathname !== "/") {
+  window.location.href = "/";
+}
       }
     }
 

@@ -9,6 +9,7 @@ const ContactFormPage = ({ userType }) => {
   const navigate = useNavigate();
   const project = location.state?.project;
   const user = useSelector((state) => state.auth.user);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -30,21 +31,25 @@ const ContactFormPage = ({ userType }) => {
   
 const handleSubmit = async (e) => {
   e.preventDefault();
+  setLoading(true);
+
   try {
-    // Send to /send-inquiry instead of old /send route
-   const response = await axios.post(`${API_URL}/contact/send-inquiry`, {
-  ...formData,
-  project: project.title,
-  userType: user?.type,   // "Individual" or "Organization"
-  userId: user?._id,      // logged-in user ID
-});
+    const response = await axios.post(`${API_URL}/contact/send-inquiry`, {
+      ...formData,
+      project: project.title,
+      userType: user?.type,
+      userId: user?._id,
+    });
+
     if (response.data.success) {
-      alert("Your inquiry has been sent! We'll be in touch shortly.");
+      alert("Your inquiry has been sent!");
       navigate(-1);
     }
   } catch (err) {
     console.error("Error submitting inquiry form:", err);
-    alert("Something went wrong. Please try again later.");
+    alert("Something went wrong.");
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -72,26 +77,37 @@ const handleSubmit = async (e) => {
           background: linear-gradient(to bottom, #e0f7e9, #c8f0dc);
           position: relative;
           overflow: hidden;
-          padding: 2rem;
+          padding: 1rem;
         }
         .form-container {
           position: relative;
           z-index: 10;
           background: #fff;
-          border-radius: 2rem;
-          max-width: 600px;
+    max-width: 600px;
+padding: 1.5rem 1rem;
+border-radius: 1rem;
           width: 100%;
-          padding: 3rem 2rem;
           box-shadow: 0 15px 40px rgba(0,0,0,0.15);
           border-top: 6px solid #22c55e;
         }
         .form-container h3 {
-          font-size: 2rem;
+          font-size: 1.4rem;
           font-weight: 700;
           color: #16a34a;
           margin-bottom: 0.5rem;
           text-align: center;
         }
+          @media (min-width: 640px) {
+  .form-container h3 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .form-container h3 {
+    font-size: 2rem;
+  }
+}
         .form-container p {
           text-align: center;
           color: #4b5563;
@@ -104,26 +120,39 @@ const handleSubmit = async (e) => {
         }
         input, select, textarea {
           width: 100%;
-          padding: 0.8rem 1rem;
+        padding: 0.7rem 0.9rem;
+font-size: 0.9rem;
           border-radius: 0.75rem;
           border: 1px solid #d1d5db;
-          font-size: 1rem;
           transition: all 0.3s;
         }
+          @media (min-width: 640px) {
+  input, select, textarea {
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+  }
+}
         input:focus, select:focus, textarea:focus {
           border-color: #22c55e;
           box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
           outline: none;
         }
-        .grid-2 {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
+       .grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
         button {
           background-color: #16a34a;
           color: white;
-          padding: 0.8rem 2rem;
+          padding: 0.7rem 1.5rem;
+font-size: 0.9rem;
           border: none;
           border-radius: 9999px;
           font-weight: 600;
@@ -131,6 +160,12 @@ const handleSubmit = async (e) => {
           transition: all 0.3s;
           align-self: center;
         }
+          @media (min-width: 640px) {
+  button {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+}
         button:hover {
           background-color: #15803d;
           box-shadow: 0 5px 15px rgba(0,0,0,0.2);
@@ -145,6 +180,19 @@ const handleSubmit = async (e) => {
           animation-iteration-count: infinite;
           opacity: 0.6;
         }
+          @media (min-width: 640px) {
+  .form-container {
+    padding: 2rem 1.5rem;
+    border-radius: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .form-container {
+    padding: 3rem 2rem;
+    border-radius: 2rem;
+  }
+}
         @keyframes fall {
           0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
           20% { opacity: 1; }
@@ -166,8 +214,8 @@ const handleSubmit = async (e) => {
    <button
   type="button"
   onClick={() => navigate(-1)}
-  className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white text-gray-700 font-bold text-xl shadow-md  hover:text-white transition-all duration-300"
->
+  className="absolute top-2 right-2 sm:top-4 sm:right-4 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-white text-gray-700 font-bold text-lg sm:text-xl shadow-md hover:text-white transition-all duration-300"
+ >
   ×
 </button>
 
@@ -190,7 +238,7 @@ const handleSubmit = async (e) => {
                 required
               />
             </div>
-            {userType === "Organization" && (
+            {userType?.toLowerCase() === "organization" && (
               <div>
                 <label>Company/Organization</label>
                 <input
@@ -229,7 +277,7 @@ const handleSubmit = async (e) => {
             </div>
           </div>
 
-          {userType === "Organization" && (
+          {userType?.toLowerCase() === "organization" && (
             <div className="grid-2">
               <div>
                 <label>Desired Quantity (tons)</label>
@@ -274,7 +322,9 @@ const handleSubmit = async (e) => {
             />
           </div>
 
-          <button type="submit">Send Inquiry</button>
+          <button type="submit" disabled={loading}>
+  {loading ? "Sending..." : "Send Inquiry"}
+</button>
         </form>
       </div>
     </div>

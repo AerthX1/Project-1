@@ -17,7 +17,7 @@ async function createOrUpdateAdmin() {
     if (existingAdmin) {
       existingAdmin.password = hashedPassword;
       await existingAdmin.save();
-      console.log("🔄 Admin password updated successfully.");
+
     } else {
       const admin = new Organization({
         orgName: "AerthX Admin",
@@ -37,11 +37,10 @@ async function createOrUpdateAdmin() {
       });
 
       await admin.save();
-      console.log("✅ Admin created successfully.");
+
     }
 
-    console.log(`📝 Email: ${ADMIN_EMAIL}`);
-    console.log(`🔑 Password: ${ADMIN_PASSWORD}`);
+
     process.exit(0);
   } catch (error) {
     console.error("❌ Error seeding admin:", error);

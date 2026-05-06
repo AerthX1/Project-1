@@ -56,7 +56,7 @@ const OrganizationRegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Register form submitted");
-    console.log("API_URL is:", API_URL);
+
 
     if (!form.termsAgreed) return alert("Please agree to Terms & Conditions");
     if (emailError || emailChecking) return;
@@ -64,39 +64,40 @@ setLocalLoading(true);
     try {
       console.log("Sending OTP request...");
       const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email: form.email });
-      console.log("send-otp response:", res);
 
       if (res.status === 200 || res.status === 201) {
-        console.log("Navigate called");
+       
         navigate("/verify-otp", { state: { form, userType: "organization" } });
       } else {
         console.log("Unexpected status:", res.status);
       }
     } catch (err) {
-      console.error("send-otp API error:", err);
-      alert(err.response?.data?.message || "Failed to send OTP");
-    }
+  console.error("send-otp API error:", err);
+  alert(err.response?.data?.message || "Failed to send OTP");
+} finally {
+  setLocalLoading(false);
+}
   };
 
 
   return (
-    <div className="max-w-4xl mx-auto mt-12 p-6 bg-white rounded shadow-md">
-      <h2 className="text-2xl font-bold mb-2 text-green-700 text-center">
+    <div className="max-w-4xl mx-auto mt-6 sm:mt-10 md:mt-12 p-4 sm:p-6 md:p-8 bg-white rounded-2xl shadow-md">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-green-700 text-center leading-tight">
         Organization Registration
       </h2>
-      <p className="text-sm text-gray-500 mb-6 text-center">
+      <p className="text-xs sm:text-sm text-gray-500 mb-5 sm:mb-6 text-center px-2">
         Provide accurate details about your organization to proceed.
       </p>
 
       {error && <p className="text-red-600 mb-4">{error}</p>}
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-3xl mx-auto">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 w-full max-w-3xl mx-auto">
         <input
           name="orgName"
           value={form.orgName}
           onChange={handleChange}
           placeholder="Organization Name"
-          className="p-2 border border-gray-300 rounded w-full"
+         className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
           required
         />
 
@@ -104,7 +105,7 @@ setLocalLoading(true);
           name="orgType"
           value={form.orgType}
           onChange={handleChange}
-          className="p-2 border border-gray-300 rounded w-full"
+          className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
           required
         >
           <option value="">Select Type</option>
@@ -116,7 +117,7 @@ setLocalLoading(true);
           name="industry"
           value={form.industry}
           onChange={handleChange}
-          className="p-2 border border-gray-300 rounded w-full"
+          className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
           required
         >
           <option value="">Industry</option>
@@ -129,7 +130,7 @@ setLocalLoading(true);
           value={form.phone}
           onChange={handleChange}
           placeholder="Phone"
-          className="p-2 border border-gray-300 rounded w-full"
+          className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
           required
         />
         <input
@@ -137,7 +138,7 @@ setLocalLoading(true);
           value={form.country}
           onChange={handleChange}
           placeholder="Country"
-          className="p-2 border border-gray-300 rounded w-full"
+          className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
           required
         />
         <input
@@ -145,7 +146,7 @@ setLocalLoading(true);
           value={form.state}
           onChange={handleChange}
           placeholder="State"
-          className="p-2 border border-gray-300 rounded w-full"
+          className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
           required
         />
         <input
@@ -153,7 +154,7 @@ setLocalLoading(true);
           value={form.city}
           onChange={handleChange}
           placeholder="City"
-          className="p-2 border border-gray-300 rounded w-full"
+          className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
           required
         />
         <input
@@ -161,7 +162,7 @@ setLocalLoading(true);
           value={form.fullName}
           onChange={handleChange}
           placeholder="Full Name"
-          className="p-2 border border-gray-300 rounded w-full"
+          className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
           required
         />
 
@@ -171,44 +172,44 @@ setLocalLoading(true);
           value={form.email}
           onChange={handleChange}
           placeholder="Email"
-          className="p-2 border border-gray-300 rounded w-full"
+          className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
           required
         />
 
         {emailChecking && (
-          <p className="col-span-2 text-blue-500 text-sm">Checking email...</p>
+          <p className="md:col-span-2 text-blue-500 text-xs sm:text-sm">Checking email...</p>
         )}
         {emailError && (
-          <p className="col-span-2 text-red-500 text-sm">{emailError}</p>
+          <p className="md:col-span-2 text-red-500 text-xs sm:text-sm">{emailError}</p>
         )}
 
-        <div className="relative col-span-2">
+        <div className="relative md:col-span-2">
           <input
             type={showPassword ? "text" : "password"}
             name="password"
             value={form.password}
             onChange={handleChange}
             placeholder="Password"
-            className="p-2 border border-gray-300 rounded w-full pr-10"
+          className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-xl pr-16 focus:outline-none focus:ring-2 focus:ring-green-500"
             required
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+            className="absolute inset-y-0 right-0 px-4 flex items-center text-xs sm:text-sm text-green-700 font-medium"
           >
             {showPassword ? "Hide" : "Show"}
           </button>
         </div>
 
-        <div className="col-span-2 flex items-start gap-2">
+        <div className="md:col-span-2 flex items-start gap-3 mt-1">
           <input
             type="checkbox"
             name="termsAgreed"
             checked={form.termsAgreed}
             onChange={handleChange}
           />
-          <label className={`text-sm ${!form.termsAgreed ? "text-red-600" : ""}`}>
+          <label className={`text-xs sm:text-sm leading-relaxed ${!form.termsAgreed ? "text-red-600" : "text-gray-700"}`}>
             I agree to the{" "}
             <a href="#" className="text-green-600 underline">
               Terms & Conditions
@@ -220,16 +221,19 @@ setLocalLoading(true);
       <button
   type="submit"
   disabled={localLoading || !form.termsAgreed}
-  className={`col-span-2 py-2 rounded text-white mt-2 font-semibold
-    ${!form.termsAgreed ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}`}
+ className={`md:col-span-2 py-3 rounded-xl text-white mt-3 font-semibold text-sm sm:text-base transition-all
+${!form.termsAgreed
+  ? "bg-gray-400 cursor-not-allowed"
+  : "bg-green-600 hover:bg-green-700 hover:shadow-lg"
+}`}
 >
   {localLoading ? "Registering..." : "Register Organization"}
 </button>
 
         <Link
           to="/signin"
-          className="col-span-2 block w-full mt-4 text-center border-2 border-green-700 text-green-700 font-semibold rounded-lg
-            py-3 hover:bg-green-700 hover:text-white transition-all"
+          className="md:col-span-2 block w-full mt-2 sm:mt-4 text-center border-2 border-green-700 text-green-700 font-semibold rounded-xl
+py-3 text-sm sm:text-base hover:bg-green-700 hover:text-white transition-all"
         >
           Already have an account? Sign In
         </Link>

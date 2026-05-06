@@ -30,7 +30,6 @@
     const notificationsRef = useRef(null);
     const [query, setQuery] = useState("");
 
-    console.log("AUTH USER:", user);
     const handleSearch = () => {
       onSearch(query);
     };
@@ -53,24 +52,41 @@
     };
 
     useEffect(() => {
-      if (!token) return;
+  const refreshToken = localStorage.getItem("refreshToken");
 
-      try {
-        const decoded = decodeJwt(token);
-        if (!decoded) throw new Error("Invalid token");
+ if (!refreshToken) return;
 
-        if (decoded.exp * 1000 < Date.now()) {
-          console.log("Token expired, logging out");
-          dispatch(logout());
-          navigate("/signin");
-        }
-      } catch (error) {
-        console.error("Error decoding token:", error);
-        dispatch(logout());
-        navigate("/signin");
-      }
-    }, [token, dispatch, navigate]);
+  try {
+    const decoded = decodeJwt(refreshToken);
 
+    if (!decoded) throw new Error("Invalid refresh token");
+
+    // 🔥 ONLY logout if refresh token expired
+if (decoded.exp * 1000 < Date.now()) {
+
+  // 🔥 REMOVE TOKEN FIRST (STOP LOOP)
+  localStorage.removeItem("refreshToken");
+  localStorage.removeItem("accessToken");
+
+  dispatch(logout());
+
+  if (window.location.pathname !== "/") {
+    navigate("/");
+  }
+}
+
+  } catch (error) {
+    console.error("Refresh token error:", error);
+    localStorage.removeItem("refreshToken");
+localStorage.removeItem("accessToken");
+
+dispatch(logout());
+
+if (window.location.pathname !== "/") {
+  navigate("/");
+}
+  }
+}, [dispatch, navigate]);
     useEffect(() => {
       const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -176,23 +192,23 @@
  
 
     return (
-      <nav className="bg-white shadow-lg w-full px-4 py-3 lg:px-8 fixed top-0 z-50">
-        <div className="flex justify-between items-center gap-4 h-14">
-          <img src={aerthxlogo} alt="AerthX Logo" className="h-16 sm:h-16 ml-3 object-contain" />
+      <nav className="bg-white shadow-lg w-full px-3 sm:px-4 py-2.5 sm:py-3 lg:px-8 fixed top-0 z-50 border-b border-gray-100">
+        <div className="flex justify-between items-center gap-2 sm:gap-4 min-h-[56px]">
+          <img src={aerthxlogo} alt="AerthX Logo" className="h-12 sm:h-14 lg:h-16 ml-0 sm:ml-2 object-contain shrink-0" />
 
 
 {isHomePage && (
-  <div className="relative flex items-center w-full max-w-md mx-4 md:mx-auto justify-center">
-  <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-green-700 tracking-wide text-center">
+  <div className="relative flex items-center justify-center flex-1 px-2 sm:px-4">
+  <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-green-700 tracking-wide text-center leading-tight truncate">
   Marketplace
 </h1>
   </div>
 )}
 
 
-          <div className="relative flex items-center space-x-4">
+          <div className="relative flex items-center gap-2 sm:gap-4 shrink-0">
             {isAuthenticated ? (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-4">
         <SubscriptionStatus
   userId={user?.id}
   onSubscribe={() =>
@@ -206,58 +222,60 @@
                 <div className="relative" ref={notificationsRef}>
                   <button
                     onClick={toggleNotifications}
-                    className="relative p-2 text-gray-600 hover:text-green-500 transition-colors duration-200"
+                    className="relative p-1.5 sm:p-2 text-gray-600 hover:text-green-500 transition-colors duration-200 rounded-full hover:bg-gray-100"
                   >
-                    <FaBell size={24} />
+                    <FaBell className="w-5 h-5 sm:w-6 sm:h-6" />
                     {unreadCount > 0 && (
-  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+  <span className="absolute top-0 right-0 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold leading-none text-white transform translate-x-1/3 -translate-y-1/3 bg-red-600 rounded-full shadow">
     {unreadCount}
   </span>
 )}
                   </button>
                 {notificationsOpen && (
-  <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-xl ring-1 ring-black/5 z-50 overflow-hidden transform transition duration-300 origin-top-right scale-100 opacity-100">
+  <div className="fixed sm:absolute top-16 sm:top-auto left-1/2 sm:left-auto right-auto sm:right-0 -translate-x-1/2 sm:translate-x-0 mt-0 sm:mt-3 w-[94vw] sm:w-80 md:w-96 max-w-[420px] bg-white rounded-2xl shadow-2xl ring-1 ring-black/5 z-[9999] overflow-hidden transition-all duration-300">
 
-    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
-      <h3 className="text-base font-semibold text-gray-800">Alerts & Notifications</h3>
+    <div className="flex items-center justify-between gap-2 px-3 sm:px-4 py-3 border-b border-gray-100 bg-gray-50 sticky top-0 z-10">
+      <h3 className="text-sm sm:text-base font-semibold text-gray-800 truncate">Alerts & Notifications</h3>
       {unreadCount > 0 && (
-        <span className="text-xs font-medium bg-red-500 text-white px-2 py-0.5 rounded-full shadow-sm">
+        <span className="text-[10px] sm:text-xs font-medium bg-red-500 text-white px-2 py-1 rounded-full shadow-sm whitespace-nowrap shrink-0">
           {unreadCount} new
         </span>
       )}
     </div>
 
-    <div className="max-h-80 overflow-y-auto divide-y divide-gray-100">
+    <div className="max-h-[65vh] sm:max-h-[420px] overflow-y-auto divide-y divide-gray-100 overscroll-contain">
       {notifications.length > 0 ? (
         notifications.map((notification) => (
           <div
             key={notification._id}
-            className={`px-4 py-3 text-sm transition-colors duration-200 cursor-pointer hover:bg-gray-100 ${
-              !notification.read ? "bg-slate-50 border-l-4 border-indigo-500" : "bg-white"
-            }`}
+            className={`px-3 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm transition-all duration-200 cursor-pointer hover:bg-gray-100 active:bg-gray-200 ${
+  !notification.read
+    ? "bg-slate-50 border-l-4 border-indigo-500"
+    : "bg-white"
+}`}
           >
-            <p className="font-medium text-gray-800">{notification.title}</p>
-            <p className="text-gray-600 text-xs mt-1 leading-snug truncate">
+            <p className="font-semibold text-gray-800 text-xs sm:text-sm leading-relaxed break-words">{notification.title}</p>
+            <p className="text-gray-600 text-[11px] sm:text-xs mt-1.5 leading-relaxed break-words line-clamp-3">
               {notification.message}
             </p>
-            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wide">
+            <p className="text-[9px] sm:text-[10px] text-gray-400 mt-2 uppercase tracking-wide break-words">
               {new Date(notification.timestamp).toLocaleString()}
             </p>
           </div>
         ))
       ) : (
-        <div className="px-4 py-8 text-center text-gray-500 text-sm">
-          <svg className="w-6 h-6 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+        <div className="px-4 py-10 text-center text-gray-500 text-xs sm:text-sm flex flex-col items-center justify-center">
+          <svg className="w-8 h-8 mx-auto mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
           <p className="font-medium">No Pending Alerts</p>
           <p className="text-xs mt-0.5">You're all caught up!</p>
         </div>
       )}
     </div>
 
-    <div className="px-4 py-3 border-t border-gray-100 bg-white text-center">
+    <div className="px-4 py-3 border-t border-gray-100 bg-white text-center sticky bottom-0">
       <Link
         to="/notification"
-        className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+       className="text-xs sm:text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors break-words"
       >
         View All Notifications &rarr;
       </Link>
@@ -272,20 +290,17 @@
                       setDropdownOpen(!dropdownOpen);
                       setNotificationsOpen(false);
                     }}
-                    className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 transition-colors shrink-0"
                   >
                     <DefaultAvatar
                       name={user.fullName || user.orgName || "User"}
                       size={40}
-                      avatarUrl={
-                        profile?.user?.avatarUrl
-                          ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.user.avatarUrl}`
-                          : profile?.org?.avatarUrl
-                            ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.org.avatarUrl}`
-                            : user.avatarUrl
-                              ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.avatarUrl}`
-                              : null
-                      }
+                  avatarUrl={
+  profile?.user?.avatarUrl ||
+  profile?.org?.avatarUrl ||
+  user?.avatarUrl ||
+  null
+}
                     />
                   </button>
                   {dropdownOpen && (
@@ -299,7 +314,7 @@
             ) : (
               <Link
                 to="/register-choice"
-                className="px-6 py-2 bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 transition-all shadow-md"
+                className="px-4 sm:px-6 py-2 text-sm sm:text-base bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 transition-all shadow-md whitespace-nowrap"
               >
                 Register
               </Link>

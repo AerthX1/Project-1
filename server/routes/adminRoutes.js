@@ -8,6 +8,9 @@ const CarbonCredit = require("../models/CarbonCredit");
 const Notification = require("../models/Notification");
 const FAQ = require("../models/FAQ");
 const PricingConfig = require('../models/PricingConfig');
+const Subscription = require("../models/Subscription");
+const CarbonPurchase = require("../models/CarbonPurchase");
+
 
 router.get("/admins", async (req, res) => {
   try {
@@ -509,7 +512,253 @@ router.post("/pricing", async (req, res) => {
   }
 });
 
+router.get("/subscriptions", async (req, res) => {
+  try {
+    const subs = await Subscription.find().sort({ createdAt: -1 });
 
+    const result = await Promise.all(
+      subs.map(async (sub) => {
+        let user =
+          sub.userType === "individual"
+            ? await Individual.findById(sub.userId)
+            : await Organization.findById(sub.userId);
+
+        return {
+          id: sub._id,
+          name: user?.fullName || user?.orgName || "Unknown",
+          email: user?.email || "N/A",
+          plan: sub.plan,
+          duration: sub.duration,
+          status: sub.status,
+          endDate: sub.endDate,
+        };
+      })
+    );
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch subscriptions" });
+  }
+});
+
+router.put("/subscription/suspend/:id", async (req, res) => {
+  try {
+    const updated = await Subscription.findByIdAndUpdate(
+      req.params.id,
+      { status: "suspended" },
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to suspend subscription" });
+  }
+});
+
+router.put("/subscription/resume/:id", async (req, res) => {
+  try {
+    const updated = await Subscription.findByIdAndUpdate(
+      req.params.id,
+      { status: "active" },
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to resume subscription" });
+  }
+});
+
+router.get("/top-purchasers", async (req, res) => {
+  try {
+    const purchases = await CarbonPurchase.aggregate([
+      { $match: { status: "completed" } },
+
+      {
+        $group: {
+          _id: "$userId",
+          totalSpent: { $sum: "$totalAmountPaid" },
+          totalTons: { $sum: "$tonsBought" },
+          purchases: { $sum: 1 },
+          userType: { $first: "$userType" },
+        },
+      },
+
+      { $sort: { totalSpent: -1 } },
+    ]);
+
+    const result = await Promise.all(
+      purchases.map(async (p, index) => {
+        let user =
+          p.userType === "individual"
+            ? await Individual.findById(p._id)
+            : await Organization.findById(p._id);
+
+        return {
+          rank: index + 1,
+          userId: p._id,
+          name: user?.fullName || user?.orgName || "Unknown",
+          email: user?.email || "N/A",
+          totalSpent: p.totalSpent,
+          totalTons: p.totalTons,
+          purchases: p.purchases,
+          userType: p.userType,
+        };
+      })
+    );
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch purchasers" });
+  }
+});
+
+router.get("/user-purchases/:userId", async (req, res) => {
+  try {
+    const data = await CarbonPurchase.find({
+      userId: req.params.userId,
+      status: "completed",
+    }).sort({ createdAt: -1 });
+
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch purchases" });
+  }
+});
+
+router.put("/suspend-user/:userId", async (req, res) => {
+  try {
+    let user =
+      (await Individual.findById(req.params.userId)) ||
+      (await Organization.findById(req.params.userId));
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.isSuspended = true;
+    await user.save();
+
+    res.json({ message: "User suspended" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to suspend user" });
+  }
+});
+
+router.put("/toggle-user-status/:userId", async (req, res) => {
+  try {
+    let user =
+      (await Individual.findById(req.params.userId)) ||
+      (await Organization.findById(req.params.userId));
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // 🔥 TOGGLE
+    user.isSuspended = !user.isSuspended;
+
+    await user.save();
+
+    res.json({
+      message: user.isSuspended ? "User suspended" : "User activated",
+      isSuspended: user.isSuspended,
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update user status" });
+  }
+});
+
+router.get("/analytics", async (req, res) => {
+  try {
+    const purchases = await CarbonPurchase.find({ status: "completed" });
+    const subscriptions = await Subscription.find();
+
+    const groupByMonth = (items, type) => {
+      const map = {};
+
+      items.forEach((item) => {
+        const date = new Date(item.createdAt || item.startDate);
+        const key = date.toLocaleString("default", { month: "short" });
+
+        if (!map[key]) {
+          map[key] = {
+            date: key,
+             rawDate: date, 
+            revenue: 0,
+            count: 0,
+            tons: 0,
+          };
+        }
+
+        if (type === "purchase") {
+          map[key].revenue += item.totalAmountPaid || 0;
+          map[key].tons += item.tonsBought || 0;
+          map[key].count += 1;
+        }
+
+        if (type === "subscription") {
+          map[key].revenue += 500; // 🔥 replace with real plan price later
+          map[key].count += 1;
+        }
+      });
+
+      return Object.values(map);
+    };
+
+    res.json({
+      carbon: groupByMonth(purchases, "purchase"),
+      subscriptions: groupByMonth(subscriptions, "subscription"),
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Analytics error" });
+  }
+});
+
+router.get("/overview", async (req, res) => {
+  try {
+    // ✅ COUNT USERS (both collections)
+    const individualUsers = await Individual.countDocuments();
+    const organizationUsers = await Organization.countDocuments();
+    const users = individualUsers + organizationUsers;
+
+    // ✅ PURCHASE DATA
+    const purchases = await CarbonPurchase.find({ status: "completed" });
+
+    // ✅ SUBSCRIPTIONS
+    const subscriptions = await Subscription.find();
+
+    // ✅ SUSPENDED USERS
+    const suspendedIndividuals = await Individual.countDocuments({ isSuspended: true });
+    const suspendedOrganizations = await Organization.countDocuments({ isSuspended: true });
+    const suspendedUsers = suspendedIndividuals + suspendedOrganizations;
+
+    // 🔥 CALCULATIONS
+    let totalRevenue = 0;
+    let totalTons = 0;
+    let totalCredits = 0;
+
+    purchases.forEach(p => {
+      totalRevenue += p.totalAmountPaid || 0;
+      totalTons += p.tonsBought || 0;
+      totalCredits += p.tonsBought || 0;
+    });
+
+    res.json({
+      users,
+      revenue: totalRevenue,
+      tons: totalTons,
+      subs: subscriptions.length,
+      suspended: suspendedUsers,
+      transactions: purchases.length,
+      credits: totalCredits
+    });
+
+  } catch (err) {
+    console.error("🔥 OVERVIEW ERROR:", err);
+    res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = router;
 

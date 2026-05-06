@@ -13,6 +13,7 @@ const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false); 
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -56,30 +57,44 @@ const token = localStorage.getItem("accessToken");
     };
   }, []);
 
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
-    try {
-      const decoded = decodeJwt(token);
-      if (!decoded) throw new Error("Invalid token");
-      if (decoded.exp * 1000 < Date.now()) {
-        console.log("Token expired, logging out");
-        dispatch(logout());
-        navigate("/signin");
-      }
-    } catch (error) {
-      console.error("Error decoding token:", error);
-      dispatch(logout());
-      navigate("/signin");
-    }
-  }, [token, dispatch, navigate]);
+useEffect(() => {
+  const refreshToken = localStorage.getItem("refreshToken");
 
-  useEffect(() => {
-    if (token && userType) {
-      dispatch(fetchProfile({ token, userType }));
-    }
-  }, [token, userType, dispatch]);
+ if (!refreshToken) return;
+
+  try {
+    const decoded = decodeJwt(refreshToken);
+
+    if (!decoded) throw new Error("Invalid refresh token");
+
+    // 🔥 ONLY logout if REFRESH TOKEN expired
+  if (decoded.exp * 1000 < Date.now()) {
+
+
+  // 🔥 REMOVE TOKEN FIRST (STOP LOOP)
+  localStorage.removeItem("refreshToken");
+  localStorage.removeItem("accessToken");
+
+  dispatch(logout());
+
+  // 🔥 NAVIGATE ONLY IF NOT ALREADY ON "/"
+  if (window.location.pathname !== "/") {
+    navigate("/");
+  }
+}
+
+  } catch (error) {
+    console.error("Refresh token error:", error);
+    localStorage.removeItem("refreshToken");
+localStorage.removeItem("accessToken");
+
+dispatch(logout());
+
+if (window.location.pathname !== "/") {
+  navigate("/");
+}
+  }
+}, [dispatch, navigate]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -164,16 +179,160 @@ useEffect(() => {
 
 
   return (
-    <nav className="bg-white shadow-md w-full px-4 lg:px-6 relative z-50 h-16 sm:h-20">
-      <div className="flex justify-between items-center h-full">
-        <div
-          className="flex items-center space-x-2 cursor-pointer h-full"
-          onClick={() => navigate("/")}
-        >
-          <img src={aerthxlogo} alt="AerthX Logo" className="h-16 sm:h-16 ml-5 object-contain" />
-        </div>
+    <nav className="bg-white shadow-md w-full px-3 sm:px-4 lg:px-6 relative z-50 min-h-[64px] sm:min-h-[80px]">
+      <div className="flex justify-between items-center min-h-[64px] sm:min-h-[80px]">
+          <div
+    className="flex items-center cursor-pointer h-full"
+    onClick={() => navigate("/")}
+  >
+    <img
+      src={aerthxlogo}
+      alt="AerthX Logo"
+      className="h-10 sm:h-14 lg:h-16 ml-0 sm:ml-5 object-contain"
+    />
+  </div>
 
-        <ul className="flex items-center gap-6 xl:gap-9 text-lg xl:text-xl font-bold text-gray-800">
+  
+
+  {/* HAMBURGER */}
+  <button
+className="lg:hidden p-2 text-gray-700 active:scale-90 order-3"
+    onClick={() => setMenuOpen(!menuOpen)}
+  >
+    ☰
+  </button>
+
+       <ul
+ className={`
+  ${menuOpen ? "flex" : "hidden"}
+  lg:flex
+  flex-col lg:flex-row
+  absolute lg:static
+  top-[64px] sm:top-[80px]
+  left-0
+  w-full lg:w-auto
+  bg-white lg:bg-transparent
+  shadow-xl lg:shadow-none
+  border-t lg:border-0
+  p-4 lg:p-0
+  gap-4 lg:gap-6 xl:gap-9
+  text-base lg:text-lg xl:text-xl
+  font-bold text-gray-800
+  z-40
+`}  
+>
+{isAuthenticated && (
+  <div className="flex lg:hidden items-center justify-center gap-4 pb-4 mb-4 border-b border-gray-200">
+    
+    {/* MOBILE NOTIFICATION */}
+    <div className="relative" ref={notificationsRef}>
+      <button
+        onClick={toggleNotifications}
+        className="relative p-2 rounded-full hover:bg-gray-100 transition"
+      >
+        <FaBell className="w-5 h-5 text-gray-700" />
+
+        {unreadCount > 0 && (
+          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold text-white bg-red-600 rounded-full">
+            {unreadCount}
+          </span>
+        )}
+      </button>
+
+      {notificationsOpen && (
+        <div className="fixed top-[140px] left-1/2 -translate-x-1/2 w-[95vw] max-w-md bg-white rounded-2xl shadow-2xl ring-1 ring-black/5 z-[9999] overflow-hidden">
+
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
+            <h3 className="text-sm font-semibold text-gray-800">
+              Alerts & Notifications
+            </h3>
+
+            {unreadCount > 0 && (
+              <span className="text-xs font-medium bg-red-500 text-white px-2 py-0.5 rounded-full">
+                {unreadCount} new
+              </span>
+            )}
+          </div>
+
+          <div className="max-h-[65vh] overflow-y-auto divide-y divide-gray-100">
+            {notifications.length > 0 ? (
+              notifications.map((notification) => (
+                <div
+                  key={notification._id}
+                  onClick={() =>
+                    handleNotificationClick(notification._id)
+                  }
+                  className={`px-4 py-3 text-sm cursor-pointer hover:bg-gray-100 ${
+                    !notification.read
+                      ? "bg-green-50"
+                      : "bg-white"
+                  }`}
+                >
+                  <p className="font-medium text-gray-800 break-words">
+                    {notification.title}
+                  </p>
+
+                  <p className="text-gray-600 text-xs mt-1 break-words">
+                    {notification.message}
+                  </p>
+
+                  <p className="text-[10px] text-gray-400 mt-1">
+                    {new Date(
+                      notification.timestamp
+                    ).toLocaleString()}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <div className="px-4 py-8 text-center text-gray-500 text-sm">
+                No notifications
+              </div>
+            )}
+          </div>
+
+          <div className="px-4 py-3 border-t border-gray-100 bg-white text-center">
+            <Link
+              to="/notification"
+              className="text-sm font-semibold text-indigo-600 hover:text-indigo-700"
+            >
+              View All Notifications →
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+
+    {/* MOBILE PROFILE */}
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => {
+          setDropdownOpen(!dropdownOpen);
+          setNotificationsOpen(false);
+        }}
+        className="rounded-full"
+      >
+        <DefaultAvatar
+          name={user.fullName || user.orgName || "User"}
+          size={36}
+          avatarUrl={
+            profile?.user?.avatarUrl ||
+            profile?.org?.avatarUrl ||
+            user?.avatarUrl ||
+            null
+          }
+        />
+      </button>
+
+      {dropdownOpen && (
+        <ProfileDropdown
+          onClose={() => setDropdownOpen(false)}
+          onLogout={handleLogout}
+        />
+      )}
+    </div>
+  </div>
+)}
+  
           <li>
             <NavLink
               to="/"
@@ -250,7 +409,7 @@ useEffect(() => {
           </li>
 
           {isAuthenticated ? (
-            <div className="flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-4">
               <li className="relative" ref={notificationsRef}>
                 <button
                   onClick={toggleNotifications}
@@ -265,7 +424,7 @@ useEffect(() => {
 
                 </button>
      {notificationsOpen && (
-  <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-xl ring-1 ring-black/5 z-50 overflow-hidden transform transition duration-300 origin-top-right scale-100 opacity-100">
+  <div className="fixed lg:absolute top-[72px] sm:top-[88px] lg:top-auto left-1/2 lg:left-auto right-auto lg:right-0 -translate-x-1/2 lg:translate-x-0 mt-0 lg:mt-3 w-[95vw] sm:w-[92vw] lg:w-80 max-w-md bg-white rounded-2xl shadow-2xl ring-1 ring-black/5 z-[9999] overflow-hidden">
 
     <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50">
       <h3 className="text-base font-semibold text-gray-800">Alerts & Notifications</h3>
@@ -326,16 +485,13 @@ useEffect(() => {
                 >
                   <DefaultAvatar
                     name={user.fullName || user.orgName || "User"}
-                    size={40}
-                    avatarUrl={
-                      profile?.user?.avatarUrl
-                        ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.user.avatarUrl}`
-                        : profile?.org?.avatarUrl
-                          ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${profile.org.avatarUrl}`
-                          : user.avatarUrl
-                            ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.avatarUrl}`
-                            : null
-                    }
+                    size={36}
+                avatarUrl={
+  profile?.user?.avatarUrl ||
+  profile?.org?.avatarUrl ||
+  user?.avatarUrl ||
+  null
+}
                   />
                 </button>
                 {dropdownOpen && (
@@ -347,7 +503,7 @@ useEffect(() => {
             <li>
               <Link
                 to="/register-choice"
-                className="ml-2 xl:ml-4 px-3 xl:px-4 py-2 bg-green-400 text-white rounded-lg font-semibold hover:bg-green-500 transition-all"
+                className="ml-2 xl:ml-4 px-3 sm:px-4 py-2 text-sm sm:text-base bg-green-400 text-white rounded-lg font-semibold hover:bg-green-500 transition-all"
               >
                 Register Here
               </Link>
