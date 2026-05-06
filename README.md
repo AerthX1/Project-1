@@ -1,5 +1,6 @@
 # 🌱 AerthX — Carbon Credit Marketplace Platform
 
+
 AerthX is a full-stack carbon credit marketplace designed to help individuals and organizations offset their carbon footprint by purchasing verified carbon credits from real-world environmental projects.
 
 The platform provides a complete ecosystem including:
@@ -370,3 +371,5 @@ AerthX is a scalable carbon credit SaaS platform with a strong foundation in:
 * subscription-based monetization
 
 It is designed to evolve into a full enterprise-grade sustainability platform.
+
+
