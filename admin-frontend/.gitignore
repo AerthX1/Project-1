@@ -15,7 +15,12 @@ dist/
 dist-ssr/
 
 # Environment variables
- .env
+# Environment files
+.env
+.env.*
+*.env
+**/.env
+**/.env.*
  .env.local
  .env.*.local
 # *.local
