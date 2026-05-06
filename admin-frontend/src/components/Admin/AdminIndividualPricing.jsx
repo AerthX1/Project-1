@@ -288,7 +288,7 @@ const isBoolean = typeof normalizedValue === "boolean";
                     type="text"
                     value={value || ''} 
                     onChange={(e) => handleFeatureChange(planId, featureKey, e.target.value)}
-                    className="w-full text-center p-2 border border-gray-300 rounded focus:border-green-500 focus:ring-1 focus:ring-green-500 bg-white shadow-inner text-sm"
+                    className="w-full text-xs sm:text-sm text-center p-1 sm:p-2 border border-gray-300 rounded focus:border-green-500 focus:ring-1 focus:ring-green-500 bg-white shadow-inner text-sm"
                 />
             );
         }
@@ -326,9 +326,9 @@ const isBoolean = typeof normalizedValue === "boolean";
         }
         
        if (normalizedValue === true) {
-    return <FaCheckCircle className="text-green-500 mx-auto" size={18} />;
+    return <FaCheckCircle className="text-green-500 mx-auto" size={14} />;
 } else if (normalizedValue === false) {
-    return <FaTimes className="text-gray-400 mx-auto" size={18} />;
+    return <FaTimes className="text-gray-400 mx-auto" size={14} />;
 }
         return <span className="text-gray-700 font-medium">{value}</span>;
     }
@@ -353,13 +353,13 @@ const isBoolean = typeof normalizedValue === "boolean";
     }
 
     return (
-        <div className="p-4 min-h-screen bg-gray-50">
+       <div className="p-2 sm:p-4 min-h-screen bg-gray-50">
             
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b pb-4">
+            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6 border-b pb-4">
                 <h2 className="text-3xl font-extrabold text-gray-900 flex items-center gap-3">
                     <FaTags className="text-green-600" /> AerthX Pricing Management
                 </h2>
-                <div className="flex flex-wrap gap-4 mt-4 md:mt-0 items-center">
+                <div className="flex flex-col sm:flex-row flex-wrap gap-2 mt-4 lg:mt-0 items-start sm:items-center">
                     
                     <AnimatePresence>
                         {status.message && (
@@ -378,7 +378,7 @@ const isBoolean = typeof normalizedValue === "boolean";
                         <div className="flex gap-2">
                             <motion.button
                                 onClick={() => setIsEditing(false)}
-                                className="bg-gray-400 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-gray-500 transition"
+                                className="bg-gray-400 text-whitew-full sm:w-auto px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-gray-500 transition"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
@@ -386,7 +386,7 @@ const isBoolean = typeof normalizedValue === "boolean";
                             </motion.button>
                             <motion.button
                                 onClick={handleSave}
-                                className="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-green-700 transition"
+                                className="bg-green-600 text-white w-full sm:w-auto px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-green-700 transition"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 disabled={status.type === 'pending'}
@@ -397,7 +397,7 @@ const isBoolean = typeof normalizedValue === "boolean";
                     ) : (
                         <motion.button
                             onClick={() => setIsEditing(true)}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-blue-700 transition"
+                            className="bg-blue-600 text-white w-full sm:w-auto px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:bg-blue-700 transition"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
@@ -407,11 +407,11 @@ const isBoolean = typeof normalizedValue === "boolean";
                 </div>
             </div>
             
-            <div className="overflow-x-auto bg-white rounded-lg shadow-xl border border-gray-100">
-                <table className="min-w-full divide-y divide-gray-200">
+            <div className="overflow-x-auto w-full bg-white rounded-lg shadow-xl border border-gray-100">
+                <table className="min-w-[900px] sm:min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
-                            <th className="px-6 py-4 text-left text-sm font-bold text-gray-600 uppercase tracking-wider sticky left-0 bg-gray-50 z-20 w-1/4">
+                            <th className="px-6 py-4 text-left text-sm font-bold text-gray-600 uppercase tracking-wider hidden sm:table-cell sticky left-0 bg-gray-50 z-20 w-1/4">
                                 Plan Detail
                             </th>
                             <AnimatePresence>
@@ -455,7 +455,7 @@ const isBoolean = typeof normalizedValue === "boolean";
                     <tbody className="divide-y divide-gray-200">
                         {['monthly', 'yearly'].map(period => (
                             <tr key={period} className="bg-green-50/70">
-                                <td className="px-6 py-4 whitespace-nowrap font-bold text-green-700 sticky left-0 bg-green-50/70 z-10">
+                                <td className="px-6 py-4 whitespace-nowrap font-bold text-green-700 hidden sm:table-cell sticky left-0 bg-green-50/70 z-10">
                                     <FaDollarSign className="inline mr-2" /> {period === 'monthly' ? 'Monthly' : 'Yearly'} Price (₹)
                                 </td>
                                 <AnimatePresence>
@@ -474,7 +474,7 @@ const isBoolean = typeof normalizedValue === "boolean";
                                                         type="text"
                                                         value={price}
                                                         onChange={(e) => handlePriceChange(planId, period, e.target.value)}
-                                                        className="w-24 text-center p-2 border border-green-300 rounded focus:border-green-500 focus:ring-1 focus:ring-green-500 bg-white font-bold"
+                                                        className="w-full max-w-[90px] sm:w-24 text-center p-1 sm:p-2 border border-green-300 rounded focus:border-green-500 focus:ring-1 focus:ring-green-500 bg-white font-bold"
                                                     />
                                                 ) : (
                                                     <span className="text-xl font-extrabold text-gray-900">{`₹${price}`}</span>
@@ -492,7 +492,7 @@ const isBoolean = typeof normalizedValue === "boolean";
                                     className="bg-gray-100/80 border-t border-gray-300/80"
                                     ref={groupIndex === featureGroups.length - 1 ? newGroupRef : null} 
                                 >
-                                    <td className="px-6 py-3 font-extrabold text-lg text-gray-800 sticky left-0 bg-gray-100/80 z-10 flex items-center justify-between">
+                                    <td className="px-6 py-3 font-extrabold text-lg text-gray-800 hidden sm:table-cell sticky left-0 bg-gray-100/80 z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                         {isEditing ? (
                                             <>
                                                 <input
@@ -535,14 +535,14 @@ const isBoolean = typeof normalizedValue === "boolean";
                                         exit={{ opacity: 0, height: 0 }}
                                         className="hover:bg-gray-50 transition-colors duration-150"
                                     >
-                                        <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-700 sticky left-0 bg-white z-10 flex items-center justify-between">
+                                        <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-700 hidden sm:table-cell sticky left-0 bg-white z-10 flex items-center justify-between">
                                             {isEditing ? (
                                                 <>
                                                     <input
                                                         type="text"
                                                         value={feature.label}
                                                         onChange={(e) => handleFeatureLabelChange(groupIndex, feature.key, e.target.value)}
-                                                        className="bg-transparent border-b border-gray-300 w-3/4 mr-2"
+                                                      className="bg-transparent border-b border-gray-300 w-full sm:w-3/4 mr-2 text-sm"
                                                         title="Feature Label"
                                                     />
                                                     <button 

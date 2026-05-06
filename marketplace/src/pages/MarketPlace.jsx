@@ -65,25 +65,25 @@ const MarketPlace = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 flex justify-center">
+    <div className="min-h-screen bg-gray-50 py-6 sm:py-8 md:py-10 px-3 sm:px-4 flex justify-center">
       <div className="w-full max-w-7xl">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">🌱 AerthX Marketplace</h1>
-          <p className="text-sm text-gray-500">Support trusted carbon offset projects</p>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 leading-tight">🌱 AerthX Marketplace</h1>
+          <p className="text-xs sm:text-sm text-gray-500 px-2">Support trusted carbon offset projects</p>
         </div>
 
         {/* Search and Filter Toggle */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 justify-center mb-6">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 sm:gap-4 justify-center mb-6">
           <input
             type="text"
             placeholder="🔍 Search projects..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full sm:w-2/3 px-5 py-3 bg-white rounded-full text-sm shadow-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
+           className="w-full lg:w-2/3 px-4 sm:px-5 py-2.5 sm:py-3 bg-white rounded-2xl sm:rounded-full text-sm shadow-md sm:shadow-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
           />
           <button
             onClick={() => setFilterOpen(!filterOpen)}
-            className="px-5 py-2 bg-green-100 text-green-700 text-sm rounded-full font-medium hover:bg-green-200 transition"
+            className="w-full sm:w-auto px-5 py-2.5 bg-green-100 text-green-700 text-sm rounded-2xl sm:rounded-full font-medium hover:bg-green-200 transition"
           >
             {filterOpen ? 'Hide Filters' : 'Show Filters'}
           </button>
@@ -91,15 +91,15 @@ const MarketPlace = () => {
 
         {/* Filters Section */}
         {filterOpen && (
-          <div className="bg-white rounded-xl shadow-md px-6 py-5 mb-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          <div className="bg-white rounded-2xl shadow-md px-4 sm:px-6 py-4 sm:py-5 mb-6 sm:mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
               {/* Category Filter */}
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Category</label>
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full bg-gray-100 px-4 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full bg-gray-100 px-4 py-2.5 rounded-xl sm:rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
                   <option value="">All Categories</option>
                   {categories.map((cat) => (
@@ -158,7 +158,7 @@ const MarketPlace = () => {
 
         {/* Filter Summary */}
         {(searchTerm || selectedCategory || selectedPlace || selectedVintage || priceRange) && (
-          <div className="text-sm text-gray-600 mb-4">
+          <div className="text-xs sm:text-sm text-gray-600 mb-4 leading-relaxed">
             Showing results for:
             <span className="font-medium text-gray-800 mx-1">{searchTerm || 'All'}</span>
             {selectedCategory && <span className="mx-1">| Category: {selectedCategory}</span>}
@@ -174,23 +174,23 @@ const MarketPlace = () => {
         ) : filteredProjects.length === 0 ? (
           <div className="text-center text-gray-400 text-sm mt-10">No projects to display.</div>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
             {filteredProjects.map(project => (
               <Link
                 to={`/project/${project._id}`}
                 key={project._id}
-                className="bg-white w-[300px] mx-auto rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-2xl hover:border-green-400 hover:scale-[1.03] transition-all duration-300 ease-in-out block"
+               className="bg-white w-full max-w-[340px] sm:max-w-full mx-auto rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-xl hover:border-green-400 hover:-translate-y-1 transition-all duration-300 ease-in-out block"
               >
                 <img
                   src={`${import.meta.env.VITE_FILE_URL}${project.image}`}
                   alt={project.title}
-                  className="w-full h-40 object-cover"
+                  className="w-full h-44 sm:h-40 md:h-44 object-cover"
                 />
-                <div className="p-4 flex flex-col justify-between">
+                <div className="p-4 sm:p-5 flex flex-col justify-between h-full">
                   <div className="mb-3">
                     <h3 className="text-lg font-semibold text-green-700">${project.pricePerTon?.toFixed(2)}</h3>
-                    <h4 className="text-md font-bold text-gray-800 truncate mt-1">{project.title}</h4>
-                    <p className="text-sm text-gray-600 mt-1 line-clamp-3">{project.info}</p>
+                    <h4 className="text-sm sm:text-base font-bold text-gray-800 line-clamp-2 mt-1 leading-snug">{project.title}</h4>
+                    <p className="text-xs sm:text-sm text-gray-600 mt-1 line-clamp-3 leading-relaxed">{project.info}</p>
                   </div>
                   <div className="flex flex-wrap gap-2 mt-auto">
                     {project.country && (

@@ -9,8 +9,8 @@ const ProfileDropdown = ({ onClose, onLogout }) => {
   if (!user) return null;
 const profile = useSelector((state) => state.profile.data);
   return (
-    <div className="absolute right-0 mt-3 w-80 bg-white rounded-lg shadow-lg z-50 p-6 border border-gray-200">
-      <div className="flex items-center gap-4 mb-6">
+    <div className="absolute right-0 mt-3 w-[90vw] max-w-sm sm:max-w-md bg-white rounded-lg shadow-lg z-50 p-4 sm:p-5 md:p-6 border border-gray-200">
+      <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
         <DefaultAvatar
   name={user.fullName || user.orgName || "User"}
   size={40}
@@ -25,17 +25,17 @@ const profile = useSelector((state) => state.profile.data);
   }
 />
         <div>
-          <p className="font-semibold text-gray-900 text-lg truncate max-w-[220px]">
+          <p className="font-semibold text-gray-900 text-base sm:text-lg truncate max-w-[180px] sm:max-w-[220px]">
             {user.fullName || user.orgName || "User"}
           </p>
-          <p className="text-sm text-gray-500 truncate max-w-[220px]">{user.email}</p>
+          <p className="text-xs sm:text-sm text-gray-500 truncate max-w-[180px] sm:max-w-[220px]">{user.email}</p>
         </div>
       </div>
 
    <Link
             to="/profile"
             onClick={onClose}
-            className="block px-4 py-2 rounded-md hover:bg-indigo-50  font-medium transition"
+         className="block px-3 sm:px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 text-sm sm:text-base font-medium transition"
           >
   Profile
 </Link>
@@ -45,7 +45,7 @@ const profile = useSelector((state) => state.profile.data);
               <Link
   to="/marketplace"
             onClick={onClose}
-            className="block px-4 py-2 rounded-md hover:bg-indigo-50 font-medium transition"
+          className="block px-3 sm:px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 text-sm sm:text-base font-medium transition"
           >
             MarketPlace
           </Link>
@@ -54,7 +54,7 @@ const profile = useSelector((state) => state.profile.data);
        <a
   href={`${import.meta.env.VITE_MAIN_URL}/pricing`}
   onClick={onClose}
-  className="block px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
+ className="block px-3 sm:px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 text-sm sm:text-base font-medium transition"
 >
   Subscription
 </a>
@@ -65,7 +65,7 @@ const profile = useSelector((state) => state.profile.data);
   href="notification" 
            
             onClick={onClose}
-            className="block px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
+            className="block px-3 sm:px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 text-sm sm:text-base font-medium transition"
           >
             Notification
             
@@ -77,7 +77,7 @@ const profile = useSelector((state) => state.profile.data);
 
            
             onClick={onClose}
-            className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 transition"
+          className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-md hover:bg-indigo-50 text-gray-700 text-sm sm:text-base transition"
           >
             <FaQuestionCircle className="text-indigo-600" />
             Help & Support
@@ -97,7 +97,7 @@ const profile = useSelector((state) => state.profile.data);
         </li>
       </ul>
 
-      <div className="flex justify-between items-center mt-6 text-sm text-gray-500 border-t border-gray-200 pt-4">
+      <div className="flex justify-between items-center mt-4 sm:mt-6 text-xs sm:text-sm text-gray-500 border-t border-gray-200 pt-3 sm:pt-4">
         <span className="flex items-center gap-1 text-gray-600">
           <FaGlobe />
           English
@@ -107,7 +107,7 @@ const profile = useSelector((state) => state.profile.data);
 
       <button
         onClick={onLogout}
-        className="w-full mt-5 py-2 bg-red-600 text-white rounded-md text-sm font-semibold hover:bg-red-700 transition"
+        className="w-full mt-4 sm:mt-5 py-2 sm:py-2.5 bg-red-600 text-white rounded-md text-sm sm:text-base font-semibold hover:bg-red-700 transition"
       >
        Sign out
       </button>

@@ -63,11 +63,11 @@ const FAQManager = ({ category, title }) => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <h2 className="text-2xl font-bold text-green-700">{title}</h2>
         <button
           onClick={() => setShowModal(true)}
-          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
         >
           + Add FAQ
         </button>
@@ -84,7 +84,7 @@ const FAQManager = ({ category, title }) => {
       >
         {editingFAQ && editingFAQ._id === faq._id ? (
           <form
-            className="flex flex-col md:flex-row md:items-center w-full gap-3"
+            className="flex flex-col lg:flex-row lg:items-center w-full gap-3"
             onSubmit={handleUpdateFAQ}
           >
             <input
@@ -122,12 +122,12 @@ const FAQManager = ({ category, title }) => {
             </div>
           </form>
         ) : (
-          <div className="flex justify-between items-center w-full">
+       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 w-full">
             <div>
               <p className="font-semibold">{faq.question}</p>
               <p className="text-gray-600">{faq.answer}</p>
             </div>
-            <div className="flex gap-3">
+      <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setEditingFAQ(faq)}
                 className="text-blue-600 hover:underline"
@@ -151,7 +151,7 @@ const FAQManager = ({ category, title }) => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-md mx-4">
             <h3 className="text-xl font-semibold mb-4">Add New FAQ</h3>
             <form onSubmit={handleAddFAQ} className="space-y-4">
               <input
@@ -159,14 +159,14 @@ const FAQManager = ({ category, title }) => {
                 placeholder="Question"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
-                className="w-full p-3 border rounded"
+                className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded"
                 required
               />
               <textarea
                 placeholder="Answer"
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
-                className="w-full p-3 border rounded"
+                className="w-full p-2 sm:p-3 text-sm sm:text-base border rounded"
                 rows="3"
                 required
               />

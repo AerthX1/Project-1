@@ -165,6 +165,9 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
       "Registry Link",
       "Additional Notes",
       "Active",
+      "Certificate ID",
+"Registry Serial",
+"Retirement Status",
     ];
     const rows = filteredCredits.map((credit) => [
       credit.title,
@@ -181,6 +184,9 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
       credit.registryLink,
       credit.additionalNotes,
       credit.isActive ? "Yes" : "No",
+      credit.certificateId,
+credit.registrySerialNumbers,
+credit.retirementStatus,
     ]);
 
     let csvContent = headers.join(",") + "\n";
@@ -221,6 +227,9 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
       "Retired",
       "Registry Link",
       "Active",
+      "Certificate ID",
+"Registry",
+"Status",
     ];
 
     const rows = filteredCredits.map((credit) => [
@@ -237,6 +246,9 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
       credit.retired ? "Yes" : "No",
       credit.registryLink || "",
       credit.isActive ? "Yes" : "No",
+      credit.certificateId || "",
+credit.registrySerialNumbers || "",
+credit.retirementStatus || "",
     ]);
 
     doc.autoTable({
@@ -380,15 +392,15 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center mb-6 border-b-4 border-green-600 pb-3">
+   <div className="p-3 sm:p-6 bg-gray-50 min-h-screen">
+    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 border-b-4 border-green-600 pb-3">
         <h2 className="text-3xl font-extrabold text-gray-900 flex items-center space-x-2">
           <MdCheckCircle className="text-green-600 text-4xl" />
           <span>Carbon Credit Management</span>
         </h2>
         <button
           onClick={onAdd}
-          className="bg-green-600 text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-1"
+          className="w-full sm:w-auto bg-green-600 text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 flex items-center space-x-1"
         >
           <MdAddCircle className="text-xl" />
           <span>Add Credit</span>
@@ -401,7 +413,7 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
           <span>Filter & Bulk Actions</span>
         </h3>
         <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0 lg:space-x-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 w-full">
             <input
               type="text"
               name="project"
@@ -452,7 +464,7 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
               <option value="archived">Archived</option>
             </select>
 
-            <div className="relative">
+<div className="relative w-full">
               <button
                 onClick={() => setOpenBulkMenu(!openBulkMenu)}
                 className="w-full bg-gray-100 text-gray-700 font-semibold py-3 px-4 rounded-xl shadow-sm hover:bg-gray-200 transition-all duration-200 flex items-center justify-center space-x-2"
@@ -507,16 +519,16 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
               )}
             </div>
           </div>
-          <div className="flex space-x-3 w-full lg:w-auto justify-end">
+          <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto justify-end">
             <button
               onClick={handleExportCSV}
-              className="bg-green-600 text-white font-semibold py-3 px-5 rounded-xl shadow-md hover:bg-green-700 transition-all duration-300 text-sm flex-grow lg:flex-grow-0 transform hover:scale-105"
+              className="bg-green-600 text-white font-semibold py-3 px-5 rounded-xl shadow-md hover:bg-green-700 transition-all duration-300 text-sm w-full sm:w-auto transform hover:scale-105"
             >
               Export CSV
             </button>
             <button
               onClick={handleExportPDF}
-              className="bg-red-600 text-white font-semibold py-3 px-5 rounded-xl shadow-md hover:bg-red-700 transition-all duration-300 text-sm flex-grow lg:flex-grow-0 transform hover:scale-105"
+              className="bg-red-600 text-white font-semibold py-3 px-5 rounded-xl shadow-md hover:bg-red-700 transition-all duration-300 text-sm w-full sm:w-auto transform hover:scale-105"
             >
               Export PDF
             </button>
@@ -528,7 +540,7 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
           filteredCredits.map((credit) => (
             <div
               key={credit._id}
-              className="flex justify-between items-center px-6 py-5 bg-white rounded-2xl shadow-xl border border-gray-200 transition-transform duration-300 hover:shadow-2xl hover:border-green-300"
+              className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 px-4 sm:px-6 py-5 bg-white rounded-2xl shadow-xl border border-gray-200 transition-transform duration-300 hover:shadow-2xl hover:border-green-300"
             >
               {isBulkSelectMode && (
                 <input
@@ -542,10 +554,13 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
                 onClick={() => handleViewDetails(credit)}
                 className="cursor-pointer flex-1 min-w-0"
               >
-                <p className="font-bold text-xl text-gray-800 truncate">
+               <p className="font-bold text-lg sm:text-xl text-gray-800 break-words">
                   {credit.name}
                 </p>
-                <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+                <p className="text-xs text-gray-400">
+  Cert: {credit.certificateId}
+</p>
+                <div className="flex flex-wrap gap-3 mt-1 text-xs sm:text-sm text-gray-600">
                   <span className="flex items-center space-x-1">
                     <FaMoneyBillWave className="text-green-500" />
                     <span>₹{credit.pricePerTon} / ton</span>
@@ -662,7 +677,7 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
 
       {selectedCredit && (
         <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex justify-center items-start pt-10 pb-10">
-          <div className="relative p-8 w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl animate-fade-in-up max-h-[95vh] overflow-y-auto transform transition-all duration-300">
+          <div className="relative p-4 sm:p-8 w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl animate-fade-in-up max-h-[90vh] overflow-y-auto transform transition-all duration-300">
             <button
               onClick={() => setSelectedCredit(null)}
               className="absolute top-5 right-5 text-gray-500 hover:text-red-600 text-2xl p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -674,7 +689,7 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
                 <img
                   src={getImageUrl(selectedCredit.image)}
                   alt={selectedCredit.name}
-                  className="w-full max-w-lg h-64 object-cover rounded-xl shadow-lg mb-6 border-4 border-green-200"
+                  className="w-full max-w-lg h-40 sm:h-64 object-cover rounded-xl shadow-lg mb-6 border-4 border-green-200"
                 />
               ) : (
                 <div className="w-full max-w-lg h-64 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 text-lg mb-6 border-4 border-gray-300">
@@ -751,7 +766,50 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
                   </div>
                 </div>
               </div>
+<div className="border-2 border-blue-300 rounded-xl p-5 bg-blue-50 shadow-inner mb-8">
+  <h4 className="font-bold text-xl text-blue-800 mb-4 border-b border-blue-300 pb-3">
+    🧾 Certificate Details
+  </h4>
 
+  <div className="space-y-3 text-base text-gray-700">
+
+    <DetailItem
+      label="Certificate ID"
+      value={selectedCredit.certificateId}
+    />
+
+    <div>
+      <span className="font-bold text-blue-700">Verification Link:</span>
+      <a
+        href={`/certificate/${selectedCredit.certificateId}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:underline ml-2"
+      >
+        Verify Certificate 🔗
+      </a>
+    </div>
+
+    <DetailItem
+      label="Registry Serial Numbers"
+      value={selectedCredit.registrySerialNumbers}
+    />
+
+    <DetailItem
+      label="Retirement Status"
+      value={selectedCredit.retirementStatus}
+    />
+
+    <DetailItem
+      label="Retirement Date"
+      value={
+        selectedCredit.retirementDate
+          ? new Date(selectedCredit.retirementDate).toLocaleDateString()
+          : "Not Retired"
+      }
+    />
+  </div>
+</div>
               <div className="border-2 border-green-300 rounded-xl p-5 bg-green-50 shadow-inner">
                 <h4 className="font-bold text-xl text-green-800 mb-4 border-b border-green-300 pb-3">
                   Credit & Financial Details
@@ -841,7 +899,7 @@ const AdminManageCarbonCredits = ({ onEdit = () => {}, onAdd = () => {} }) => {
 };
 
 const DetailItem = ({ label, value }) => (
-  <div className="flex justify-between">
+<div className="flex flex-col sm:flex-row sm:justify-between gap-1">
     <span className="font-bold text-green-700">{label}:</span>
     <span className="ml-4">{value || "N/A"}</span>
   </div>

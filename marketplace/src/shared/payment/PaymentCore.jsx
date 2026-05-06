@@ -78,7 +78,6 @@ const loadRazorpay = () => {
       return;
     }
 
-    console.log("START PAYMENT");
     
 const normalizeMethod = () => {
   switch (method) {
@@ -101,7 +100,6 @@ const normalizeMethod = () => {
       }
     );
 
-    console.log("ORDER:", data);
 
     // 2. Open Razorpay
     const options = {
@@ -116,13 +114,7 @@ const normalizeMethod = () => {
 },
 
      handler: async function (response) {
-  console.log("PAYMENT RESPONSE:", response);
-  console.log("META:", meta);
-  console.log({
-  userId: meta?.userId,
-  plan: meta?.plan,
-  duration: meta?.duration
-});
+
 
   try {
 const paymentMethod = normalizeMethod();
@@ -134,13 +126,11 @@ if (!paymentMethod) {
 
 const verifyRes = await axios.post(
   `${import.meta.env.VITE_API_URL}/payment/verify`,
-  {
-    ...response,
-    userId: meta.userId,
-    plan: meta.plan,
-    duration: meta.duration,
-    paymentMethod: paymentMethod,
-  }
+ {
+  ...response,
+  ...meta, // 🔥 THIS LINE FIXES YOUR ERROR
+  paymentMethod: paymentMethod,
+}
 );
     if (verifyRes.data.success) {
       alert("Payment verified ✅");
@@ -151,7 +141,6 @@ const verifyRes = await axios.post(
   console.error("FULL ERROR:", err);
 
   if (err.response) {
-    console.log("BACKEND MESSAGE:", err.response.data);
     alert(err.response.data.message || "Backend error");
   } else {
     alert("Network / server error");

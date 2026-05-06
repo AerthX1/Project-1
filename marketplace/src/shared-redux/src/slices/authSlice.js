@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import api from "../../../utils/api";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -36,12 +37,7 @@ localStorage.setItem("accessToken", accessToken);
 localStorage.setItem("refreshToken", refreshToken);
 localStorage.setItem("user", JSON.stringify(finalUser));
 localStorage.setItem("userType", "organization");
-      console.log("Saved to localStorage:", {
-accessToken: localStorage.getItem("accessToken") || null,
-refreshToken: localStorage.getItem("refreshToken") || null,
-  user: localStorage.getItem("user"),
-  userType: localStorage.getItem("userType"),
-});
+ 
       return {
   accessToken,
   refreshToken,
@@ -111,12 +107,7 @@ localStorage.setItem("refreshToken", refreshToken);
 localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("forceReload", Date.now().toString());
       localStorage.setItem("userType", "individual");
-      console.log("Saved to localStorage:", {
- accessToken: localStorage.getItem("accessToken") || null,
-refreshToken: localStorage.getItem("refreshToken") || null,
-  user: localStorage.getItem("user"),
-  userType: localStorage.getItem("userType"),
-});
+ 
      return {
   accessToken,
   refreshToken,

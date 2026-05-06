@@ -1,4 +1,5 @@
 const Organization = require("../models/Organization");
+const { uploadToImageKit } = require("../utils/imagekit");
 
 const getProfile = async (req, res) => {
   try {
@@ -28,10 +29,17 @@ const updateProfile = async (req, res) => {
         updatedData[key] = req.body[key];
       }
     });
+if (req.file && req.file.buffer) {
+  const result = await uploadToImageKit(
+    req.file.buffer,
+    `org_${userId}_${Date.now()}`,
+    "/organizations"
+  );
 
-    if (req.file) {
-      updatedData.avatarUrl = `/uploads/${req.file.filename}`;
-    }
+  updatedData.avatarUrl = result.url;
+} else {
+  console.log("❌ No file buffer received:", req.file);
+}
 
     const updatedProfile = await Organization.findByIdAndUpdate(
       userId,

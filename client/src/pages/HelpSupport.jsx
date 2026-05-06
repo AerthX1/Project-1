@@ -23,10 +23,10 @@ import {
 import axios from "axios";
 
 const SectionHeading = ({ icon, title, subtitle }) => (
-  <div className="text-center mb-10">
-    {icon && <div className="flex justify-center mb-3 text-5xl text-indigo-600">{icon}</div>}
-    <h2 className="text-4xl font-extrabold text-gray-800">{title}</h2>
-    <p className="text-gray-500 mt-2 text-lg max-w-2xl mx-auto">{subtitle}</p>
+  <div className="text-center mb-6 sm:mb-10 px-2">
+    {icon && <div className="flex justify-center mb-2 sm:mb-3 text-3xl sm:text-4xl md:text-5xl text-indigo-600">{icon}</div>}
+    <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-800">{title}</h2>
+    <p className="text-gray-500 mt-2 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">{subtitle}</p>
   </div>
 );
 
@@ -74,12 +74,12 @@ const HelpSupport = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <header className="bg-indigo-700 text-white py-20 px-4 md:px-8 text-center animate-fade-in-up">
-        <h1 className="text-5xl md:text-6xl font-extrabold leading-tight">How Can We Help?</h1>
+      <header className="bg-indigo-700 text-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 text-center animate-fade-in-up">
+        <h1 className="mt-4 text-sm sm:text-base md:text-xl opacity-80 max-w-3xl mx-auto px-2">How Can We Help?</h1>
         <p className="mt-4 text-xl opacity-80 max-w-3xl mx-auto">
           Find answers, get started, or connect with our support team.
         </p>
-        <div className="mt-8 flex justify-center items-center space-x-4">
+        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
           <Link
             to="/docs/getting-started"
             className="px-6 py-3 bg-white text-indigo-700 rounded-full font-bold text-lg shadow-lg hover:bg-gray-100 transition-colors duration-300 transform hover:-translate-y-1"
@@ -95,8 +95,8 @@ const HelpSupport = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 md:px-8 py-16">
-        <div className="bg-yellow-50 text-yellow-800 border-l-4 border-yellow-400 p-5 mb-16 rounded-xl shadow-md flex items-center gap-4">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-10 sm:py-14 md:py-16">
+        <div className="bg-yellow-50 text-yellow-800 border-l-4 border-yellow-400 p-3 sm:p-5 mb-10 sm:mb-16 rounded-xl shadow-md flex items-start sm:items-center gap-3 sm:gap-4 text-sm sm:text-base">
           <FaInfoCircle className="text-yellow-500 text-2xl" />
           <p className="font-medium">
             **Service Notice:** Some users may experience slower processing during high traffic.
@@ -109,7 +109,7 @@ const HelpSupport = () => {
             title="Popular Topics"
             subtitle="Explore our knowledge base by category to find the right information."
           />
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {[
               { icon: <FaUserCircle />, title: "Getting Started", desc: "Setting up your account and getting familiar with the platform.", href: "/docs/getting-started" },
               { icon: <FaCreditCard />, title: "Billing & Payments", desc: "Questions about subscriptions, invoices, and payment methods.", href: "/docs/billing" },
@@ -159,7 +159,7 @@ const HelpSupport = () => {
             <p className="text-gray-500 text-center mb-10 max-w-2xl mx-auto">
                 Can't find what you're looking for? These solutions might help.
             </p>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 <a
                     href="/account-settings"
                     className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 group text-center"
@@ -216,7 +216,7 @@ const HelpSupport = () => {
             subtitle="Choose the best way to get in touch with us for your specific issue."
             icon={<FaHeadset />}
           />
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             <div className="md:col-span-2 lg:col-span-2 p-8 bg-white border border-gray-100 rounded-3xl shadow-xl">
                 <h3 className="text-3xl font-bold text-gray-800 mb-8">Direct Support</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -287,7 +287,7 @@ const HelpSupport = () => {
         <FaRobot className="text-3xl" />
       </Link>
 
-      <footer className="bg-gray-800 text-center text-gray-400 py-12">
+      <footer className="bg-gray-800 text-center text-gray-400 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-6 text-sm md:text-base">
             <Link to="/privacy-policy" className="hover:text-white transition">Privacy Policy</Link>

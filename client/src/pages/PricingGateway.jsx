@@ -182,7 +182,7 @@ const PaymentFormForGateway = ({
       saveCard,
     };
 
-    console.log("Simulated payment payload:", payload);
+    
     alert(`Processing payment of ${formatRupees(grandTotal)} via ${paymentFees[selectedMethod].label}.`);
 
     if (onSuccessNavigate) {

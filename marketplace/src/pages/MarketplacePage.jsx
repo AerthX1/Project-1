@@ -15,8 +15,10 @@ const MarketplacePage = () => {
   const navigate = useNavigate();
   const API = import.meta.env.VITE_API_URL;
 
+
+
   const isUserLoggedIn = () => {
-    return !!localStorage.getItem("token");
+    return !!localStorage.getItem("accessToken");
   };
 
   const handleButtonClick = (projectId) => {
@@ -26,6 +28,7 @@ const MarketplacePage = () => {
       setShowAuthModal(true);
     }
   };
+
 
 useEffect(() => {
   const fetchData = async () => {
@@ -117,7 +120,7 @@ const impactfulProjects = [...allProjects]
 
   return (
     <div className="w-full">
-      <div className="relative w-full h-[900px] sm:h-[700px] overflow-hidden shadow-lg">
+      <div className="relative w-full h-[650px] sm:h-[700px] lg:h-[850px] overflow-hidden shadow-lg">
         <img
          src={`${import.meta.env.VITE_FILE_URL}${current.backgroundImage || current.image}`}
           alt={current.title}
@@ -126,7 +129,7 @@ const impactfulProjects = [...allProjects]
 
         <div className="absolute inset-0 bg-black/50 z-0" />
 
-        <div className="absolute top-1/2 left-0 right-0 z-30 flex items-center justify-between px-6 sm:px-10 transform -translate-y-1/2">
+        <div className="absolute top-1/2 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-6 md:px-10 transform -translate-y-1/2">
           <button
             onClick={prevSlide}
             className="p-3 rounded-full bg-white/20 hover:bg-white/40 hover:scale-125 transition-all duration-300"
@@ -141,9 +144,9 @@ const impactfulProjects = [...allProjects]
           </button>
         </div>
 
-        <div className="absolute bottom-6 sm:bottom-10 left-8 sm:left-20 z-20 text-white max-w-md sm:max-w-lg">
-          <div className="rounded-xl p-5 sm:p-6 shadow-md">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 leading-tight text-white drop-shadow">
+        <div className="absolute bottom-4 sm:bottom-8 md:bottom-10 left-4 sm:left-8 md:left-20 z-20 text-white w-[90%] sm:w-auto max-w-md sm:max-w-lg">
+          <div className="rounded-2xl p-4 sm:p-5 md:p-6 shadow-md backdrop-blur-sm bg-black/20">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 leading-tight text-white drop-shadow">
               {current.title}
             </h2>
 
@@ -158,7 +161,7 @@ const impactfulProjects = [...allProjects]
               <p className="text-gray-200">📅 Vintage: {current.vintage}</p>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
            <button
   onClick={() => {
     if (isUserLoggedIn()) {
@@ -184,7 +187,7 @@ const impactfulProjects = [...allProjects]
       </div>
 
       {highestPricedProject && (
-        <div className="mt-12 w-full bg-green-50 rounded-xl shadow-lg flex flex-col sm:flex-row overflow-hidden px-6 sm:px-12 py-6">
+        <div className="mt-10 sm:mt-12 w-full bg-green-50 rounded-2xl shadow-lg flex flex-col lg:flex-row overflow-hidden px-4 sm:px-6 md:px-12 py-5 sm:py-6">
           <div className="sm:w-1/2 p-3">
             <img
            src={`${import.meta.env.VITE_FILE_URL}${
@@ -192,11 +195,11 @@ const impactfulProjects = [...allProjects]
                 highestPricedProject.image
               }`}
               alt={highestPricedProject.title}
-              className="w-10/12 h-80 object-cover rounded-md shadow"
+             className="w-full h-64 sm:h-72 md:h-80 object-cover rounded-xl shadow"
             />
           </div>
 
-          <div className="sm:w-1/2 p-6 flex flex-col justify-center">
+          <div className="lg:w-1/2 p-4 sm:p-6 flex flex-col justify-center">
             <span className="text-xs uppercase tracking-widest text-green-600 font-semibold mb-3">
               🔥 Premium Carbon Credit Project
             </span>
@@ -227,11 +230,11 @@ const impactfulProjects = [...allProjects]
       )}
 
       {dailySuggestions.length > 0 && (
-        <div className="mt-16 px-6 sm:px-12">
+        <div className="mt-12 sm:mt-16 px-4 sm:px-6 md:px-12">
           <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">
             🌱 Our Suggestions Today
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
             {dailySuggestions.map((project) => (
               <div
                 key={project._id}
@@ -260,13 +263,13 @@ const impactfulProjects = [...allProjects]
         </div>
       )}
 
-      <div className="mt-20 m-10 bg-green-50 rounded-xl shadow-2xl p-8 sm:p-12 text-center transform transition-transform duration-500 hover:scale-[1.02] relative overflow-hidden">
+      <div className="mt-16 sm:mt-20 mx-3 sm:mx-6 md:mx-10 bg-green-50 rounded-2xl shadow-2xl p-5 sm:p-8 md:p-12 text-center transform transition-transform duration-500 hover:scale-[1.01] relative overflow-hidden">
         <div className="absolute inset-0 border-4 border-green-200 rounded-3xl animate-pulse" />
         <div className="relative z-10">
           <h2 className="text-3xl sm:text-4xl font-bold text-green-800 mb-6 tracking-tight drop-shadow-md">
             Benefits of Buying Carbon Credits
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:divide-x md:divide-green-300">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 md:divide-x md:divide-green-300">
             <div className="flex flex-col items-center">
               <div className="text-4xl text-green-600 mb-3">🌱</div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Reduce Emissions</h3>
@@ -342,7 +345,7 @@ const impactfulProjects = [...allProjects]
     <div
       key={category}
       onClick={() => navigate(`/marketplace?filter=${category}`)}
-      className="min-w-[240px] bg-green-50 rounded-xl shadow-lg p-6 flex flex-col items-center text-center hover:scale-105 hover:bg-green-100 transition-all duration-300 cursor-pointer"
+      className="min-w-[220px] sm:min-w-[240px] bg-green-50 rounded-2xl shadow-lg p-5 sm:p-6 flex flex-col items-center text-center hover:scale-105 hover:bg-green-100 transition-all duration-300 cursor-pointer"
     >
       <div className="text-4xl mb-3">🌱</div>
       <h3 className="text-lg font-semibold text-gray-800 mb-1">{category}</h3>
@@ -368,26 +371,26 @@ const impactfulProjects = [...allProjects]
         <h2 className="text-2xl sm:text-3xl font-bold text-green-800 mb-6">
           📊 Global Impact So Far
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-          <div className="bg-green-50 p-6 rounded-xl shadow-md">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-center">
+          <div className="bg-green-50 p-4 sm:p-6 rounded-2xl shadow-md">
             <p className="text-3xl font-bold text-green-700">
               {projects.reduce((sum, p) => sum + (p.impactMetrics?.co2Avoided || 0), 0)}
             </p>
             <p className="text-sm text-gray-600">Tons CO₂ Avoided</p>
           </div>
-          <div className="bg-green-50 p-6 rounded-xl shadow-md">
+          <div className="bg-green-50 p-4 sm:p-6 rounded-2xl shadow-md">
             <p className="text-3xl font-bold text-green-700">
               {projects.reduce((sum, p) => sum + (p.impactMetrics?.treesPlanted || 0), 0)}
             </p>
             <p className="text-sm text-gray-600">Trees Planted</p>
           </div>
-          <div className="bg-green-50 p-6 rounded-xl shadow-md">
+          <div className="bg-green-50 p-4 sm:p-6 rounded-2xl shadow-md">
             <p className="text-3xl font-bold text-green-700">
               {projects.reduce((sum, p) => sum + (p.impactMetrics?.communitiesBenefited || 0), 0)}
             </p>
             <p className="text-sm text-gray-600">Communities Benefited</p>
           </div>
-          <div className="bg-green-50 p-6 rounded-xl shadow-md">
+          <div className="bg-green-50 p-4 sm:p-6 rounded-2xl shadow-md">
             <p className="text-3xl font-bold text-green-700">
               {projects.reduce((sum, p) => sum + (p.impactMetrics?.energyGenerated || 0), 0)}
             </p>
@@ -428,9 +431,9 @@ const impactfulProjects = [...allProjects]
         </div>
       )}
 
-      <div className="mt-24 m-8 bg-gradient-to-r from-green-500 to-green-700 text-white py-20 px-6 sm:px-12 text-center shadow-2xl rounded-3xl transform -rotate-1 perspective-1000">
+      <div className="mt-16 sm:mt-24 mx-3 sm:mx-6 md:mx-8 bg-gradient-to-r from-green-500 to-green-700 text-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-12 text-center shadow-2xl rounded-3xl transform md:-rotate-1">
         <div className="transform rotate-1">
-          <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 drop-shadow-lg">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-lg leading-tight">
             Join the Movement for a Greener Planet 🌍
           </h2>
           <p className="text-lg sm:text-xl mb-8 max-w-3xl mx-auto opacity-90 drop-shadow-md">
@@ -452,8 +455,8 @@ const impactfulProjects = [...allProjects]
       </div>
 
       {showAuthModal && (
-       <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-black/10">
-          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-sm w-full relative">
+       <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm bg-black/30 px-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-5 sm:p-8 max-w-sm w-full relative">
             <button
               onClick={() => setShowAuthModal(false)}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"

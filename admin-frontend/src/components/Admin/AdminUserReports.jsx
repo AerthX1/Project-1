@@ -352,7 +352,7 @@ const AdminUserReports = () => {
     if (reports.length === 0) return <p>No reports found for this user.</p>;
     return (
       <div>
-        <div className="mb-4 flex gap-3">
+        <div className="mb-4 flex flex-col sm:flex-row gap-2 sm:gap-3">
           <button
             onClick={handleExportCSV}
             className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
@@ -366,7 +366,7 @@ const AdminUserReports = () => {
             Export PDF
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {sortedReports.map((report) => {
             const assignedAdmin = admins.find(admin => admin.id === report.assignedAdminId);
             return (
@@ -377,12 +377,12 @@ const AdminUserReports = () => {
                 }`}
               >
                 <div
-                  className="flex justify-between items-start mb-2"
+                  className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2"
                   onDoubleClick={() => openReportDetailsModal(report)}
                 >
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 truncate">{report.title}</h3>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <h3 className="font-semibold text-gray-900 break-words sm:truncate">{report.title}</h3>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
                       {report.description.length > 50
                         ? `${report.description.substring(0, 50)}...`
                         : report.description}
@@ -418,7 +418,7 @@ const AdminUserReports = () => {
                         <FaEllipsisV />
                       </button>
                       {menuOpenId === report._id && (
-                        <div className="absolute right-0 top-full mt-2 w-56 bg-white shadow-lg rounded-lg border z-10 py-1">
+                        <div className="absolute right-0 sm:right-0 left-0 sm:left-auto top-full mt-2 w-full sm:w-56 bg-white shadow-lg rounded-lg border z-10 py-1">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -498,7 +498,7 @@ const AdminUserReports = () => {
     const usersWithReports = users.filter((user) => user.reportsCount > 0);
     return (
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-xl shadow border border-gray-200">
+        <table className="min-w-[700px] sm:min-w-full bg-white rounded-xl shadow border border-gray-200"></table><table className="min-w-full bg-white rounded-xl shadow border border-gray-200">
           <thead className="bg-gray-100">
             <tr>
               <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">User ID</th>
@@ -518,14 +518,14 @@ const AdminUserReports = () => {
             ) : (
               usersWithReports.map((user) => (
                 <tr key={user.id} className="border-b last:border-b-0 hover:bg-gray-50">
-                  <td className="px-6 py-4">{user.id}</td>
-                  <td className="px-6 py-4">{user.name}</td>
-                  <td className="px-6 py-4">{user.isOrganization ? "Organization" : "Individual"}</td>
-                  <td className="px-6 py-4 flex items-center gap-2">
+                  <td className="px-3 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm">{user.id}</td>
+                  <td className="px-3 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm">{user.name}</td>
+                  <td className="px-3 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm">{user.isOrganization ? "Organization" : "Individual"}</td>
+                  <td className="px-3 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm flex items-center gap-2">
                     {user.reportsCount}
                     {user.newReports > 0 && <FaCircle className="text-green-500 text-xs" />}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-3 sm:px-6 py-2 sm:py-4 text-xs sm:text-sm">
                     <button
                       onClick={() => viewReports(user.id)}
                       className="px-3 py-1 bg-green-600 text-white rounded-full hover:bg-green-700 transition"
@@ -545,7 +545,7 @@ const AdminUserReports = () => {
   const renderReportDetailsModal = () =>
     reportDetails && (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-        <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg w-full max-w-lg mx-4">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-bold">Report Details</h3>
             <button onClick={() => setShowReportDetailsModal(false)}>
@@ -643,10 +643,10 @@ const AdminUserReports = () => {
   const renderConfirmModal = () =>
     showConfirmModal && (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-        <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm">
+        <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm mx-4">
           <h3 className="text-lg font-bold mb-4">Confirm Deletion</h3>
           <p className="mb-4">Are you sure you want to delete this report? This action cannot be undone.</p>
-          <div className="flex justify-end gap-3">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
             <button
               onClick={() => setShowConfirmModal(false)}
               className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400"
@@ -724,11 +724,11 @@ const AdminUserReports = () => {
         <>
           <button
             onClick={goBack}
-            className="mb-4 px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300 transition"
+        className="mb-4 w-full sm:w-auto px-4 py-2 bg-gray-200 rounded-full text-sm sm:text-base"
           >
             Back
           </button>
-          <h2 className="text-2xl font-bold mb-4">Reports from User ID: {selectedUser}</h2>
+          <h2 className="text-xl sm:text-2xl font-bold mb-4">Reports from User ID: {selectedUser}</h2>
           {renderReportsTable()}
         </>
       ) : (

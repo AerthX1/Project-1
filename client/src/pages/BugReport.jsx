@@ -72,16 +72,16 @@ const BugReport = ({ user }) => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 py-14 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-8 py-10 sm:py-14 animate-fade-in">
       <div className="w-full max-w-6xl mx-auto bg-white bg-opacity-95 backdrop-blur-md rounded-3xl shadow-2xl p-12 animate-fade-in-up border border-green-200 overflow-hidden mt-20">
-        <h3 className="text-4xl font-extrabold text-green-700 mb-4 flex justify-center items-center gap-3">
-          <FaBug className="text-red-600 text-5xl animate-bounce" /> Bug Report Form
+        <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-green-700 mb-4 flex justify-center items-center gap-3">
+          <FaBug className="text-red-600 text-3xl sm:text-4xl md:text-5xl animate-bounce" /> Bug Report Form
         </h3>
-        <p className="text-gray-700 text-center mb-10 max-w-4xl mx-auto text-lg">
+        <p className="text-gray-700 text-center mb-10 max-w-4xl mx-auto text-sm sm:text-base md:text-lg">
           Facing an issue on AerthX? Select the category and type of problem below. Provide details to help us fix it faster.
         </p>
         
-        <form onSubmit={handleSubmit} className="space-y-10">
+        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-10">
           {[
             {
               category: "UI / UX",
@@ -109,14 +109,14 @@ const BugReport = ({ user }) => {
             }
           ].map((group) => (
             <div key={group.category}>
-              <p className="font-semibold text-gray-800 mb-3 text-lg">{group.category}:</p>
-              <div className="flex flex-wrap gap-3">
+              <p className="font-semibold text-gray-800 mb-3 text-sm sm:text-base md:text-lg">{group.category}:</p>
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 {group.types.map((type) => (
                   <button
                     key={type}
                     type="button"
                     onClick={() => handleCheckboxChange(type)}
-                    className={`px-5 py-2 rounded-full border transition-all duration-300 font-medium shadow-sm ${
+                    className={`px-3 sm:px-5 py-2 text-xs sm:text-sm rounded-full border transition-all duration-300 font-medium shadow-sm ${
                       formData.title.includes(type)
                         ? "bg-red-600 text-white border-red-600 shadow-lg scale-105"
                         : "bg-white text-gray-700 border-gray-300 hover:bg-red-50 hover:scale-105"
@@ -141,11 +141,11 @@ const BugReport = ({ user }) => {
             />
           </div>
 
-          <div className="flex justify-end gap-4">
+          <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-3 bg-red-600 text-white rounded-full font-semibold shadow-lg hover:bg-red-700 transition-all duration-300 hover:scale-105"
+              className="w-full sm:w-auto px-6 py-3 text-sm sm:text-base bg-red-600 text-white rounded-full font-semibold shadow-lg hover:bg-red-700 transition-all duration-300 hover:scale-105"
             >
               {loading ? "Submitting..." : "Submit"}
             </button>
@@ -153,7 +153,7 @@ const BugReport = ({ user }) => {
 
           {success && (
             <p
-              className={`text-center mt-4 font-medium text-lg ${
+              className={`text-center mt-4 font-medium text-sm sm:text-lg ${
                 success.includes("Error") ? "text-red-600" : "text-green-600"
               }`}
             >

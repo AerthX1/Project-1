@@ -11,7 +11,8 @@ import AdminUserData from "../components/Admin/AdminUserData";
 import AdminFAQManager from "../components/Admin/AdminFAQManager";
 import AdminManagePricing from "../components/Admin/AdminManagePricing";
 import AdminIndividualPricing from "../components/Admin/AdminIndividualPricing";
-
+import AdminSubscriptions from "../components/Admin/AdminSubscriptions";
+import AdminTopPurchasers from "../components/Admin/AdminTopPurchasers";
 
 import {
   FaTachometerAlt,
@@ -29,6 +30,8 @@ const navItems = [
   { id: "overview", icon: <FaTachometerAlt />, label: "Overview" },
   { id: "income", icon: <FaChartBar />, label: "Income Chart" },
   { id: "users", icon: <FaUsers />, label: "Live Users" },
+{ id: "usermanagement", label: "Top Purchasers" },
+{ id: "subscriptions", icon: <FaUsers />, label: "Subscriptions" },
   { id: "inventory", icon: <FaLeaf />, label: "Carbon Inventory" },
   { id: "controls", icon: <FaCogs />, label: "Controls" }, 
   { id: "managepricing", icon: <FaTags />, label: "Org Pricing" },
@@ -39,9 +42,11 @@ const navItems = [
   { id: "faqmanager", icon: <FaClipboardList />, label: "FAQ Manager" },
 ];
 
+
 const AdminDashboard = () => {
   const [selectedCreditId, setSelectedCreditId] = useState(null); 
   const [selected, setSelected] = useState("overview"); 
+const [sidebarOpen, setSidebarOpen] = useState(false);
 
 const renderContent = () => {
   if (selectedCreditId) {
@@ -54,6 +59,10 @@ const renderContent = () => {
         return <IncomeChart />;
       case "users":
         return <LiveUserControl />;
+case "usermanagement":
+  return <AdminTopPurchasers />;
+case "subscriptions":
+  return <AdminSubscriptions />;
       case "inventory":
         return <CarbonInventory />;
       case "controls":
@@ -84,9 +93,24 @@ case "individualpricing":
 
   return (
     <div className="flex min-h-screen bg-white text-gray-900">
-      <aside className="w-64 bg-black text-white min-h-screen p-6 hidden md:block">
-        <div className="text-2xl font-bold mb-10 text-green-400">AerthX Admin</div>
-        <nav className="space-y-4">
+<aside
+  className={`fixed top-0 left-0 h-screen w-64 bg-black text-white p-6 overflow-y-auto z-50 transform transition-transform duration-300
+  ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+>
+
+  {/* 🔥 CLOSE BUTTON (ONLY MOBILE) */}
+  <button
+    className="md:hidden mb-6 text-white"
+    onClick={() => setSidebarOpen(false)}
+  >
+    Close
+  </button>
+
+  <div className="text-2xl font-bold mb-10 text-green-400">
+    AerthX Admin
+  </div>
+
+  <nav className="space-y-4">
           {navItems.map((item) => (
             <button
               key={item.id}
@@ -102,15 +126,26 @@ case "individualpricing":
         </nav>
       </aside>
 
-      <main className="flex-1 p-6 md:p-10">
+<main className="flex-1 p-4 sm:p-6 md:p-10 md:ml-64">
         <header className="mb-6 border-b pb-4 flex flex-col md:flex-row justify-between items-start md:items-center">
-          <h1 className="text-3xl font-bold">
-            {navItems.find((item) => item.id === selected)?.label || "Dashboard"}
-          </h1>
-          <span className="text-sm text-gray-500 mt-2 md:mt-0">
-            Last updated: {new Date().toLocaleString()}
-          </span>
-        </header>
+
+  {/* 🔥 MOBILE MENU BUTTON */}
+  <button
+    className="md:hidden mb-4 px-4 py-2 bg-green-600 text-white rounded"
+    onClick={() => setSidebarOpen(true)}
+  >
+    Menu
+  </button>
+
+  <h1 className="text-3xl font-bold">
+    {navItems.find((item) => item.id === selected)?.label || "Dashboard"}
+  </h1>
+
+  <span className="text-sm text-gray-500 mt-2 md:mt-0">
+    Last updated: {new Date().toLocaleString()}
+  </span>
+
+</header>
 
         <div className="bg-gray-50 rounded-xl shadow p-6">
           {renderContent()}

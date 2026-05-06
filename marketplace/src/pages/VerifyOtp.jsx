@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyOtpAction, setUser, setToken, setUserType } from "../shared-redux/src/slices/authSlice";
 import { fetchProfile } from "../shared-redux/src/slices/profileSlice";
-import axios from "axios";
+import api from "../utils/api";
+
 import { XCircleIcon, CheckCircleIcon, InformationCircleIcon } from "@heroicons/react/20/solid";
 
 const VerifyOtp = () => {
@@ -137,7 +138,7 @@ const VerifyOtp = () => {
 
     try {
       const email = form?.email;
-      const res = await axios.post(`${API_URL}/auth/send-register-otp`, { email });
+     const res = await api.post("/auth/send-register-otp", { email });
       setVerificationMessage({ type: "success", text: res.data.message || "New OTP sent! Check your inbox." });
     } catch (err) {
       console.error("Resend OTP API error:", err);
@@ -163,7 +164,7 @@ const VerifyOtp = () => {
 
   if (!form || !userType) {
     return (
-      <div className="leaf-container min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-lime-100 via-green-100 to-emerald-200">
+      <div className="leaf-container min-h-screen flex items-center justify-center p-3 sm:p-4 md:p-6 bg-gradient-to-br from-lime-100 via-green-100 to-emerald-200">
         <style>
           {`
             .leaf-container {
@@ -309,20 +310,20 @@ const VerifyOtp = () => {
         `}
       </style>
       {leaves}
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-200 z-10">
+      <div className="max-w-md w-full space-y-6 sm:space-y-8 bg-white p-5 sm:p-6 md:p-8 rounded-lg sm:rounded-xl shadow-md sm:shadow-lg border border-gray-200 z-10">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-4 sm:mt-6 text-center text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900">
             Verify Your Email Address
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-xs sm:text-sm text-gray-600">
             A 6-digit verification code has been sent to
             <strong className="font-medium text-indigo-600"> {form.email}</strong>.
             Please enter the code below to complete your registration.
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleVerify}>
-          <div className="flex justify-center space-x-2" onPaste={handlePaste}>
+        <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleVerify}>
+          <div className="flex justify-center gap-2 sm:gap-3 flex-wrap" onPaste={handlePaste}>
             {otp.map((digit, index) => (
               <input
                 key={index}
@@ -332,7 +333,7 @@ const VerifyOtp = () => {
                 value={digit}
                 onChange={(e) => handleOtpChange(e, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
-                className="w-12 h-12 text-center text-2xl font-bold border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out"
+                className="w-10 h-10 sm:w-12 sm:h-12 text-center text-lg sm:text-xl md:text-2xl font-bold border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-150 ease-in-out"
                 required
                 aria-label={`OTP digit ${index + 1}`}
               />
@@ -356,11 +357,11 @@ const VerifyOtp = () => {
           <button
             type="submit"
             disabled={loading || otp.join("").length !== 6}
-            className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white
-              ${loading || otp.join("").length !== 6
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              } transition duration-150 ease-in-out`}
+           className={`group relative w-full flex justify-center py-2.5 sm:py-3 px-4 text-xs sm:text-sm font-medium rounded-md text-white
+${loading || otp.join("").length !== 6
+  ? "bg-gray-400 cursor-not-allowed"
+  : "bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+} transition duration-150 ease-in-out`}
           >
             {loading ? (
               <span className="flex items-center">
@@ -376,7 +377,7 @@ const VerifyOtp = () => {
           </button>
         </form>
 
-        <div className="text-center mt-6">
+        <div className="text-center mt-4 sm:mt-6">
           {canResend ? (
             <button
               onClick={handleResendOtp}
@@ -401,7 +402,7 @@ const VerifyOtp = () => {
           )}
         </div>
 
-        <p className="mt-4 text-center text-xs text-gray-500">
+        <p className="mt-3 sm:mt-4 text-center text-[11px] sm:text-xs text-gray-500">
           Did not receive the email? Please check your spam or junk folder. If you still don't receive it, ensure your email address is correct or try resending.
         </p>
       </div>

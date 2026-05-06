@@ -6,11 +6,8 @@ const path = require('path');
 const Individual = require('../models/Individual');
 const Organization = require('../models/Organization');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
-  filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
-});
-const upload = multer({ storage });
+const upload = multer({ storage: multer.memoryStorage() });
+const { uploadToImageKit } = require("../utils/imagekit");
 
 router.post('/', upload.fields([
   { name: 'image', maxCount: 1 },
@@ -19,13 +16,40 @@ router.post('/', upload.fields([
   try {
     const data = req.body;
 
-    const imagePath = req.files?.image?.[0]
-      ? `/uploads/${req.files.image[0].filename}`
-      : data.imageUrl || '';
+  let imagePath = data.imageUrl || "";
 
-    const backgroundImagePath = req.files?.backgroundImage?.[0]
-      ? `/uploads/${req.files.backgroundImage[0].filename}`
-      : data.backgroundImageUrl || '';
+if (req.files?.image?.[0]) {
+  const result = await uploadToImageKit(
+    req.files.image[0].buffer,
+    `credit_${Date.now()}`,
+    "/carbonCredits"
+  );
+  imagePath = result.url;
+}
+
+let backgroundImagePath = data.backgroundImageUrl || "";
+
+if (req.files?.backgroundImage?.[0]) {
+  const result = await uploadToImageKit(
+    req.files.backgroundImage[0].buffer,
+    `credit_bg_${Date.now()}`,
+    "/carbonCredits"
+  );
+  backgroundImagePath = result.url;
+}
+
+let certificateId;
+let exists = true;
+
+while (exists) {
+  const year = new Date().getFullYear();
+  const random = Math.floor(100000 + Math.random() * 900000);
+
+  certificateId = `CERT-AERTHX-${year}-${random}`;
+
+  const existing = await CarbonCredit.findOne({ certificateId });
+  if (!existing) exists = false;
+}
 
     const credit = new CarbonCredit({
       title: data.title || '',
@@ -54,6 +78,10 @@ router.post('/', upload.fields([
       backgroundImage: backgroundImagePath,
       isActive: true,
       isArchived: false,
+  certificateId: certificateId,
+registrySerialNumbers: data.registrySerialNumbers || "Pending",
+retirementStatus: data.retirementStatus || "pending",
+retirementDate: data.retirementDate || null,
       remainingTons: parseFloat(data.tons) || 0,
       impactScore: parseFloat(data.impactScore) || 0,
       impactMetrics: {
@@ -143,13 +171,63 @@ router.put('/:id', upload.fields([
   try {
     const data = req.body;
 
-    const imagePath = req.files?.image?.[0]
-      ? `/uploads/${req.files.image[0].filename}`
-      : data.imageUrl || '';
 
-    const backgroundImagePath = req.files?.backgroundImage?.[0]
-      ? `/uploads/${req.files.backgroundImage[0].filename}`
-      : data.backgroundImageUrl || '';
+// 🔥 KEEP EXISTING CERTIFICATE ID
+const existingCredit = await CarbonCredit.findById(req.params.id);
+if (!existingCredit) {
+  return res.status(404).json({ message: "Credit not found" });
+}
+
+let imagePath = existingCredit.image;
+
+if (req.files?.image?.[0]?.buffer) {
+  try {
+    const result = await uploadToImageKit(
+      req.files.image[0].buffer,
+      `credit_${Date.now()}`,
+      "/carbonCredits"
+    );
+    imagePath = result.url;
+  } catch (err) {
+    console.error("Image upload failed:", err.message);
+  }
+} else if (data.imageUrl) {
+  imagePath = data.imageUrl;
+} 
+
+let backgroundImagePath = existingCredit.backgroundImage;
+
+if (req.files?.backgroundImage?.[0]?.buffer) {
+  try {
+    const result = await uploadToImageKit(
+      req.files.backgroundImage[0].buffer,
+      `credit_bg_${Date.now()}`,
+      "/carbonCredits"
+    );
+    backgroundImagePath = result.url;
+  } catch (err) {
+    console.error("Background upload failed:", err.message);
+  }
+} else if (data.backgroundImageUrl) {
+  backgroundImagePath = data.backgroundImageUrl;
+}
+
+let certificateId = existingCredit?.certificateId;
+
+// 🔥 IF MISSING (rare case) → generate
+if (!certificateId) {
+  let exists = true;
+
+  while (exists) {
+    const year = new Date().getFullYear();
+    const random = Math.floor(100000 + Math.random() * 900000);
+
+    certificateId = `CERT-AERTHX-${year}-${random}`;
+
+    const found = await CarbonCredit.findOne({ certificateId });
+    if (!found) exists = false;
+  }
+}
 
     const updateData = {
       title: data.title || '',
@@ -178,6 +256,10 @@ router.put('/:id', upload.fields([
       backgroundImage: backgroundImagePath,
       isActive: true,
       isArchived: false,
+      certificateId: certificateId,
+registrySerialNumbers: data.registrySerialNumbers || "Pending",
+retirementStatus: data.retirementStatus || "pending",
+retirementDate: data.retirementDate || null,
       impactScore: parseFloat(data.impactScore) || 0,
       impactMetrics: {
         co2Avoided: parseFloat(data['impactMetrics[co2Avoided]']) || 0,
@@ -200,6 +282,34 @@ router.put('/:id', upload.fields([
     res.json({ message: "Carbon Credit Updated", data: updatedCredit });
   } catch (err) {
     res.status(500).json({ message: 'Update failed', error: err.message });
+  }
+});
+
+router.get('/certificate/:id', async (req, res) => {
+  try {
+    const credit = await CarbonCredit.findOne({
+      certificateId: req.params.id
+    });
+
+    if (!credit) {
+      return res.status(404).json({
+        success: false,
+        message: "Invalid Certificate"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      certificateId: credit.certificateId,
+      projectName: credit.name,
+      tons: credit.tons,
+      registrySerialNumbers: credit.registrySerialNumbers,
+      retirementStatus: credit.retirementStatus,
+      retirementDate: credit.retirementDate
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Verification failed" });
   }
 });
 

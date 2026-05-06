@@ -11,6 +11,8 @@ const AdminUpdateCarbonCredit = ({ id, goBack }) => {
     retired: false, sdgs: '', registryLink: '', additionalNotes: '', imageUrl: ''
   });
   const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+const [bgPreview, setBgPreview] = useState(null);
 const [backgroundFile, setBackgroundFile] = useState(null);
 
 
@@ -42,28 +44,55 @@ const [backgroundFile, setBackgroundFile] = useState(null);
     }));
   };
 
-  const handleFileChange = (e) => setFile(e.target.files[0]);
+ const handleFileChange = (e) => {
+  const selected = e.target.files[0];
+  setFile(selected);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    for (let key in formData) data.append(key, formData[key]);
-    if (file) data.append('image', file);
-    if (backgroundFile) data.append('backgroundImage', backgroundFile); 
+  if (selected) {
+    setPreview(URL.createObjectURL(selected));
+  }
+};
 
-try {
-  await axios.put(`${API}/carbon-credits/${id}`, data, {
-    headers: { 'Content-Type': 'multipart/form-data' }
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const data = new FormData();
+
+  Object.keys(formData).forEach((key) => {
+    let value = formData[key];
+
+    if (value === undefined || value === null) return;
+
+    // 🔥 FIX NUMBERS
+    if (["tons", "pricePerTon"].includes(key)) {
+      value = Number(value);
+    }
+
+    // 🔥 FIX ARRAY (SDGS)
+    if (key === "sdgs") {
+      value = value.split(",").map((s) => s.trim());
+    }
+
+    data.append(key, value);
   });
-  alert("✅ Carbon Credit updated successfully!");
-  goBack();
-} catch (err) {
-  alert("❌ Update failed");
-  console.error(err);
-}
-  };
 
-  const inputClass = "w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500";
+  if (file) data.append("image", file);
+  if (backgroundFile) data.append("backgroundImage", backgroundFile);
+
+  try {
+    await axios.put(`${API}/carbon-credits/${id}`, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    alert("✅ Updated successfully");
+    goBack();
+  } catch (err) {
+    console.error("UPDATE ERROR:", err.response?.data || err.message);
+    alert("❌ Update failed");
+  }
+};
+
+  const inputClass = "w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500";
 
   const renderInput = (name, label, placeholder = '') => (
     <div>
@@ -72,7 +101,7 @@ try {
         type="text"
         name={name}
         placeholder={placeholder}
-        value={formData[name]}
+       value={formData[name] || ""}
         onChange={handleChange}
         className={inputClass}
       />
@@ -80,24 +109,24 @@ try {
   );
 
   return (
-     <div className="p-6 sm:p-10 max-w-5xl mx-auto bg-white rounded-2xl shadow-md">
+     <div className="p-3 sm:p-6 md:p-10 max-w-5xl mx-auto bg-white rounded-2xl shadow-md">
     {goBack && (
       <button
         onClick={goBack}
-        className="mb-6 inline-flex items-center text-sm text-green-600 hover:underline"
+        className="mb-6 inline-flex items-center text-xs sm:text-sm text-green-600 hover:underline"
       >
         ← Back to Manage Credits
       </button>
     )}
-    <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+    <h2 className="text-base sm:text-lg md:text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center">
       ✏️ Update Carbon Credit
     </h2>
 
       <form onSubmit={handleSubmit} className="space-y-10">
 
-        <div className="border border-gray-300 rounded-xl p-6 bg-gray-50">
-          <h3 className="text-xl font-semibold text-gray-700 mb-4">📋 Project Information</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="border border-gray-300 rounded-xl p-4 sm:p-6 bg-gray-50">
+          <h3 className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 mb-4">📋 Project Information</h3>
+          <div className="grid grid grid-cols-1 lg:grid-cols-2 gap-6">
             {renderInput('title', 'Project Title')}
             {renderInput('name', 'Carbon Credit Name')}
             {renderInput('verifiedBy', 'Verified By')}
@@ -136,9 +165,9 @@ try {
             <label className="block text-sm font-medium text-gray-700 mb-1">Project Description</label>
             <textarea
               name="info"
-              value={formData.info}
+              value={formData.info || ""}
               onChange={handleChange}
-              rows={4}
+              rows={3}
               className={inputClass}
             />
           </div>
@@ -155,11 +184,11 @@ try {
             />
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex items-start sm:items-center gap-2 sm:gap-3">
             <input
               type="checkbox"
               name="retired"
-              checked={formData.retired}
+              checked={!!formData.retired}
               onChange={handleChange}
               className="h-4 w-4 text-green-600 border-gray-300 rounded"
             />
@@ -187,7 +216,7 @@ try {
             <input
               type="file"
               onChange={handleFileChange}
-              className="block w-full text-sm text-gray-500 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
+              className="block w-full text-xs sm:text-sm text-gray-500 file:py-2 file:px-3 sm:file:px-4 file:rounded-lg file:border-0 file:bg-green-100 file:text-green-700 hover:file:bg-green-200"
             />
           </div>
 
@@ -207,7 +236,7 @@ try {
         <div className="text-center pt-4">
           <button
             type="submit"
-            className="bg-green-600 text-white px-8 py-2 rounded-lg font-medium hover:bg-green-700 transition"
+            className="w-full sm:w-auto bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition"
           >
             💾 Update Credit
           </button>

@@ -7,12 +7,14 @@ const AdminAddCarbonCredit = () => {
     projectDeveloper: '', methodology: '', projectDuration: '',
     tons: '', pricePerTon: '', info: '', country: '', state: '',
     city: '', placeName: '', vintage: '', vintageYear: '',
-    retired: false, sdgs: '', registryLink: '', additionalNotes: '', imageUrl: '',
+    retired: false, sdgs: '', registryLink: '', additionalNotes: '', imageUrl: '', registrySerialNumbers: '',
     impactScore: '', // new
     impactMetrics: { co2Avoided: '', treesPlanted: '', communitiesBenefited: '', energyGenerated: '' } // new
   });
 
   const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+const [bgPreview, setBgPreview] = useState(null);
   const [backgroundFile, setBackgroundFile] = useState(null);
 
   const handleChange = (e) => {
@@ -34,8 +36,22 @@ const AdminAddCarbonCredit = () => {
     }));
   };
 
-  const handleFileChange = (e) => setFile(e.target.files[0]);
-  const handleBackgroundFileChange = (e) => setBackgroundFile(e.target.files[0]);
+  const handleFileChange = (e) => {
+  const selected = e.target.files[0];
+  setFile(selected);
+
+  if (selected) {
+    setPreview(URL.createObjectURL(selected));
+  }
+};
+ const handleBackgroundFileChange = (e) => {
+  const selected = e.target.files[0];
+  setBackgroundFile(selected);
+
+  if (selected) {
+    setBgPreview(URL.createObjectURL(selected));
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,7 +93,7 @@ const AdminAddCarbonCredit = () => {
     }
   };
 
-  const inputClass = "w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500";
+  const inputClass = "w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500";
 
   const renderInput = (name, label, placeholder = '') => (
     <div>
@@ -108,7 +124,7 @@ const AdminAddCarbonCredit = () => {
   );
 
   return (
-    <div className="p-6 sm:p-10 max-w-5xl mx-auto bg-white rounded-2xl shadow-md">
+    <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto bg-white rounded-2xl shadow-md">
       <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
         ➕ Add New Carbon Credit Project
       </h2>
@@ -151,6 +167,7 @@ const AdminAddCarbonCredit = () => {
             {renderInput('vintage', 'Vintage')}
             {renderInput('vintageYear', 'Vintage Year')}
             {renderInput('registryLink', 'Registry Link')}
+            {renderInput('registrySerialNumbers', 'Registry Serial Numbers', 'VCS-XXXX-XXXX')}
           </div>
         </div>
 
@@ -245,7 +262,7 @@ const AdminAddCarbonCredit = () => {
         <div className="text-center pt-4">
           <button
             type="submit"
-            className="bg-green-600 text-white px-8 py-2 rounded-lg font-medium hover:bg-green-700 transition"
+            className="bg-green-600 text-white w-full sm:w-auto px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition"
           >
             🚀 Submit Project
           </button>

@@ -35,6 +35,15 @@ const CarbonCreditSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: false },
   isArchived: { type: Boolean, default: false },
   remainingTons: { type: Number, default: function() { return this.tons || 0; } },
+  certificateId: { type: String, unique: true },
+verificationUrl: { type: String },
+registrySerialNumbers: { type: String }, // from Verra
+retirementStatus: { 
+  type: String, 
+  enum: ["pending", "retired"], 
+  default: "pending" 
+},
+retirementDate: { type: Date },
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../../../utils/api";   // adjust path if needed
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
-  async ({ token, userType }, { rejectWithValue }) => {
+  async ({  userType }, { rejectWithValue }) => {
     try {
      const route =
   userType === "individual"
@@ -19,9 +19,7 @@ if (!route) {
 }
 
 
-      const res = await axios.get(`${API_URL}/${route}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  const res = await api.get(`/${route}`);
       return res.data;
     } catch (err) {
       console.error("Profile fetch error:", err.response?.data || err.message);
@@ -46,12 +44,11 @@ if (!route) {
 }
 
 
-      const res = await axios.put(`${API_URL}/${route}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+   const res = await api.put(`/${route}`, formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || "Failed to update profile");

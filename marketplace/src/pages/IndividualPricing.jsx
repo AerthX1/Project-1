@@ -51,9 +51,9 @@ const ContactSales = ({ onBack }) => {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-green-100 to-white py-20 px-6 flex items-center justify-center">
-      <div className="max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-8 sm:p-10">
-        <h2 className="text-4xl font-extrabold text-green-700 mb-6 text-center drop-shadow-md">
+    <section className="min-h-screen bg-gradient-to-b from-green-100 to-white py-10 sm:py-14 md:py-20 px-4 sm:px-6 flex items-center justify-center">
+      <div className="max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-5 sm:p-6 md:p-10">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-green-700 mb-6 text-center drop-shadow-md">
           Contact Our Enterprise Team 🚀
         </h2>
         <p className="text-gray-600 text-center mb-10 text-lg leading-relaxed">
@@ -191,8 +191,8 @@ const calcSavings = (monthly, yearly) => {
 const API_BASE_URL = `${import.meta.env.VITE_API_URL}/admin`;
 
 const IndividualPricing = () => {
-  const [billing, setBilling] = useState("monthly");
   const [currentPlan, setCurrentPlan] = useState(null);
+const [selectedBilling, setSelectedBilling] = useState("monthly");
 const [currentDuration, setCurrentDuration] = useState(null);
 const planOrder = ["plan_1", "plan_2", "plan_3"];
   const [showContactSales, setShowContactSales] = useState(false);
@@ -274,7 +274,7 @@ const planOrder = ["plan_1", "plan_2", "plan_3"];
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-green-50">
-        <FaSpinner className="animate-spin text-green-600 text-6xl" />
+        <FaSpinner className="animate-spin text-green-600 text-4xl sm:text-5xl md:text-6xl" />
         <p className="mt-4 text-green-700 text-xl">Loading pricing plans...</p>
       </div>
     );
@@ -297,54 +297,62 @@ const planOrder = ["plan_1", "plan_2", "plan_3"];
 
   return (
     <>
-      <section className="bg-gradient-to-b from-green-50 to-white py-20 px-6 max-w-7xl mx-auto">
+      <section className="bg-gradient-to-b from-green-50 to-white py-10 sm:py-14 md:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
         <div className="text-center mb-14">
-          <h2 className="text-5xl font-extrabold text-green-800 drop-shadow-md mb-3">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-green-800 drop-shadow-md mb-3">
             Choose Your Plan 💰
           </h2>
-          <p className="text-lg text-green-900 max-w-xl mx-auto leading-relaxed font-medium">
+          <p className="text-sm sm:text-base md:text-lg text-green-900 max-w-xl mx-auto leading-relaxed font-medium">
             Transparent pricing tailored for businesses of all sizes.
           </p>
 
           <div className="inline-flex bg-green-200 rounded-full mt-10 shadow-inner overflow-hidden select-none">
             <button
-              onClick={() => setBilling("monthly")}
-              className={`px-10 py-3 font-semibold rounded-full transition-transform duration-300 focus:outline-none
+              onClick={() => setSelectedBilling("monthly")}
+              className={`px-4 sm:px-6 md:px-10 py-2 sm:py-3 text-sm sm:text-base font-semibold rounded-full transition-transform duration-300 focus:outline-none
                                   ${
-                                    billing === "monthly"
+                                    selectedBilling === "monthly"
                                       ? "bg-white text-green-800 shadow-md scale-110"
                                       : "text-green-900 hover:text-green-700"
                                   }`}
-              aria-pressed={billing === "monthly"}
+              aria-pressed={selectedBilling === "monthly"}
             >
               Monthly
             </button>
             <button
-              onClick={() => setBilling("yearly")}
-              className={`px-10 py-3 font-semibold rounded-full transition-transform duration-300 focus:outline-none
+              onClick={() => setSelectedBilling("yearly")}
+              className={`px-4 sm:px-6 md:px-10 py-2 sm:py-3 text-sm sm:text-base font-semibold rounded-full transition-transform duration-300 focus:outline-none
                                   ${
-                                    billing === "yearly"
+                                    selectedBilling === "yearly"
                                       ? "bg-white text-green-800 shadow-md scale-110"
                                       : "text-green-900 hover:text-green-700"
                                   }`}
-              aria-pressed={billing === "yearly"}
+              aria-pressed={selectedBilling === "yearly"}
             >
               Yearly{" "}
             </button>
           </div>
         </div>
 
-        <div className="grid gap-12 md:grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-10">
           {Object.entries(plans).map(([planKey, plan]) => {
             const currentIndex = currentPlan
   ? planOrder.indexOf(currentPlan)
   : -1;
 
 const planIndex = planOrder.indexOf(planKey);
-
+const monthlyPrice = Number(plan.monthly);
+const yearlyPrice = Number(plan.yearly);
+const savings = calcSavings(monthlyPrice, yearlyPrice);
+const currentPrice = plan[selectedBilling];
 const isSamePlan = currentPlan === planKey;
 const isLower = currentPlan && planIndex < currentIndex;
 const isHigher = planIndex > currentIndex;
+
+const selectedPrice =
+  selectedBilling === "yearly"
+    ? plan.yearly
+    : plan.monthly;
 
 // 🔥 IMPORTANT LOGIC
 const isSamePlanUpgrade =
@@ -361,10 +369,6 @@ const isCurrent =
   );
 
 const isUpgrade = isHigher || isSamePlanUpgrade;
-            const monthlyPrice = Number(plan.monthly);
-            const yearlyPrice = Number(plan.yearly);
-            const savings = calcSavings(monthlyPrice, yearlyPrice);
-            const currentPrice = plan[billing];
 
             const shouldContactSales =
               planKey === "Enterprise" || planKey === "plan_3";
@@ -372,7 +376,7 @@ const isUpgrade = isHigher || isSamePlanUpgrade;
             return (
               <article
                 key={planKey}
-                className={`relative rounded-3xl p-10 shadow-lg transition-transform transform hover:scale-105 cursor-pointer border-2
+                className={`relative rounded-3xl p-5 sm:p-6 md:p-10 shadow-lg transition-transform transform hover:scale-105 cursor-pointer border-2
                                     ${
                                       plan.highlight
                                         ? "bg-gradient-to-tr from-green-500 via-green-600 to-green-700 text-white border-green-600 shadow-xl"
@@ -393,7 +397,7 @@ const isUpgrade = isHigher || isSamePlanUpgrade;
                 </h3>
 
                 <p
-                  className={`text-6xl font-extrabold mb-6 tracking-tight ${
+                  className={`py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg font-extrabold mb-6 tracking-tight ${
                     plan.highlight
                       ? "text-yellow-200 drop-shadow"
                       : "text-green-800"
@@ -407,12 +411,12 @@ const isUpgrade = isHigher || isSamePlanUpgrade;
                     plan.displayName !== "Custom" &&
                     formatCurrency(currentPrice) !== "Custom" && (
                       <span className="text-2xl font-semibold text-gray-300/70">
-                        /{billing.slice(0, -2)}
+                        /{selectedBilling.slice(0, -2)}
                       </span>
                     )}
                 </p>
 
-                {billing === "yearly" && savings > 0 && (
+            {selectedBilling === "yearly" && savings > 0 && (
                   <p
                     className={`mb-8 font-semibold tracking-wide ${
                       plan.highlight ? "text-yellow-300" : "text-green-600"
@@ -509,14 +513,15 @@ const isUpgrade = isHigher || isSamePlanUpgrade;
     if (shouldContactSales) {
       setShowContactSales(true);
     } else if (!isCurrent && !isLower) {
-      navigate("/PricingGateway", {
-        state: {
-          source: "individual",
-          planName: planKey,
-          billing,
-          price: currentPrice,
-        },
-      });
+     navigate("/PricingGateway", {
+  state: {
+    type: "subscription",   // 🔥 MUST
+    plan: plan.name,        // your plan
+    billing: selectedBilling, // "monthly" or "yearly"
+    price: selectedPrice,
+    userType: "individual"
+  }
+});
     }
   }}
   className={`w-full mt-8 py-4 rounded-full font-bold text-lg shadow-lg transition

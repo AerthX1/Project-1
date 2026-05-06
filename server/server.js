@@ -1,5 +1,4 @@
 require("dotenv").config();
-const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -25,7 +24,6 @@ const allowedOrigins = [
   process.env.VITE_CLIENT_URL,
   process.env.VITE_ADMIN_URL
 ];
-dotenv.config();
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -46,10 +44,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} body:`, req.body);
+ 
   next();
 });
-app.use("/uploads", express.static("uploads"));
+
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 app.use("/api/organization", orgRoutes);

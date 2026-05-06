@@ -16,24 +16,19 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
   const { user, userType } = useSelector((state) => state.auth);
   const [featureMap, setFeatureMap] = useState({});
-
+const [mobileOpen, setMobileOpen] = useState(false);
   const [subscription, setSubscription] = useState(null);
   const [planFeatures, setPlanFeatures] = useState({});
   const [loading, setLoading] = useState(true);
 
   // 🔥 Redirect logic
-  useEffect(() => {
-    if (!userType) return;
+useEffect(() => {
+  if (!userType) return;
 
-    if (location.pathname === "/dashboard") {
-      navigate(
-        userType === "organization"
-          ? "/dashboard/org-overview"
-          : "/dashboard/overview",
-        { replace: true }
-      );
-    }
-  }, [location, navigate, userType]);
+  if (location.pathname === "/dashboard" || location.pathname === "/dashboard/") {
+    navigate("/dashboard/overview", { replace: true });
+  }
+}, [location.pathname, navigate, userType]);
 
   // 🔥 Fetch subscription + features
   useEffect(() => {
@@ -125,64 +120,95 @@ const hasFeature = (label) => {
   ];
 
   return (
-    <div className="flex h-screen">
-      {/* SIDEBAR */}
-      <aside className="w-64 bg-white shadow-md p-5">
-        <button
-  onClick={() => navigate("/")}
-  className="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-green-600 transition"
->
-  ← Back to Home
-</button>
-        <h1 className="text-xl font-bold text-green-700 mb-6">AerthX</h1>
+  <div className="min-h-screen flex flex-col md:flex-row bg-gray-50">
 
-        {/* Subscription Badge */}
-       {subscription?.status === "active" && (
-  <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg">
-    
-    <div className="flex items-center justify-between">
-      <span className="text-xs uppercase tracking-wide opacity-80">
-        Current Plan
-      </span>
-
-      <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
-        Active
-      </span>
+    {/* 🔴 MOBILE TOP BAR */}
+    <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white shadow">
+      <h1 className="text-lg font-bold text-green-700">AerthX</h1>
+      <button
+        onClick={() => setMobileOpen((prev) => !prev)}
+        className="text-gray-600 text-xl"
+      >
+        ☰
+      </button>
     </div>
 
-    <div className="mt-2 text-lg font-bold tracking-wide">
-      {subscription.plan.toUpperCase()}
-    </div>
+    {/* 🔴 SIDEBAR */}
+    <aside
+      className={`
+  fixed md:sticky top-0 left-0
+  h-screen md:h-screen
+  z-50
+  bg-white shadow-md p-5
+  transition-transform duration-300
+  w-64
+  ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
+  md:translate-x-0
+`}
+    >
+      {/* CLOSE BUTTON MOBILE */}
+      <div className="md:hidden flex justify-end mb-4">
+        <button onClick={() => setMobileOpen(false)}>✕</button>
+      </div>
 
-    <div className="text-xs opacity-80 mt-1">
-      Premium access enabled
-    </div>
-  </div>
-)}
+      <button
+        onClick={() => navigate("/")}
+        className="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-green-600"
+      >
+        ← Back to Home
+      </button>
 
-        <nav className="space-y-2">
-          {navItems.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={`flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition ${
-                location.pathname === item.to
-                  ? "bg-green-100 text-green-700"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
-            >
-              {item.icon} {item.label}
-            </Link>
-          ))}
-        </nav>
-      </aside>
+      <h1 className="text-xl font-bold text-green-700 mb-6">AerthX</h1>
 
-      {/* MAIN CONTENT */}
-      <main className="flex-1 p-6 overflow-y-auto bg-gray-50">
+      {/* PLAN */}
+      {subscription?.status === "active" && (
+        <div className="mb-6 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg">
+          <div className="flex justify-between text-xs">
+            <span>Current Plan</span>
+            <span className="bg-white/20 px-2 py-1 rounded">Active</span>
+          </div>
+
+          <div className="mt-2 text-lg font-bold">
+            {subscription.plan.toUpperCase()}
+          </div>
+        </div>
+      )}
+
+      {/* NAV */}
+      <nav className="space-y-2">
+        {navItems.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            onClick={() => setMobileOpen(false)}
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg text-sm sm:text-base font-medium ${
+              location.pathname === item.to
+                ? "bg-green-100 text-green-700"
+                : "text-gray-600 hover:bg-gray-100"
+            }`}
+          >
+            {item.icon}
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+    </aside>
+
+    {/* 🔴 OVERLAY */}
+    {mobileOpen && (
+      <div
+        className="fixed inset-0 bg-black/30 md:hidden"
+        onClick={() => setMobileOpen(false)}
+      />
+    )}
+
+    {/* 🔴 MAIN CONTENT */}
+    <main className="flex-1 w-full min-h-screen">
+      <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
         <Outlet />
-      </main>
-    </div>
-  );
+      </div>
+    </main>
+  </div>
+);
 };
-
 export default DashboardLayout;

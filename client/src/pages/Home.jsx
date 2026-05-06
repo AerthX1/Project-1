@@ -142,7 +142,7 @@ export default function Home() {
         <div className="flex flex-col items-center w-full min-h-screen font-sans bg-gray-50 antialiased">
             
             <section 
-                className="relative w-full h-[100vh] flex items-center justify-center overflow-hidden text-white"
+                className="relative w-full min-h-[100vh] flex items-center justify-center overflow-hidden text-white px-4"
                 style={{ fontFamily: 'Poppins, sans-serif' }}
             >
                 <video
@@ -159,14 +159,14 @@ export default function Home() {
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-gray-900/90 via-black/40 to-black/10 z-10"></div>
 
                 <div className="relative z-20 flex flex-col items-center text-center px-4 max-w-6xl animate-fade-in-up">
-                    <h1 className="text-5xl md:text-7xl font-extrabold mb-8 leading-snug tracking-tight drop-shadow-2xl">
+                    <h1 className="text-3xl sm:text-4xl md:text-7xl font-extrabold mb-6 sm:mb-8 leading-snug tracking-tight drop-shadow-2xl">
                         Empowering Businesses to Go <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-lime-500">Carbon Neutral</span>
                     </h1>
-                    <p className="text-xl sm:text-2xl mb-12 font-light text-gray-200 drop-shadow-lg max-w-3xl animate-fade-in delay-200">
+                    <p className="text-sm sm:text-base md:text-2xl mb-8 sm:mb-12 px-2 font-light text-gray-200 drop-shadow-lg max-w-3xl animate-fade-in delay-200">
                         Secure, verified, and high-impact carbon credits to meet your sustainability goals with absolute transparency.
                     </p>
                     
-                    <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
                         <Link
                             to={import.meta.env.VITE_CLIENT_URL}
                             className="group inline-flex items-center justify-center gap-2 
@@ -193,13 +193,13 @@ export default function Home() {
                         </Link>
                     </div>
 
-                    <div className="mt-16 text-lg font-bold text-gray-200 backdrop-blur-sm bg-black/20 px-8 py-3 rounded-xl border border-emerald-500/50 shadow-lg">
+                    <div className="mt-10 sm:mt-16 text-sm sm:text-lg font-bold text-gray-200 backdrop-blur-sm bg-black/20 px-4 sm:px-8 py-2 sm:py-3 rounded-xl border border-emerald-500/50 shadow-lg">
                         <span className="text-emerald-400 mr-2">LIVE:</span> {remainingTons.toLocaleString()} CO₂ Credits Available
                     </div>
                 </div>
             </section>
 
-            <section className="px-4 md:px-12 py-24 bg-white w-full">
+            <section className="px-4 sm:px-6 md:px-12 py-12 sm:py-16 md:py-24 bg-white w-full">
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 text-center">
                         Why Invest in <span className="text-emerald-600">Carbon Credits</span>?
@@ -208,7 +208,7 @@ export default function Home() {
                         Offset your footprint, support sustainable projects, and contribute to a greener, more resilient future.
                     </p>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10 text-center">
                         {[
                             { title: "Tangible Climate Action", desc: "Fund verified projects that actively reduce CO₂ emissions, support reforestation, and protect vital ecosystems.", icon: <LeafIcon /> },
                             { title: "Boost Your Brand & ESG", desc: "Demonstrate leadership in sustainability, improve your ESG rating, and appeal to a conscious market.", icon: <BriefcaseIcon /> },
@@ -236,7 +236,7 @@ export default function Home() {
                     <h2 className="text-4xl lg:text-5xl font-extrabold text-center mb-16">
                         Our Verified <span className="text-green-400">Impact</span>
                     </h2>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-12">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-12">
                         <div className="p-6 bg-white/5 rounded-xl backdrop-blur-md border border-transparent transition hover:scale-[1.05] duration-500 relative overflow-hidden group hover:border-emerald-500/50 shadow-xl">
                             <div className="absolute inset-0 bg-emerald-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-sm"></div>
                             <AnimatedStat start={0} end={35000} label="Tons CO₂ Offset" unit="k" />
@@ -309,7 +309,7 @@ export default function Home() {
                             Real-time inventory of verified credits ready for immediate offset. Secure your climate commitment today.
                         </p>
 
-                        <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
                             <Link to='/MarketplaceHero' 
                                 className="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-4 px-10 rounded-full shadow-xl shadow-emerald-500/30 transition duration-300 transform hover:scale-105"
                             >
@@ -331,12 +331,12 @@ export default function Home() {
                 </div>
             </section>
 
-            <section id="how-it-works" className="py-24 bg-gray-50 w-full">
+            <section id="how-it-works" className="py-12 sm:py-16 md:py-24 bg-gray-50 w-full">
                 <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-20 text-center">
                     Simple <span className="text-emerald-600">4-Step Process</span>
                 </h2>
                 <div className="max-w-7xl mx-auto px-4 md:px-8">
-                    <div className="relative flex flex-col md:grid md:grid-cols-4 gap-8">
+                    <div className="relative flex flex-col md:grid md:grid-cols-4 gap-6 sm:gap-8">
                         
                         <div className="hidden md:block absolute top-10 left-0 right-0 h-1 bg-emerald-200 mx-12"></div>
 
@@ -429,7 +429,7 @@ export default function Home() {
                 </div>
             </section>
             
-            <section className="py-20 bg-white w-full text-center">
+            <section className="py-12 sm:py-16 md:py-20 bg-white w-full text-center">
                 <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-12">
                     Certified <span className="text-emerald-600">Integrity</span>
                 </h2>

@@ -34,11 +34,11 @@ const StyledCard = ({ children, className = "", title, icon: Icon, description }
     initial={{ opacity: 0, y: 12 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.35, ease: "easeOut" }}
-    className={`relative p-6 lg:p-8 rounded-2xl bg-white shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 ${className}`}
+    className={`relative p-4 sm:p-6 lg:p-8 rounded-2xl bg-white shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden ${className} hover:shadow-2xl transition-all duration-300 border border-gray-100 ${className}`}
   >
     {title && (
       <div className="mb-4 pb-4 border-b border-gray-100">
-        <h3 className="text-2xl font-extrabold text-gray-800 flex items-center">
+        <h3 className="text-xl sm:text-2xl font-extrabold text-gray-800 flex items-center leading-tight">
           {Icon && <Icon className="text-green-600 mr-3" size={24} />}
           {title}
         </h3>
@@ -183,7 +183,7 @@ const PaymentFormForGateway = ({
       saveCard,
     };
 
-    console.log("Simulated payment payload:", payload);
+    
     alert(`Processing payment of ${formatRupees(grandTotal)} via ${paymentFees[selectedMethod].label}.`);
 
     if (onSuccessNavigate) {
@@ -204,7 +204,7 @@ const PaymentFormForGateway = ({
         inputMode={inputMode}
         placeholder=" "
         aria-label={label}
-        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:border-green-500 peer"
+        className="block py-3 px-0 w-full text-sm sm:text-base text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:border-green-500 peer text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:border-green-500 peer"
       />
       <label
         htmlFor={name}
@@ -221,7 +221,7 @@ const PaymentFormForGateway = ({
         icon={FaMoneyBillAlt} 
         description="Select your method and enter required payment and contact details."
     >
-      <div className="grid grid-cols-3 lg:grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
         {Object.keys(paymentFees).map((id) => {
           const method = paymentFees[id];
           const Icon = method.icon;
@@ -231,12 +231,12 @@ const PaymentFormForGateway = ({
               onClick={() => setSelectedMethod(id)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`flex flex-col items-center justify-center py-3 px-2 rounded-xl border-2 transition-all duration-300 relative focus:outline-none
+              className={`flex flex-col items-center justify-center py-3 sm:py-4 px-2 rounded-xl min-h-[90px] sm:min-h-[100px] border-2 transition-all duration-300 relative focus:outline-none
               ${selectedMethod === id ? "bg-green-600 text-white shadow-lg border-green-700" : "border-gray-200 text-gray-600 hover:border-green-400 bg-gray-50 hover:bg-white"}`}
               aria-pressed={selectedMethod === id}
             >
-              <Icon size={26} className="mb-2" />
-              <span className="text-xs font-semibold">{method.label}</span>
+              <Icon size={22} className="mb-2 sm:mb-3 sm:w-7 sm:h-7" />
+              <span className="text-[11px] sm:text-xs font-semibold text-center leading-tight">{method.label}</span>
               <AnimatePresence>
                 {selectedMethod === id && (
                   <motion.div
@@ -255,7 +255,7 @@ const PaymentFormForGateway = ({
       </div>
 
       <form onSubmit={handlePaymentSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           {renderInput("fullName", "Full Name", "text", true)}
           {renderInput("email", "Email Address", "email", true)}
         </div>
@@ -329,7 +329,7 @@ const PaymentFormForGateway = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.35 }}
-          className="bg-gray-50 p-5 rounded-xl mt-8 space-y-3 shadow-md border border-gray-100"
+          className="bg-gray-50 p-4 sm:p-5 rounded-xl mt-6 sm:mt-8 space-y-3 shadow-md border border-gray-100"
         >
           <h4 className="text-lg font-bold text-gray-800 mb-3 pb-2 border-b border-gray-200 flex items-center">
             <FaCalculator className="text-gray-500 mr-2" size={18} /> Payment Breakdown
@@ -354,18 +354,18 @@ const PaymentFormForGateway = ({
           <div className="pt-4 border-t-2 border-green-200 mt-4">
             <div className="flex flex-col items-center justify-center">
               <div className="text-md text-green-800 font-medium mb-1">Total Amount Due</div>
-              <div className="text-4xl font-extrabold text-green-700 mb-6">{formatRupees(grandTotal)}</div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-green-700 mb-5 sm:mb-6 break-words text-center">{formatRupees(grandTotal)}</div>
               
               <button
                 type="submit"
-                className="w-full py-4 bg-gradient-to-r from-green-500 to-green-700 text-white text-xl font-extrabold rounded-xl shadow-xl hover:from-green-600 hover:to-green-800 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] ring-4 ring-green-200 ring-opacity-50"
+                className="w-full py-3.5 sm:py-4 bg-gradient-to-r from-green-500 to-green-700 text-white text-lg sm:text-xl font-extrabold rounded-xl shadow-xl hover:from-green-600 hover:to-green-800 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] ring-4 ring-green-200 ring-opacity-50 text-white text-xl font-extrabold rounded-xl shadow-xl hover:from-green-600 hover:to-green-800 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] ring-4 ring-green-200 ring-opacity-50"
               >
                 <FaDollarSign className="inline mr-2" size={20} /> Pay Now
               </button>
             </div>
           </div>
         </motion.div>
-        <div className="flex flex-wrap justify-center gap-4 mt-6 text-xs text-gray-500 pt-4 border-t border-gray-100">
+        <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-3 sm:gap-4 mt-6 text-[11px] sm:text-xs text-center text-gray-500 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-1.5"><FaLock size={14} className="text-green-400" /><span>Secure Payment</span></div>
           <div className="flex items-center gap-1.5"><FaShieldAlt size={14} className="text-green-400" /><span>PCI Compliant</span></div>
           <div className="flex items-center gap-1.5"><FaTags size={14} className="text-green-400" /><span>Transparent Fees</span></div>
@@ -381,28 +381,39 @@ const PricingGateway = () => {
 
   const location = useLocation();
   const state = location.state || {};
-  console.log("FULL STATE:", state);
    const { user } = useSelector((state) => state.auth); 
-
   const [loadingPlans, setLoadingPlans] = useState(false);
   const [availablePlans, setAvailablePlans] = useState(null);
-  const [fetchedProject, setFetchedProject] = useState(null);
-  const [tons, setTons] = useState(1);
   const [perks, setPerks] = useState({});
   const [subtotalFromState, setSubtotalFromState] = useState(null);
-  console.log("USER:", user);
-  console.log("FULL STATE:", state);
   
 const userType = state.userType || "Individual";
-  const source = state.source || "pricing"; 
+  const type = state.type; 
+  const isSubscription = type === "subscription";
+const isCarbon = type === "carbon_credit";
+// 🔥 CLEAN DATA
+
+const planName = isSubscription ? state.plan : null;
+const billing = isSubscription ? state.billing : null;
+const planPrice = isSubscription
+  ? Number(state.price || 0)
+  : 0;
+
+const project = state.project;
+const [tons, setTons] = useState(state.tons || 1);
+
+const carbonPrice = isCarbon
+  ? Number(project?.pricePerTon || 0) * tons
+  : 0;
+
+
   const incomingPlanName = state.planName || state.plan || (state.planNameFromPricing || "Basic");
   const incomingPrice = state.price || state.totalPrice || state.planPrice || null;
   const incomingTons = state.tons || state.creditsTons || null;
   const incomingPerks = state.selectedPerks || state.perks || {};
-  const isCustomPlan = incomingPlanName === "Enterprise" && source === "pricing";
+const isCustomPlan = incomingPlanName === "Enterprise" && isSubscription;
 
   useEffect(() => {
-    if (incomingTons) setTons(incomingTons);
     if (incomingPerks && Object.keys(incomingPerks).length) setPerks(incomingPerks);
    if (incomingPrice !== null && incomingPrice !== undefined) {
   setSubtotalFromState(Number(incomingPrice));
@@ -445,27 +456,7 @@ const userType = state.userType || "Individual";
 
   const API = import.meta.env?.VITE_API_URL || "/api";
 
-  useEffect(() => {
-    if (state?.projectId) {
-      const mockProject = {
-          _id: state.projectId,
-          name: "Amazon Reforestation Project",
-          location: "Brazil",
-          pricePerTonUSD: 10,
-          verifiedStandard: "Verra",
-          focus: "Biodiversity & Climate",
-      };
-      
-      const CONVERSION_RATE_USD_TO_INR = 83.5;
-      const projectPricePerTon = mockProject.pricePerTonUSD * CONVERSION_RATE_USD_TO_INR;
 
-      setFetchedProject({ ...mockProject, pricePerTon: projectPricePerTon });
-      
-      if (!subtotalFromState) {
-          setSubtotalFromState(Number(projectPricePerTon * (incomingTons || 1)));
-      }
-    }
-  }, [state?.projectId, API, incomingTons, subtotalFromState]);
 
   const allPerksList = useMemo(() => [
     { id: "annual_cert", price: 500, label: "Annual Certification" },
@@ -485,21 +476,21 @@ const userType = state.userType || "Individual";
 
   const planDetails = availablePlans?.[incomingPlanName];
 
-  const basePlanPrice = useMemo(() => {
-      if (source === "pricing" && planDetails) {
+const basePlanPrice = useMemo(() => {
+  if (isSubscription && planDetails) {
           if (state?.billing === "Yearly") return Number(planDetails.yearly || 0);
           return Number(planDetails.monthly || 0);
       }
       return Number(state?.base || 0); 
-  }, [source, planDetails, state?.base, state?.billing]);
+}, [isSubscription, planDetails, state?.base, state?.billing]);
 
 
   const creditsPrice = useMemo(() => {
-    if (source === "individual" && fetchedProject) {
-        return Number(fetchedProject.pricePerTon) * Number(tons);
+    if (isCarbon && project) {
+        return Number(project.pricePerTon) * Number(tons);
     }
     return 0;
-  }, [source, fetchedProject, tons]);
+}, [isCarbon, project, tons]);
 
 
   const perksTotal = useMemo(() => {
@@ -516,33 +507,25 @@ const userType = state.userType || "Individual";
   }, [perks, planDetails, isCustomPlan, getPerkDetails]);
 
 
-  const computedSubtotal = useMemo(() => {
-   
-    if (subtotalFromState !== null) return Number(subtotalFromState);
+const computedSubtotal = useMemo(() => {
+  if (isCarbon) {
+    return creditsPrice + perksTotal;
+  }
 
-    let total = 0;
-    if (source === "individual") {
-        total += Number(state?.base || 0);
-    } else {
-        total += basePlanPrice;
-    }
-    
-    total += creditsPrice;
-    
-    total += perksTotal;
+  // subscription
+  return basePlanPrice + perksTotal;
+}, [isCarbon, creditsPrice, basePlanPrice, perksTotal]);
 
-    return total;
-  }, [subtotalFromState, source, state, creditsPrice, perksTotal, basePlanPrice]);
+const subtotal = computedSubtotal;
 
+ const handleTonsChange = (newTons) => {
+  const max = project?.tons || 1;
 
-  const handleTonsChange = (newTons) => {
-    const v = Math.max(1, Number(newTons) || 1);
-    setTons(v);
+  const v = Math.max(1, Math.min(max, Number(newTons) || 1));
 
-    if (source === "individual" && fetchedProject) {
-        setSubtotalFromState(Number(fetchedProject.pricePerTon * v));
-    }
-  };
+  setTons(v);
+};
+
 
   const goBack = () => navigate(-1);
 
@@ -584,26 +567,26 @@ const userType = state.userType || "Individual";
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-100 p-4 lg:p-12 font-sans">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8 md:mb-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-green-100 px-3 py-4 sm:px-5 sm:py-6 lg:px-8 lg:py-10 xl:px-12 font-sans overflow-x-hidden">
+      <div className="max-w-7xl mx-auto w-full">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8 lg:mb-12">
           <button
             onClick={goBack}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm bg-white rounded-full shadow-md border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors transform hover:scale-[1.02]"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm bg-white rounded-full shadow-md border border-gray-200 text-gray-700 hover:bg-gray-100 transition-all duration-300 transform hover:scale-[1.02] w-full sm:w-auto"
           >
             <FaArrowLeft size={14} /> Back to Selection
           </button>
-          <h1 className="text-3xl lg:text-4xl font-extrabold text-green-800 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-green-800 tracking-tight text-center sm:text-left leading-tight">
             Confirm Your Order
           </h1>
-          <div className="w-48 hidden md:block" /> 
+          <div className="hidden lg:block lg:w-40" /> 
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
 
-          <div className="lg:col-span-2 space-y-6">
+          <div className="xl:col-span-2 space-y-5 sm:space-y-6">
             <StyledCard
-              title={`${incomingPlanName} Order Summary`}
+          title={`${isSubscription ? planName : project?.title} Order Summary`}
               icon={FaChartLine}
               description="Review your plan details, credits, and pricing breakdown before proceeding to payment."
             >
@@ -611,13 +594,13 @@ const userType = state.userType || "Individual";
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-lg font-bold text-gray-800 flex items-center">
                       <FaLeaf className="text-green-500 mr-2" size={18} />
-                      {source === "individual" ? "Project Purchase" : "Subscription Plan"}
+                {isCarbon ? "Project Purchase" : "Subscription Plan"}
                   </span>
-                  <span className="text-xl font-extrabold text-green-700">{incomingPlanName}</span>
+                  <span className="text-xl font-extrabold text-green-700">{isSubscription ? planName : project?.title}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm text-gray-600">
                     <span className="flex items-center"><FaCalendarAlt className="mr-2" size={14} />Billing Cycle</span>
-                    <span className="font-semibold">{state?.billing || (source === "pricing" ? "Monthly" : "One-Time")}</span>
+                    <span className="font-semibold">{isSubscription ? billing : "One-Time"}</span>
                 </div>
                 {planDetails?.description && (
                   <p className="text-sm text-gray-500 mt-2 p-2 bg-gray-50 rounded-md border border-gray-100 flex items-center">
@@ -633,24 +616,30 @@ const userType = state.userType || "Individual";
                   </h4>
                   <div className="space-y-2">
                       <div className="flex justify-between items-center">
-                          <span className="text-gray-700">{source === "individual" ? "Base Service Fee" : `${incomingPlanName} Plan Fee`}</span>
+                          <span className="text-gray-700">{isCarbon ? "Carbon Credit Cost" : `${incomingPlanName} Plan Fee`}</span>
                           <span className="font-semibold text-gray-900">
-                              {basePlanPrice > 0 ? formatRupees(basePlanPrice) : (isCustomPlan ? "Negotiated" : "Included")}
+                             {isSubscription
+  ? formatRupees(basePlanPrice)
+  : formatRupees(project?.pricePerTon)}
                           </span>
                       </div>
 
-                      {source === "individual" && fetchedProject && (
+                     {isCarbon && project && (
                           <>
+                          <div className="flex justify-between items-center text-sm text-gray-600 pl-4">
+  <span>Total Tons Available</span>
+  <span className="font-semibold">{project.tons}</span>
+</div>
                             <div className="flex justify-between items-center text-sm text-gray-600 pl-4">
                                 <span className="flex items-center"><FaLeaf className="mr-2" size={14} /> Project Price per Ton</span>
-                                <span className="font-medium">{formatRupees(fetchedProject.pricePerTon)}</span>
+                                <span className="font-medium">{formatRupees(project.pricePerTon)}</span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-700">{tons} Tons of Carbon Credits</span>
                                 <span className="font-semibold text-gray-900">{formatRupees(creditsPrice)}</span>
                             </div>
                             <label className="block text-sm font-medium text-gray-700 mt-3 mb-2">Adjust Quantity (Tons)</label>
-                            <div className="flex items-center gap-3 w-48">
+                            <div className="flex items-center gap-2 sm:gap-3 w-full max-w-[220px]">
                                 <button
                                     onClick={() => handleTonsChange(tons - 1)}
                                     className="p-2 rounded-full border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -663,8 +652,8 @@ const userType = state.userType || "Individual";
                                     type="number"
                                     min="1"
                                     value={tons}
-                                    onChange={(e) => handleTonsChange(e.target.value)}
-                                    className="w-full text-center rounded-lg border border-gray-300 p-2 text-md font-semibold focus:ring-green-500 focus:border-green-500"
+                                 onChange={(e) => handleTonsChange(Number(e.target.value))}
+                                    className="w-full text-center rounded-lg border border-gray-300 p-2 text-sm sm:text-md font-semibold focus:ring-green-500 focus:border-green-500"
                                 />
                                 <button
                                     onClick={() => handleTonsChange(tons + 1)}
@@ -684,13 +673,13 @@ const userType = state.userType || "Individual";
                       
                       <div className="pt-3 border-t border-dashed border-gray-300 flex justify-between items-center mt-3">
                           <span className="text-lg font-bold text-gray-800">Calculated Subtotal</span>
-                          <span className="text-2xl font-extrabold text-green-700">{formatRupees(computedSubtotal)}</span>
+                          <span className="text-2xl font-extrabold text-green-700">{formatRupees(subtotal)}</span>
                       </div>
                   </div>
               </div>
 
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
                   <div>
                     <h4 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
                       <FaCheckCircle className="text-green-500 mr-2" size={18} /> Included Features & Perks
@@ -718,15 +707,24 @@ const userType = state.userType || "Individual";
             </StyledCard>
           </div>
 
-          <div className="lg:col-span-1">
-         <PaymentCore
-  subtotal={computedSubtotal}
- meta={{
-  userId: user?._id || user?.id,
-  plan: incomingPlanName,
-  duration: state.billing?.toLowerCase() === "yearly" ? "yearly" : "monthly",
- userType: userType.toLowerCase()   
-}}
+          <div className="xl:col-span-1 w-full xl:sticky xl:top-6 h-fit">
+     <PaymentCore
+  subtotal={subtotal}
+  meta={{
+    type: isCarbon ? "carbon_credit" : "subscription",
+    userId: user?.id,
+    userType: userType.toLowerCase(),
+
+    ...(isSubscription && {
+      plan: planName,
+      duration: billing,
+    }),
+
+    ...(isCarbon && {
+      projectId: project?._id,
+      tons,
+    }),
+  }}
 />
           </div>
 

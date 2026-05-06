@@ -1,12 +1,7 @@
 import React from "react";
 
 const DefaultAvatar = ({ name, size = 40, avatarUrl }) => {
-  const fullAvatarUrl =
-    avatarUrl?.startsWith("http") || avatarUrl?.startsWith("data:")
-      ? avatarUrl
-      : avatarUrl
-      ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${avatarUrl}`
-      : null;
+const fullAvatarUrl = avatarUrl || null;
 
   if (fullAvatarUrl) {
     return (
