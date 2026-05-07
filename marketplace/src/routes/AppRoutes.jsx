@@ -30,7 +30,7 @@ import ESGReports from '../Components/Dashboard/ESGReports';
 import APIAccess from '../Components/Dashboard/APIAccess';
 import RequireAuth from '../Components/RequireAuth'; 
 import ErrorPage from '../pages/ErrorPage';
-import DashboardRedirect from "../components/DashboardRedirect";
+import DashboardRedirect from "../Components/DashboardRedirect";
 import FeatureGate from "../Components/FeatureGate";
 import Settings from '../pages/Settings';
 

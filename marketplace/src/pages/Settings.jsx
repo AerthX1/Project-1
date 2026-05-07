@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
-import SecurityTab from "../components/Tabs/SecurityTab";
-import SubscriptionTab from "../components/Tabs/SubscriptionTab";
-import BillingHistoryTab from "../components/Tabs/BillingHistoryTab";
-import PaymentMethodsTab from "../components/Tabs/PaymentMethodsTab";
-import TermsTab from "../components/Tabs/TermsTab";
+import SecurityTab from "../Components/Tabs/SecurityTab";
+import SubscriptionTab from "../Components/Tabs/SubscriptionTab";
+import BillingHistoryTab from "../Components/Tabs/BillingHistoryTab";
+import PaymentMethodsTab from "../Components/Tabs/PaymentMethodsTab";
+import TermsTab from "../Components/Tabs/TermsTab";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("Security");
