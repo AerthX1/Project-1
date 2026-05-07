@@ -7,7 +7,7 @@
   import ProfileDropdown from "../Header/ProfileDropdown";
   import { CiSearch } from "react-icons/ci";
   import { FaBell } from "react-icons/fa";
-  import aerthxlogo from "../../assets/AerthXLogo.png";
+  import aerthxlogo from "../../assets/aerthxLogo.png";
   import SubscriptionStatus from "../SubscriptionStatus";
 
   const MarketplaceNavbarControls = ({ onSearch }) => {
