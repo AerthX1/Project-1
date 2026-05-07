@@ -21,7 +21,7 @@ const path = require('path');
 const app = express();
 const allowedOrigins = [
   process.env.VITE_MAIN_URL,
-  process.env.VITE_CLIENT_URL,
+ process.env.VITE_MARKETPLACE_URL,
   process.env.VITE_ADMIN_URL
 ];
 
