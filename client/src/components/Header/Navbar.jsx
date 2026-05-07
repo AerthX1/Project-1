@@ -5,7 +5,7 @@ import { logout } from "../../shared-redux/src/slices/authSlice";
 import { fetchProfile } from "../../shared-redux/src/slices/profileSlice";
 import ProfileDropdown from "./ProfileDropdown";
 import DefaultAvatar from "./DefaultAvatar";
-import aerthxlogo from "../../assets/aerthxlogo.png";
+import aerthxlogo from "../../assets/aerthxLogo.png";
 import { FaBell } from "react-icons/fa"; 
 
 const Navbar = () => {
