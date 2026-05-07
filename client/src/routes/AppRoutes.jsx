@@ -18,8 +18,6 @@ import NotificationPage from '../pages/NotificationPage';
 import About from '../pages/About';
 import Settings from '../pages/Settings';
 import RegisterChoice from "../pages/RegisterChoice"
-import AdminDashboard from "../../../admin-frontend/src/pages/AdminDashboard";
-import AdminRoute from "../../../admin-frontend/src/components/Admin/AdminRoute";
 import Services from '../pages/Services';
 import VerifyOtp from '../pages/VerifyOtp';
 import ContactUs from '../pages/ContactUs';
@@ -60,7 +58,6 @@ const router = createBrowserRouter(
  	 <Route path="/about" element={<About />} />
  	 <Route path="/settings" element={<Settings />} />
  	 	 <Route path="/forgot-password" element={<ForgotPassword />} />
- 	 	 <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} /> 
  	 	
 
  	 	 	    </>
