@@ -28,7 +28,7 @@ import OrganizationOverview from '../Components/Dashboard/OrganizationOverview';
 import TeamMembers from '../Components/Dashboard/TeamMembers';
 import ESGReports from '../Components/Dashboard/ESGReports';
 import APIAccess from '../Components/Dashboard/APIAccess';
-import RequireAuth from '../components/RequireAuth'; 
+import RequireAuth from '../Components/RequireAuth'; 
 import ErrorPage from '../pages/ErrorPage';
 import DashboardRedirect from "../components/DashboardRedirect";
 import FeatureGate from "../Components/FeatureGate";
