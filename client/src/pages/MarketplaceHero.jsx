@@ -10,7 +10,7 @@ import {
   FaExternalLinkAlt,
 } from "react-icons/fa";
 import starterImage from "../assets/marketplacebg.png";
-import aerthxlogo from "../assets/aerthxlogo.png";
+import aerthxlogo from "../assets/aerthxLogo.png";
 import goldstandard from "../assets/gold-standard.png";
 import verra from "../assets/Verra-Logo.png";
 
