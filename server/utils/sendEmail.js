@@ -1,15 +1,23 @@
 const nodemailer = require("nodemailer");
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("SMTP ERROR:", error);
+  } else {
+    console.log("SMTP READY");
+  }
+});
+
 const sendEmail = async ({ to, subject, text, html }) => {
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.MAIL_USER,
-pass: process.env.MAIL_PASS,
-      },
-    });
-
     const mailOptions = {
       from: `"AerthX 🌱" <${process.env.EMAIL_USER}>`,
       to,
@@ -20,8 +28,9 @@ pass: process.env.MAIL_PASS,
 
     await transporter.sendMail(mailOptions);
 
+    console.log("✅ Email sent");
   } catch (error) {
-    console.error("❌ Failed to send email:", error.message);
+    console.error("❌ Failed to send email:", error);
   }
 };
 
