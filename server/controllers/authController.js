@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
+const sendEmail = require("../utils/sendEmail");
 const OtpToken = require("../models/OtpToken");
 const Individual = require("../models/Individual");
 const Organization = require("../models/Organization");
@@ -65,13 +65,6 @@ res.status(200).json({
   }
 };
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-   user: process.env.MAIL_USER,
-pass: process.env.MAIL_PASS,
-  },
-});
 
 const sendOtp = async (req, res) => {
   const { email } = req.body;
@@ -87,12 +80,11 @@ const sendOtp = async (req, res) => {
     await OtpToken.deleteMany({ email });
     await OtpToken.create({ email, otp });
 
-    await transporter.sendMail({
-      from: `"AerthX" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "OTP for Password Reset",
-      html: `<p>Your AerthX OTP is <strong>${otp}</strong>. It expires in 5 minutes.</p>`,
-    });
+   await sendEmail({
+  to: email,
+  subject: "OTP for Password Reset",
+  html: `<p>Your AerthX OTP is <strong>${otp}</strong>. It expires in 5 minutes.</p>`,
+});
 
     res.status(200).json({ message: "OTP sent successfully", otp });
   }catch (err) {
@@ -121,8 +113,7 @@ const resetPassword = async (req, res) => {
 
     await OtpToken.deleteMany({ email });
 
-    await transporter.sendMail({
-      from: `"AerthX" <${process.env.EMAIL_USER}>`,
+    await sendEmail({
       to: email,
       subject: "Your AerthX Password Was Changed",
       html: `<h2>Password Changed</h2>

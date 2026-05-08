@@ -1,5 +1,5 @@
 const express = require("express");
-const nodemailer = require("nodemailer");
+const sendEmail = require("../utils/sendEmail");
 const router = express.Router();
 
 
@@ -13,16 +13,9 @@ router.post("/send-message", async (req, res) => {
         .json({ success: false, error: "All fields are required" });
     }
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.MAIL_USER, 
-        pass: process.env.MAIL_PASS, 
-      },
-    });
 
     try {
-    await transporter.sendMail({
+   await sendEmail({
       from: `"AerthX Contact Form" <${process.env.MAIL_USER}>`, 
       to: "support@aerthx.com", 
       subject: "New Contact Form Submission",
@@ -52,13 +45,7 @@ router.post("/send-inquiry", async (req, res) => {
       return res.status(400).json({ success: false, error: "Name, email, and project are required" });
     }
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
-      },
-    });
+
 
     const mailMessage = `
       <p><b>Name:</b> ${name}</p>
@@ -71,7 +58,7 @@ router.post("/send-inquiry", async (req, res) => {
       <p><b>Notes:</b> ${notes || "N/A"}</p>
     `;
 
-    await transporter.sendMail({
+    await sendEmail({
       from: `"AerthX Inquiry" <${process.env.MAIL_USER}>`,
       to: "support@aerthx.com",
       subject: `New High-Volume Inquiry: ${project}`,
