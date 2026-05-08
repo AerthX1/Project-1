@@ -3,7 +3,7 @@ const router = express.Router();
 const Individual = require('../models/Individual');
 const Organization = require('../models/Organization');
 const BugReport = require('../models/BugReport');
-const nodemailer = require("nodemailer");
+const sendEmail = require("../utils/sendEmail");
 const CarbonCredit = require("../models/CarbonCredit");
 const Notification = require("../models/Notification");
 const FAQ = require("../models/FAQ");
@@ -122,13 +122,6 @@ router.get('/user-reports/:userId', async (req, res) => {
 });
 
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
 
 router.post("/send-email/:userId", async (req, res) => {
   try {
@@ -177,7 +170,7 @@ const emailBody = `
 
 
 
-    await transporter.sendMail({
+    await sendEmail({
       from: `"AerthX Admin" <${process.env.EMAIL_USER}>`,
       to: user.email,
       subject: subject || "Regarding Your Report - AerthX",
@@ -358,7 +351,7 @@ router.post("/send-general-email/:userId", async (req, res) => {
   </div>
 `;
 
-    await transporter.sendMail({
+    await sendEmail({
       from: `"AerthX Admin" <${process.env.EMAIL_USER}>`,
       to: user.email,
       subject: subject || "Message from AerthX Admin",
