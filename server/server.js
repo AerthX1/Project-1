@@ -22,7 +22,8 @@ const app = express();
 const allowedOrigins = [
   process.env.VITE_MAIN_URL,
  process.env.VITE_MARKETPLACE_URL,
-  process.env.VITE_ADMIN_URL
+  process.env.VITE_ADMIN_URL,
+  "https://www.aerthx.in"
 ];
 
 app.use(cors({
